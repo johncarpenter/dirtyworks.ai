@@ -3,19 +3,19 @@
 
    Founder name, biography, credentials and photograph are outstanding sponsor inputs. Rather than
    invent them or leave the page unwritten, the page exists in full and the route carries
-   `published: false` in src/content/routes.ts. That flag already removes /about from navigation
+   `published: false` in src/copy/routes.ts. That flag already removes /about from navigation
    and from every CTA target; the empty response below removes it from the build, so the address
    falls through to the 404 page instead of shipping the OPEN GAP annotation panel publicly.
 
    To publish: land the real founder content, delete the FOUNDER_PROFILE entry from
-   src/content/placeholders.ts — which removes the gap panel — and flip the route to published. */
+   src/copy/placeholders.ts — which removes the gap panel — and flip the route to published. */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Band from '../components/layout/Band.astro';
 import Folio from '../components/ui/Folio.astro';
 import CTABand from '../components/patterns/CTABand.astro';
 import Beliefs from '../components/sections/about/Beliefs.astro';
 import FounderGap from '../components/sections/about/FounderGap.astro';
-import { hrefFor, isPublished } from '../content/routes';
+import { hrefFor, isPublished } from '../copy/routes';
 import {
   CTA,
   FOUNDER_FOLIO,
@@ -23,7 +23,7 @@ import {
   FOUNDER_GAP_TITLE,
   FOUNDER_PARAGRAPHS,
   HERO,
-} from '../content/pages/about';
+} from '../copy/pages/about';
 
 if (!isPublished('about')) {
   // A response with no body writes no file: the route is absent from dist/ entirely.

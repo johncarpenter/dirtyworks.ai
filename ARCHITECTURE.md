@@ -308,9 +308,9 @@ greps it for leaked values.
 
 Marketing copy carries claims, and claims can be wrong in ways that cost trust. Three mechanisms:
 
-1. **Placeholder registry** (`src/content/placeholders.ts`). Unresolved facts render as visible
+1. **Placeholder registry** (`src/copy/placeholders.ts`). Unresolved facts render as visible
    markers, never as invented text.
-2. **Claim-artefact registry** (`src/content/claim-artefacts.ts`). Each illustrative artefact
+2. **Claim-artefact registry** (`src/copy/claim-artefacts.ts`). Each illustrative artefact
    declares the stamp it must render, so the gate checks the *output*, not the intent.
 3. **`scripts/check-content.ts`** — eight rules: unresolved markers, prohibited vocabulary, banned
    CTA labels, missing claim stamps, fabricated proof (prices, comparatives, certifications), emoji,
@@ -377,7 +377,7 @@ mockups/              content authority — never imported from src/
 specs/                feature spec, plan, contracts, tasks, launch blockers
 ```
 
-Routing and navigation live in `src/content/routes.ts` as data. The header, footer, mobile panel,
+Routing and navigation live in `src/copy/routes.ts` as data. The header, footer, mobile panel,
 CTA targets and publication state all derive from it, and a unit test asserts every route resolves
 to a page file and every published route appears in navigation — so a renamed page cannot silently
 orphan a link. The same table gates `/about`: `published: false` removes it from the build, from

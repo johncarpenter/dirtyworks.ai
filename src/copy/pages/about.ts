@@ -2,7 +2,7 @@
    in sentence case and uppercased by CSS (scripts/check-content.ts RULE-7).
 
    Nothing here names a founder, a company history, a credential, or a photograph. Those are
-   outstanding sponsor inputs, held in src/content/placeholders.ts as FOUNDER_PROFILE, and the
+   outstanding sponsor inputs, held in src/copy/placeholders.ts as FOUNDER_PROFILE, and the
    route stays unpublished until they arrive. The paragraphs below are the provisional copy the
    prototype authored around that gap — they describe the company, never a person. */
 

@@ -10,9 +10,9 @@
  */
 import { readdirSync, readFileSync, statSync, existsSync } from 'node:fs';
 import { join, relative, extname } from 'node:path';
-import { PLACEHOLDERS } from '../src/content/placeholders';
-import { ROUTES } from '../src/content/routes';
-import { CLAIM_ARTEFACTS } from '../src/content/claim-artefacts';
+import { PLACEHOLDERS } from '../src/copy/placeholders';
+import { ROUTES } from '../src/copy/routes';
+import { CLAIM_ARTEFACTS } from '../src/copy/claim-artefacts';
 
 const ROOT = process.cwd();
 const SRC = join(ROOT, 'src');
@@ -43,7 +43,7 @@ const walk = (dir: string, exts: string[]): string[] => {
 };
 
 const srcFiles = walk(SRC, ['.astro', '.ts', '.tsx', '.css']);
-const contentFiles = srcFiles.filter((f) => f.includes(join('src', 'content')));
+const contentFiles = srcFiles.filter((f) => f.includes(join('src', 'copy')));
 const distHtml = walk(DIST, ['.html']);
 
 const lineOf = (text: string, index: number) => text.slice(0, index).split('\n').length;
@@ -83,9 +83,9 @@ for (const placeholder of PLACEHOLDERS) {
       `blocks route ${route.path}, but that route is published. ${placeholder.note}`;
 
     if (placeholder.severity === 'blocks-build') {
-      fail('src/content/placeholders.ts', 0, 'RULE-1', message);
+      fail('src/copy/placeholders.ts', 0, 'RULE-1', message);
     } else if (LAUNCH_MODE) {
-      fail('src/content/placeholders.ts', 0, 'RULE-1', `[launch] ${message}`);
+      fail('src/copy/placeholders.ts', 0, 'RULE-1', `[launch] ${message}`);
     } else {
       notes.push(`RULE-1 launch blocker: ${message}`);
     }

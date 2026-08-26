@@ -9,7 +9,7 @@ import { join } from 'node:path';
  * A gate that has never been seen to fail is not a gate.
  */
 const ROOT = process.cwd();
-const FIXTURE_TS = join(ROOT, 'src', 'content', '__gate_fixture__.ts');
+const FIXTURE_TS = join(ROOT, 'src', 'copy', '__gate_fixture__.ts');
 const FIXTURE_CSS = join(ROOT, 'src', 'styles', '__gate_fixture__.css');
 
 interface GateResult {

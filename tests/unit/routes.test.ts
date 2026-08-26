@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
-import { ROUTES, routeById, HEADER_ACTIONS } from '../../src/content/routes';
-import { headerNav, footerColumns } from '../../src/content/navigation';
+import { ROUTES, routeById, HEADER_ACTIONS } from '../../src/copy/routes';
+import { headerNav, footerColumns } from '../../src/copy/navigation';
 
 const PAGES = join(process.cwd(), 'src', 'pages');
 const navIds = [

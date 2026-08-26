@@ -5,8 +5,8 @@ import Band from '../components/layout/Band.astro';
 import Folio from '../components/ui/Folio.astro';
 import Button from '../components/ui/Button.astro';
 import StartForm from '../components/islands/StartForm';
-import { CONTACT_EMAIL, INTAKE_MAILTO_SUBJECT } from '../content/site';
-import { hrefFor } from '../content/routes';
+import { CONTACT_EMAIL, INTAKE_MAILTO_SUBJECT } from '../copy/site';
+import { hrefFor } from '../copy/routes';
 
 const mailto = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(INTAKE_MAILTO_SUBJECT)}`;
 

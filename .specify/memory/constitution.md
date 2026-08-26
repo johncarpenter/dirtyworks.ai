@@ -26,6 +26,14 @@ Amendment 1.0.0 → 1.0.1 (PATCH, 2026-08-25)
   bundled Vite major instead of by peer-range checking.
 - Classification: PATCH — a factual correction to an existing constraint. No principle added,
   removed, or redefined; the intent (pin integrations to the Astro major) is unchanged.
+
+Amendment 1.0.1 → 1.0.2 (PATCH, 2026-08-26)
+- Trigger: `src/content/` is Astro's content-collections root, and every directory inside it becomes
+  an auto-generated legacy collection (astro/dist/content/utils.js:467) — deprecated, and noisy in
+  every build log. The typed copy modules are not a collection.
+- Change: the two references to `src/content/` in Principle III and the Development Workflow now
+  read `src/copy/`. The registry and the navigation model are unchanged in substance.
+- Classification: PATCH — a path correction. No rule added, removed, or weakened.
 -->
 
 # Dirtyworks.ai Marketing Website Constitution
@@ -81,7 +89,7 @@ source without breaking the build, and keeps the build from reaching outside `sr
 Unresolved facts MUST render as visible markers, and the release MUST fail while any marker is
 unresolved. Intent is not a control; a failing exit code is.
 
-- A placeholder registry under `src/content/` MUST back every unresolved fact. Unresolved values
+- A placeholder registry under `src/copy/` MUST back every unresolved fact. Unresolved values
   render through a marker component, never as invented text.
 - A content check script MUST exit non-zero when: any placeholder is unresolved; any prohibited
   vocabulary string appears in `src/`; any banned CTA label appears in `src/`; an illustrative mock
@@ -195,7 +203,7 @@ Order of construction is mandatory because each step removes a class of rework:
    section does not recolour its headings.
 2. Apply `min-width: 0` to grid children in shared layout classes before building any page. Grid
    children default to `min-width: auto` and will overflow at 320px.
-3. Model navigation as data in `src/content/`, consumed by header, footer, mobile panel, and a unit
+3. Model navigation as data in `src/copy/`, consumed by header, footer, mobile panel, and a unit
    test asserting every route resolves to a page file and every page appears in navigation.
 4. Build pages as `.astro` sections; add an island only when a control needs behaviour.
 5. Write the action error contract table before the handler.
@@ -245,4 +253,4 @@ MUST be corrected.
   Where content and visual authority disagree, `mockups/README.md` governs words, structure, and
   calls to action; `design-system/readme.md` governs tokens, components, and interaction patterns.
 
-**Version**: 1.0.1 | **Ratified**: 2026-08-25 | **Last Amended**: 2026-08-25
+**Version**: 1.0.2 | **Ratified**: 2026-08-25 | **Last Amended**: 2026-08-26

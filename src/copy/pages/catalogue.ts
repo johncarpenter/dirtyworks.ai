@@ -8,7 +8,7 @@
    2. There is no price, no currency, no per-seat figure and no buy button. Every commercial value
       resolves to "Verify at quote" or "Scoped at review".
    3. The quote sheet is a structure, not an offer, and renders its ILLUSTRATIVE stamp — see
-      src/content/claim-artefacts.ts, which the release gate reads. */
+      src/copy/claim-artefacts.ts, which the release gate reads. */
 import { hrefFor } from '../routes';
 import type { ProofStatus } from '../../types/proof';
 
@@ -211,7 +211,7 @@ export const PRODUCT_MENU = {
   ] satisfies readonly ProductCategory[],
   primary: { label: 'Add to draft portfolio', href: hrefFor('start') } satisfies Action,
   secondary: { label: 'Ask about this category', href: hrefFor('start') } satisfies Action,
-  /** Registered as the catalogue's VERIFY AT QUOTE artefact in src/content/claim-artefacts.ts. */
+  /** Registered as the catalogue's VERIFY AT QUOTE artefact in src/copy/claim-artefacts.ts. */
   disclaimer: 'No prices and no buy button. The configurator is not a live application yet.',
 };
 
