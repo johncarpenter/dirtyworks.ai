@@ -1,6 +1,8 @@
 /* Single source for routing, metadata, navigation membership and publication gating.
    Titles and descriptions are verbatim from mockups/README.md — content, not implementation
-   detail. tests/unit/routes.test.ts asserts the invariants. */
+   detail. The one exception is /about, which the README scoped as an about page and which now
+   also carries the contact register; its title says so. tests/unit/routes.test.ts asserts the
+   invariants. */
 
 export type RouteId =
   | 'home'
@@ -123,17 +125,22 @@ export const ROUTES: readonly RouteEntry[] = [
     id: 'about',
     path: '/about',
     page: 'about',
-    title: 'About Dirtyworks.ai | Operator-led managed AI services',
-    description: null,
-    navLabel: 'About',
-    inHeaderNav: false,
+    title: 'About and contact | Dirtyworks.ai',
+    description:
+      'Who Dirtyworks.ai is, and how to reach us: email hello@dirtyworks.ai, the operating-gap ' +
+      'intake, or a partner enquiry. Calgary, Alberta.',
+    navLabel: 'About & contact',
+    // In the header because the contact route is the one visitors hunt for. The label names both
+    // halves of the page; "Contact us" on its own is a banned call to action (content-check RULE-3).
+    inHeaderNav: true,
     footerColumn: 'company',
     headerAction: 'buyer',
     ctaPrimary: 'start',
     ctaSecondary: 'method',
-    // Withheld: founder name, biography, credentials and photograph are outstanding sponsor
-    // inputs. The page is built; publishing it would ship the OPEN GAP annotation panel.
-    published: false,
+    // Publishes without founder content. The page describes the company and how to reach it; it
+    // names no person, so nothing on it is invented. FOUNDER_PROFILE stays open in
+    // src/copy/placeholders.ts and gates the founder band, which is withheld rather than filled.
+    published: true,
   },
   {
     id: 'notes',

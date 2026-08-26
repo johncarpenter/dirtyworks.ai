@@ -1,0 +1,61 @@
+---
+/* 03 / The company. Three paragraphs describing what Dirtyworks.ai is and why it exists.
+
+   There is deliberately no founder band beside them. The prototype put an OPEN GAP annotation
+   panel here listing the sponsor inputs still outstanding; that panel is a production artefact and
+   was never for public release. The inputs are still tracked — FOUNDER_PROFILE in
+   src/copy/placeholders.ts — and when they land the band goes in beside this copy. */
+import Band from '../../layout/Band.astro';
+import Folio from '../../ui/Folio.astro';
+import { COMPANY_FOLIO, COMPANY_PARAGRAPHS } from '../../../copy/pages/about';
+
+const [lead, ...body] = COMPANY_PARAGRAPHS;
+---
+
+<Band ground="bone-2" labelledBy="company-folio">
+  <Folio id="company-folio" text={COMPANY_FOLIO} />
+  <div class="company">
+    <p class="company__lead">{lead}</p>
+    <div class="company__body">
+      {body.map((paragraph) => <p>{paragraph}</p>)}
+    </div>
+  </div>
+</Band>
+
+<style>
+  .company {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+    gap: clamp(32px, 5vw, 80px);
+    align-items: start;
+  }
+
+  .company > * {
+    min-width: 0;
+  }
+
+  .company__lead {
+    margin: 0;
+    font-size: clamp(19px, 1.4vw, 26px);
+    line-height: 1.38;
+    max-width: 52ch;
+  }
+
+  .company__body p {
+    margin: 0;
+    font-size: 18px;
+    line-height: 1.52;
+    max-width: 56ch;
+  }
+
+  /* The prototype tightens the gap between the two body paragraphs by 4px. */
+  .company__body p + p {
+    margin-top: 20px;
+  }
+
+  @media (max-width: 900px) {
+    .company {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>

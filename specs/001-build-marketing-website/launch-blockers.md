@@ -9,9 +9,7 @@ run, and `npm run check:launch` turns the reports into failures.
 
 ## Blocking the build
 
-| # | Blocker | Owner | Gates | Behaviour today |
-|---|---|---|---|---|
-| 1 | Founder name, title, employment history, verifiable achievements, credentials, approved photograph, legal entity, and why Alberta | Sponsor | `/about` | `published: false` in `src/content/routes.ts`. The page is built and complete; the route returns 404, is absent from every navigation surface, and no CTA targets it. `npm run check:content` fails if it is published while `FOUNDER_PROFILE` is unresolved. **Do not invent biography.** |
+Nothing. `/about` was the only entry here; see below for what replaced it.
 
 ## Blocking public launch
 
@@ -28,6 +26,12 @@ of permanently red.
 | 6 | Sponsor approval of public offer names, support boundaries and availability wording | Sponsor | all pages | Copy currently ships exactly as the handoff specifies. |
 | 7 | Confirmed supported product shortlist and any authorized-reseller statements | Sponsor | `/catalogue` | Every product name renders as a candidate example under a `VERIFY AT QUOTE` stamp, with no price and no purchase route. |
 
+## Outstanding, blocking nothing
+
+| # | Input | Owner | Behaviour today |
+|---|---|---|---|
+| 8 | Founder name, title, employment history, verifiable achievements, credentials, approved photograph, legal entity, and why Alberta | Sponsor | `/about` publishes as the about-and-contact page. It describes the company, carries the contact register, and names no person — so it needs none of these to be true. `FOUNDER_PROFILE` stays in `src/copy/placeholders.ts` with `blocksRoutes: []`, and the founder band is simply absent rather than stubbed. Release-gate rule 1 still fails the build if an `OPEN GAP` marker is ever rendered on a published route, so the annotation panel cannot return by accident. **Do not invent biography.** |
+
 ## Already satisfied
 
 | Item | Evidence |
@@ -36,7 +40,7 @@ of permanently red.
 | No fabricated logos, testimonials, certifications, results or vendor relationships | Release gate rules 4 and 5; `tests/e2e/home.spec.ts` asserts zero images and zero price patterns |
 | Three complete Notes articles *if* Notes launches | `/notes` ships as an index with three notes in preparation and a title-only queue — the intended design, with no fabricated dates or reading times |
 | Accessibility QA | `tests/e2e/a11y.spec.ts` (heading outline, AA contrast on every band, no colour-only state, hidden decorative glyphs), `keyboard.spec.ts`, `no-js.spec.ts` |
-| Mobile QA | `tests/e2e/responsive.spec.ts` — 8 routes × 6 widths from 320px |
+| Mobile QA | `tests/e2e/responsive.spec.ts` — 9 routes × 6 widths from 320px |
 | Form abuse QA | Decoy, 1000ms timing floor, 10/60s hashed-IP rate limit; unit-tested including the fail-closed path |
 | Security headers | **Not yet configured** — see below |
 | Gates in front of the deploy | `npm run ci:verify` is the Workers Builds build command; a failing content gate stops the deploy. E2E runs at push time via `.githooks/pre-push`. See [`DEPLOYMENT.md`](../../DEPLOYMENT.md). |
@@ -51,3 +55,6 @@ of permanently red.
   latin would cut it substantially.
 - **`from` address.** `src/actions/notify.ts` sends from `website@dirtyworks.ai`. Confirm that
   mailbox exists on the onboarded domain.
+- **Open mobile menu overflows.** With the disclosure panel open at 320-375px the document scrolls
+  sideways (456px against a 320px viewport). Pre-dates the `/about` work and is present on every
+  page; `responsive.spec.ts` only measures the closed state, which is why it went unseen.

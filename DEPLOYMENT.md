@@ -77,7 +77,7 @@ message and a `mailto:` alternative — until the sending domain is onboarded.
 ```bash
 curl -s -o /dev/null -w '%{http_code}\n' https://dirtyworks.ai/                     # 200
 curl -s -o /dev/null -w '%{http_code}\n' https://dirtyworks.ai/_worker.js/index.js  # 404
-curl -s -o /dev/null -w '%{http_code}\n' https://dirtyworks.ai/about                # 404, withheld
+curl -s -o /dev/null -w '%{http_code}\n' https://dirtyworks.ai/about                # 200
 ```
 
 The middle one matters: a 200 there means the server bundle is being served as a public asset and

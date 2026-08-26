@@ -1,6 +1,16 @@
 import { expect, test } from '@playwright/test';
 
-const ROUTES = ['/', '/services', '/catalogue', '/method', '/trust', '/msps', '/notes', '/start'];
+const ROUTES = [
+  '/',
+  '/services',
+  '/catalogue',
+  '/method',
+  '/trust',
+  '/msps',
+  '/about',
+  '/notes',
+  '/start',
+];
 
 /** Relative luminance per WCAG 2.1. */
 const contrast = (a: [number, number, number], b: [number, number, number]) => {

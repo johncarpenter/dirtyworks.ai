@@ -1,0 +1,121 @@
+---
+/* 02 / How to reach us. The contact block sits directly under the hero rather than at the foot of
+   the page: this is the route a visitor arrives on when they are looking for a way in, so the
+   channels come before the narrative.
+
+   It is a register, not a card grid — the same RegisterRow the rest of the site uses for anything
+   that has a label, a value and a classification. The band takes the bone ground rather than
+   bone-2 so that the register's alternating rows have a ground to alternate to. The sensitive-data
+   rule closes it, because the email address on this page is a channel in its own right and the
+   note on /start only covers the form. */
+import Band from '../../layout/Band.astro';
+import Folio from '../../ui/Folio.astro';
+import RegisterRow from '../../patterns/RegisterRow.astro';
+import { CONTACT, CONTACT_ROWS } from '../../../copy/pages/about';
+import { SENSITIVE_DATA_NOTE_EMAIL } from '../../../copy/site';
+---
+
+<Band ground="bone" labelledBy="contact-heading">
+  <Folio text={CONTACT.folio} />
+  <div class="contact__head">
+    <h2 class="contact__heading" id="contact-heading">{CONTACT.heading}</h2>
+    <p class="contact__support">{CONTACT.support}</p>
+  </div>
+
+  <div class="contact__register">
+    {
+      CONTACT_ROWS.map((row, index) => (
+        <RegisterRow
+          label={row.label}
+          detail={row.detail}
+          offset={index % 2 === 1}
+          last={index === CONTACT_ROWS.length - 1}
+        >
+          <p class="contact__value">
+            {row.href ? <a href={row.href}>{row.value}</a> : row.value}
+          </p>
+          {/* A span, not a paragraph: RegisterRow zeroes the margin on every `p` it is handed,
+              which would collapse the gap under the value. */}
+          <span class="contact__body">{row.body}</span>
+        </RegisterRow>
+      ))
+    }
+  </div>
+
+  <p class="contact__note">{SENSITIVE_DATA_NOTE_EMAIL}</p>
+</Band>
+
+<style>
+  .contact__head {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    gap: clamp(24px, 4vw, 64px);
+    align-items: end;
+    margin-bottom: clamp(32px, 4vw, 56px);
+  }
+
+  .contact__heading {
+    font-weight: var(--weight-display-max);
+    font-size: clamp(34px, 4.4vw, 76px);
+    line-height: 0.86;
+    letter-spacing: -0.035em;
+    margin: 0;
+  }
+
+  .contact__support {
+    margin: 0;
+    font-size: 18px;
+    line-height: 1.52;
+    max-width: 48ch;
+  }
+
+  .contact__register {
+    border-top: 1.5px solid var(--ink);
+  }
+
+  .contact__value {
+    font-family: var(--font-mono);
+    font-size: 15px;
+    font-weight: var(--weight-label);
+    letter-spacing: 0.04em;
+    line-height: 1.4;
+  }
+
+  .contact__value a {
+    border-bottom: 2px solid var(--signal-orange);
+    padding-bottom: 1px;
+  }
+
+  .contact__value a:hover {
+    background: var(--signal-orange);
+    color: var(--ink);
+  }
+
+  .contact__body {
+    display: block;
+    margin-top: 10px;
+    font-size: 16.5px;
+    line-height: 1.5;
+    color: var(--ink-2);
+  }
+
+  .contact__note {
+    margin: clamp(28px, 3vw, 40px) 0 0;
+    padding-top: 20px;
+    border-top: 1px solid var(--rule);
+    font-family: var(--font-mono);
+    font-size: var(--type-label-sm);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--steel);
+    line-height: 1.8;
+  }
+
+  @media (max-width: 900px) {
+    .contact__head {
+      grid-template-columns: minmax(0, 1fr);
+      align-items: start;
+      gap: 20px;
+    }
+  }
+</style>

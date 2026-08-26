@@ -380,8 +380,10 @@ specs/                feature spec, plan, contracts, tasks, launch blockers
 Routing and navigation live in `src/copy/routes.ts` as data. The header, footer, mobile panel,
 CTA targets and publication state all derive from it, and a unit test asserts every route resolves
 to a page file and every published route appears in navigation — so a renamed page cannot silently
-orphan a link. The same table gates `/about`: `published: false` removes it from the build, from
-navigation, and from every CTA.
+orphan a link. The same table carries publication state: `published: false` removes a route from
+the build, from navigation, and from every CTA. `/about` was held that way until it became the
+about-and-contact page — it now publishes, and the founder record it still lacks is withheld
+content rather than a withheld route.
 
 ## 12. Replicating this
 
