@@ -53,8 +53,11 @@ npm run check:launch   # same rules, but outstanding approvals become failures
 ```
 
 `build` comes before `check:content` because three of the gate's eight rules inspect the **built
-output** — a claim stamp can only be verified as rendered. Merge requires the first four. Deploy
-requires all of them plus:
+output** — a claim stamp can only be verified as rendered.
+
+The first four are also exactly what `npm run ci:verify` runs, which is the Workers Builds build
+command: if any of them fails, nothing deploys. E2E and the dry run run at push time via
+`.githooks/pre-push`. Deploy additionally requires:
 
 ```bash
 curl -o /dev/null -w '%{http_code}\n' http://localhost:8787/_worker.js/index.js   # expect 404

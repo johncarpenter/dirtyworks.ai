@@ -419,7 +419,8 @@ Then, in order — the order is the point, because each step removes a class of 
    both the server and the form state machine implement.
 10. `vitest.config.ts` with `getViteConfig()`; `playwright.config.ts` with `webServer` running
     `wrangler dev`.
-11. Wire the content gate into CI *before* deploy. `build → check:content → e2e → deploy --dry-run`.
+11. Wire the content gate in *front of* the deploy, wherever your one build hook is. Order:
+    `typecheck → unit → build → check:content`, then E2E and a dry run at push time.
 
 ### The `_worker.js` upload error
 
@@ -438,9 +439,17 @@ curl -o /dev/null -w '%{http_code}\n' \
 
 ### Workers Builds
 
-Build command `npm run build`, deploy command `npx wrangler deploy`, build output directory empty.
-A combined `build && deploy` script as the build command makes CI build twice. If the config `name`
-does not match the Worker, Workers Builds overrides it and opens a reconciliation PR.
+Cloudflare is connected directly to GitHub; there is no CI workflow in the repository. Build command
+`npm run ci:verify`, deploy command `npx wrangler deploy`, build output directory empty. A combined
+`build && deploy` script as the build command makes it build twice. If the config `name` does not
+match the Worker, Workers Builds overrides it and opens a reconciliation PR.
+
+The build command is `ci:verify` rather than `build` on purpose. Workers Builds gives you exactly one
+build hook, so that hook is the last place a gate can still block a deploy: it runs the type check,
+the unit tests, the build and the content gate in sequence, and any failure stops the deploy. The
+Playwright suite deliberately stays out of it — downloading a browser on every deploy buys slowness
+and flakiness for a suite that has already had its chance to fail — and lives in a `pre-push` hook
+instead (`git config core.hooksPath .githooks`). Full setup: [`DEPLOYMENT.md`](DEPLOYMENT.md).
 
 ## 13. Where this stops scaling
 

@@ -11,7 +11,9 @@
     "test:unit": "vitest run",
     "test:e2e": "playwright test",
     "check:content": "tsx scripts/check-content.ts",
-    "check:launch": "tsx scripts/check-content.ts --launch"
+    "check:launch": "tsx scripts/check-content.ts --launch",
+    "ci:verify": "npm run typecheck && npm run test:unit && npm run build && npm run check:content",
+    "verify:full": "npm run ci:verify && npm run test:e2e && npx wrangler deploy --dry-run"
   },
   "dependencies": {
     "@astrojs/cloudflare": "^12.6.13",

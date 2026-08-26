@@ -1,0 +1,23 @@
+#!/bin/sh
+# Full verification before anything reaches the remote.
+#
+# Cloudflare Workers Builds runs one build command, and `npm run ci:verify` covers the fast gates
+# there (type check, unit tests, build, content gate). It does NOT run Playwright: the browser
+# download makes every deploy slower and flakier for a suite that has already had its chance to
+# fail here.
+#
+# So this hook is where the end-to-end gate lives. Enable it once per clone:
+#
+#   git config core.hooksPath .githooks
+#
+# Skip deliberately when you must: `git push --no-verify`.
+
+set -e
+
+printf '\n>> pre-push: type check, unit tests, build, content gate, e2e\n\n'
+
+npm run ci:verify
+npm run test:e2e
+npx wrangler deploy --dry-run
+
+printf '\n>> pre-push: all gates passed\n\n'

@@ -39,6 +39,7 @@ of permanently red.
 | Mobile QA | `tests/e2e/responsive.spec.ts` — 8 routes × 6 widths from 320px |
 | Form abuse QA | Decoy, 1000ms timing floor, 10/60s hashed-IP rate limit; unit-tested including the fail-closed path |
 | Security headers | **Not yet configured** — see below |
+| Gates in front of the deploy | `npm run ci:verify` is the Workers Builds build command; a failing content gate stops the deploy. E2E runs at push time via `.githooks/pre-push`. See [`DEPLOYMENT.md`](../../DEPLOYMENT.md). |
 
 ## Recommended before launch, not blocking
 
