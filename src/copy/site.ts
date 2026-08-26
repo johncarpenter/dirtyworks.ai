@@ -14,6 +14,12 @@ export const ACCOUNTABILITY_LINE =
 /** Used by the intake form's no-JavaScript fallback and every retryable failure state. */
 export const INTAKE_MAILTO_SUBJECT = 'Operating gap';
 
-export const SENSITIVE_DATA_NOTE =
-  'Do not send customer records, credentials, private documents, employee information, or other ' +
-  'sensitive data through the website form.';
+/* One list, two sentences. /about offers the email address as a channel in its own right, so the
+   note rendered there has to cover email as well as the form. */
+const SENSITIVE_DATA_LIST =
+  'customer records, credentials, private documents, employee information, or other sensitive data';
+
+export const SENSITIVE_DATA_NOTE = `Do not send ${SENSITIVE_DATA_LIST} through the website form.`;
+
+export const SENSITIVE_DATA_NOTE_EMAIL =
+  `Do not send ${SENSITIVE_DATA_LIST} by email or through the website form.`;

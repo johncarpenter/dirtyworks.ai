@@ -8,6 +8,7 @@ const PUBLISHED = [
   { path: '/method', title: 'Managed AI operating method | Dirtyworks.ai' },
   { path: '/trust', title: 'AI governance, controls, and operating boundaries | Dirtyworks.ai' },
   { path: '/msps', title: 'Managed AI operations for MSP partners | Dirtyworks.ai' },
+  { path: '/about', title: 'About and contact | Dirtyworks.ai' },
   { path: '/notes', title: 'Notes on managed AI operations | Dirtyworks.ai' },
   { path: '/start', title: 'Map your AI stack | Dirtyworks.ai' },
 ];
@@ -21,16 +22,34 @@ test.describe('routes', () => {
     });
   }
 
-  test('withholds /about while its founder content is unresolved', async ({ page }) => {
-    const response = await page.goto('/about');
-    expect(response?.status()).toBe(404);
-  });
-
-  test('never links to the withheld route', async ({ page }) => {
+  test('reaches the contact page from every other page', async ({ page }) => {
     for (const route of PUBLISHED) {
       await page.goto(route.path);
-      await expect(page.locator('a[href="/about"]'), route.path).toHaveCount(0);
+      await expect(page.locator('a[href="/about"]:visible').first(), route.path).toBeVisible();
     }
+  });
+
+  test('names both halves of the page in the navigation label', async ({ page }) => {
+    await page.goto('/');
+    await openNavIfCollapsed(page);
+    await expect(
+      page.locator('header').getByRole('link', { name: /about & contact/i }).first(),
+    ).toBeVisible();
+  });
+
+  test('gives the contact page a working address and both enquiry routes', async ({ page }) => {
+    await page.goto('/about');
+    const main = page.locator('main');
+    await expect(main.locator('a[href="mailto:hello@dirtyworks.ai"]').first()).toBeVisible();
+    await expect(main.locator('a[href="/start"]').first()).toBeVisible();
+    await expect(main.locator('a[href="/msps"]').first()).toBeVisible();
+  });
+
+  test('publishes no founder record while its inputs are unresolved', async ({ page }) => {
+    await page.goto('/about');
+    const text = await page.locator('main').innerText();
+    expect(text).not.toMatch(/OPEN GAP/i);
+    expect(text).not.toMatch(/sponsor input/i);
   });
 
   test('keeps the site chrome on an unknown route', async ({ page }) => {

@@ -2,7 +2,17 @@ import { expect, test } from '@playwright/test';
 
 test.use({ javaScriptEnabled: false });
 
-const ROUTES = ['/', '/services', '/catalogue', '/method', '/trust', '/msps', '/notes', '/start'];
+const ROUTES = [
+  '/',
+  '/services',
+  '/catalogue',
+  '/method',
+  '/trust',
+  '/msps',
+  '/about',
+  '/notes',
+  '/start',
+];
 
 /**
  * A site that ships almost no JavaScript has no excuse for requiring it. These run with scripting
@@ -22,7 +32,7 @@ test.describe('without scripting', () => {
     // Two copies of each destination exist by design (desktop list + disclosure panel); which one
     // is visible depends on width. Without scripting the panel cannot collapse, so one is always
     // visible — that is the guarantee being asserted.
-    for (const path of ['/services', '/catalogue', '/method', '/trust', '/msps']) {
+    for (const path of ['/services', '/catalogue', '/method', '/trust', '/msps', '/about']) {
       await expect(page.locator(`a[href="${path}"]:visible`).first()).toBeVisible();
     }
   });

@@ -1,6 +1,16 @@
 import { expect, test } from '@playwright/test';
 
-const ROUTES = ['/', '/services', '/catalogue', '/method', '/trust', '/msps', '/notes', '/start'];
+const ROUTES = [
+  '/',
+  '/services',
+  '/catalogue',
+  '/method',
+  '/trust',
+  '/msps',
+  '/about',
+  '/notes',
+  '/start',
+];
 const WIDTHS = [320, 375, 480, 768, 1024, 1440];
 
 /**

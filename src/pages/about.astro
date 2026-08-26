@@ -1,36 +1,26 @@
 ---
-/* /about — built completely, published never (yet).
+/* /about — the about-and-contact page.
 
-   Founder name, biography, credentials and photograph are outstanding sponsor inputs. Rather than
-   invent them or leave the page unwritten, the page exists in full and the route carries
-   `published: false` in src/copy/routes.ts. That flag already removes /about from navigation
-   and from every CTA target; the empty response below removes it from the build, so the address
-   falls through to the 404 page instead of shipping the OPEN GAP annotation panel publicly.
+   This is the address a visitor guesses when they want to reach the company, so it carries both
+   halves: who Dirtyworks.ai is, and every way in. The contact register sits directly under the
+   hero rather than at the foot of the page, and the route is in the header navigation under
+   "About & contact" — the previous build reached the same information only through the footer
+   address or /start.
 
-   To publish: land the real founder content, delete the FOUNDER_PROFILE entry from
-   src/copy/placeholders.ts — which removes the gap panel — and flip the route to published. */
+   Founder name, biography, credentials and photograph remain outstanding sponsor inputs, tracked
+   as FOUNDER_PROFILE in src/copy/placeholders.ts. The page publishes without them: it describes
+   the company and names no person, so nothing here is invented, and the OPEN GAP annotation panel
+   the prototype drew is not shipped. When the founder record lands, delete that registry entry and
+   add the band to Company.astro. */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Band from '../components/layout/Band.astro';
 import Folio from '../components/ui/Folio.astro';
 import CTABand from '../components/patterns/CTABand.astro';
+import Contact from '../components/sections/about/Contact.astro';
+import Company from '../components/sections/about/Company.astro';
 import Beliefs from '../components/sections/about/Beliefs.astro';
-import FounderGap from '../components/sections/about/FounderGap.astro';
-import { hrefFor, isPublished } from '../copy/routes';
-import {
-  CTA,
-  FOUNDER_FOLIO,
-  FOUNDER_GAP_NOTE,
-  FOUNDER_GAP_TITLE,
-  FOUNDER_PARAGRAPHS,
-  HERO,
-} from '../copy/pages/about';
-
-if (!isPublished('about')) {
-  // A response with no body writes no file: the route is absent from dist/ entirely.
-  return new Response(null, { status: 404 });
-}
-
-const [lead, ...body] = FOUNDER_PARAGRAPHS;
+import { hrefFor } from '../copy/routes';
+import { CTA, HERO } from '../copy/pages/about';
 ---
 
 <BaseLayout route="about">
@@ -43,18 +33,12 @@ const [lead, ...body] = FOUNDER_PARAGRAPHS;
         }</span
       >
     </h1>
+    <p class="about-hero__support">{HERO.support}</p>
   </Band>
 
-  <Band ground="bone-2" labelledBy="founder-folio">
-    <div class="founder">
-      <div class="founder__copy">
-        <Folio id="founder-folio" text={FOUNDER_FOLIO} />
-        <p class="founder__lead">{lead}</p>
-        {body.map((paragraph) => <p class="founder__body">{paragraph}</p>)}
-      </div>
-      <FounderGap title={FOUNDER_GAP_TITLE} note={FOUNDER_GAP_NOTE} />
-    </div>
-  </Band>
+  <Contact />
+
+  <Company />
 
   <Beliefs />
 
@@ -84,39 +68,10 @@ const [lead, ...body] = FOUNDER_PARAGRAPHS;
     color: var(--orange-press);
   }
 
-  .founder {
-    display: grid;
-    grid-template-columns: minmax(0, 1.25fr) minmax(280px, 1fr);
-    gap: clamp(32px, 5vw, 80px);
-    align-items: start;
-  }
-
-  .founder > * {
-    min-width: 0;
-  }
-
-  .founder__lead {
-    margin: 0;
-    font-size: clamp(19px, 1.4vw, 26px);
-    line-height: 1.38;
-    max-width: 52ch;
-  }
-
-  .founder__body {
-    margin: 24px 0 0;
-    font-size: 18px;
-    line-height: 1.52;
-    max-width: 56ch;
-  }
-
-  /* The prototype tightens the gap between the two body paragraphs by 4px. */
-  .founder__body + .founder__body {
-    margin-top: 20px;
-  }
-
-  @media (max-width: 900px) {
-    .founder {
-      grid-template-columns: minmax(0, 1fr);
-    }
+  .about-hero__support {
+    margin: 34px 0 0;
+    font-size: clamp(18px, 1.4vw, 24px);
+    line-height: 1.42;
+    max-width: 48ch;
   }
 </style>

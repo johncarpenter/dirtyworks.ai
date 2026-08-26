@@ -68,14 +68,29 @@ describe('route model', () => {
     expect(HEADER_ACTIONS.partner.href).toBe('/start');
   });
 
-  it('puts the five primary items in the header, in order', () => {
+  it('puts the six primary items in the header, in order', () => {
     expect(headerNav.map((i) => i.label)).toEqual([
       'Services',
       'Catalogue',
       'Method',
       'Trust',
       'For MSPs',
+      'About & contact',
     ]);
+  });
+
+  /* The reason /about was published: the address was reachable only through the footer. */
+  it('keeps the contact route in the header navigation', () => {
+    expect(headerNav.map((i) => i.id)).toContain('about');
+  });
+
+  /* RULE-3 of the release gate bans "Contact us" as a call to action; a navigation label that
+     normalised to exactly that string would be caught in dist/ rather than here. */
+  it('never labels a destination with a banned call to action', () => {
+    const banned = ['get started', 'learn more', 'book a demo', 'contact us', 'talk to sales'];
+    for (const route of ROUTES) {
+      expect(banned, route.id).not.toContain(route.navLabel.toLowerCase());
+    }
   });
 
   it('keeps legal footer items as inert text, never links', () => {

@@ -1,6 +1,16 @@
 import { expect, test } from '@playwright/test';
 
-const ROUTES = ['/', '/services', '/catalogue', '/method', '/trust', '/msps', '/notes', '/start'];
+const ROUTES = [
+  '/',
+  '/services',
+  '/catalogue',
+  '/method',
+  '/trust',
+  '/msps',
+  '/about',
+  '/notes',
+  '/start',
+];
 
 /**
  * Guards against silent style loss. `<Band class="x">` renders that class on an element carrying

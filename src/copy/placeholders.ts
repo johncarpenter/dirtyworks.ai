@@ -31,9 +31,16 @@ export const PLACEHOLDERS: readonly Placeholder[] = [
     key: 'FOUNDER_PROFILE',
     state: 'OPEN GAP',
     owner: 'sponsor',
-    severity: 'blocks-build',
-    blocksRoutes: ['about'],
-    note: 'About cannot publish without real founder content. Do not invent biography.',
+    severity: 'blocks-launch',
+    /* Blocks no route. /about publishes as an about-and-contact page: it describes the company
+       and how to reach it, and names no person, so nothing on it depends on these inputs. The
+       founder band is withheld rather than filled, exactly as LEGAL_PAGES holds the legal links
+       as inert text. The entry stays because the fact is still unresolved — resolution means
+       deleting it and adding the real founder band to src/pages/about.astro. */
+    blocksRoutes: [],
+    note:
+      'A founder record does not exist yet. /about carries no biography, no credential and no ' +
+      'photograph until these land. Do not invent biography.',
     requires: [
       'Founder name and title',
       'Employment history',
