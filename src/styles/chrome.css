@@ -12,10 +12,11 @@
 }
 
 .site-header__inner {
+  --header-line: 76px;
   max-width: 1440px;
   margin: 0 auto;
   padding: 0 clamp(20px, 4vw, 80px);
-  min-height: 76px;
+  min-height: var(--header-line);
   display: flex;
   align-items: center;
   gap: 24px;
@@ -141,14 +142,13 @@
   background: var(--bone-3);
 }
 
+/* Only ever rendered at 1024px and below, where it is a full-width row of `.site-header__inner`
+   stacked under the header line — see the `max-width: 1024px` block. Horizontal padding comes
+   from that container, not from here. */
 .header-panel {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 100%;
   background: var(--bone);
-  border-bottom: 1.5px solid var(--ink);
-  padding: 20px clamp(20px, 4vw, 80px) 28px;
+  border-top: 1.5px solid var(--ink);
+  padding: 20px 0 28px;
   display: grid;
   gap: 18px;
 }
@@ -197,12 +197,21 @@
 
 @media (max-width: 1024px) {
   .site-header__inner {
-    position: relative;
-    gap: 12px;
+    /* The panel takes a line of its own beneath the wordmark and the menu button. No row gap:
+       the panel's own top rule is the separator under the header line. */
+    flex-wrap: wrap;
+    gap: 0 12px;
   }
 
-  /* Direct children only. `.header-nav .header-action` also matched the panel's copy of the
-     action, which is the one the mobile visitor needs (FR-045). */
+  /* Once the panel wraps below it, `min-height` on the container no longer governs the header
+     line — it measures the whole wrapped stack. The line carries its own 76px instead, so the
+     wordmark and the menu button sit exactly where they do with the panel closed. */
+  .header-nav {
+    min-height: var(--header-line);
+  }
+
+  /* The header line's own copies only. The panel keeps its copy of the action, which is the one
+     the mobile visitor needs (FR-045). */
   .header-nav > .header-nav__list,
   .header-nav > .header-action,
   .header-nav > .header-version {
@@ -214,13 +223,12 @@
     align-items: center;
   }
 
-  /* Without scripting the panel is simply part of the page, stacked under the header. */
+  /* Spans the header line so the panel's own contents decide its width rather than whatever is
+     left over beside the menu button. Holds in both states: with scripting this row appears only
+     while the panel is open, and without scripting the panel is simply part of the page, stacked
+     under the header. */
   .header-panel {
-    position: static;
-    border-bottom: 0;
-    border-top: 1.5px solid var(--ink);
-    padding-left: 0;
-    padding-right: 0;
+    flex: 1 0 100%;
   }
 }
 

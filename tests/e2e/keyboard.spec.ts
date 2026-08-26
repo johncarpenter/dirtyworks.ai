@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { openNavIfCollapsed } from './support';
+import { openNavIfCollapsed, waitForHeaderHydration } from './support';
 
 test.describe('keyboard', () => {
   test('reaches the skip link first and jumps to content', async ({ page }) => {
@@ -55,6 +55,7 @@ test.describe('keyboard', () => {
   test('opens and dismisses the mobile menu without a pointer', async ({ page }) => {
     await page.setViewportSize({ width: 320, height: 720 });
     await page.goto('/');
+    await waitForHeaderHydration(page);
 
     const button = page.locator('.header-menu-button');
     await button.focus();
@@ -70,6 +71,7 @@ test.describe('keyboard', () => {
   test('keeps the primary action inside the opened panel', async ({ page }) => {
     await page.setViewportSize({ width: 320, height: 720 });
     await page.goto('/');
+    await waitForHeaderHydration(page);
     await page.locator('.header-menu-button').click();
     await expect(
       page.locator('.header-panel').getByRole('link', { name: /map your ai stack/i }),

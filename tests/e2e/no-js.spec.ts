@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { measureOverflow } from './support';
 
 test.use({ javaScriptEnabled: false });
 
@@ -36,6 +37,21 @@ test.describe('without scripting', () => {
       await expect(page.locator(`a[href="${path}"]:visible`).first()).toBeVisible();
     }
   });
+
+  // The panel cannot collapse here, so its layout is the header's layout at every narrow width.
+  for (const width of [320, 375, 480]) {
+    test(`does not scroll sideways at ${width}px with the panel always open`, async ({ page }) => {
+      await page.setViewportSize({ width, height: 720 });
+      await page.goto('/');
+
+      const overflow = await measureOverflow(page);
+      expect(
+        overflow.scrollWidth,
+        `no scripting @ ${width}px — widest element: ${overflow.widest.tag} ` +
+          `(right edge ${Math.round(overflow.widest.right)}px)`,
+      ).toBeLessThanOrEqual(overflow.clientWidth + 1);
+    });
+  }
 
   test('navigates by following a link', async ({ page }) => {
     await page.goto('/');
