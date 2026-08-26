@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { measureOverflow, waitForHeaderHydration } from './support';
 
 const ROUTES = [
   '/',
@@ -47,6 +48,30 @@ test.describe('responsive', () => {
         ).toBeLessThanOrEqual(overflow.clientWidth + 1);
       });
     }
+  }
+
+  /**
+   * The cases above measure the closed header only, which is how an open panel that pushed the
+   * document 136px sideways at 320px went unseen. The panel is navigation: it has to hold at the
+   * narrow widths it exists for.
+   */
+  for (const width of [320, 375, 480]) {
+    test(`the open navigation panel does not scroll sideways at ${width}px`, async ({ page }) => {
+      await page.setViewportSize({ width, height: 720 });
+      await page.goto('/');
+      await page.waitForLoadState('load');
+
+      await waitForHeaderHydration(page);
+      await page.locator('.header-menu-button').click();
+      await page.locator('.header-panel[data-open="true"]').waitFor();
+
+      const overflow = await measureOverflow(page);
+      expect(
+        overflow.scrollWidth,
+        `panel open @ ${width}px — widest element: ${overflow.widest.tag} ` +
+          `(right edge ${Math.round(overflow.widest.right)}px)`,
+      ).toBeLessThanOrEqual(overflow.clientWidth + 1);
+    });
   }
 
   test('keeps call-to-action labels specific rather than shortening them', async ({ page }) => {

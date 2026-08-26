@@ -55,6 +55,3 @@ of permanently red.
   latin would cut it substantially.
 - **`from` address.** `src/actions/notify.ts` sends from `website@dirtyworks.ai`. Confirm that
   mailbox exists on the onboarded domain.
-- **Open mobile menu overflows.** With the disclosure panel open at 320-375px the document scrolls
-  sideways (456px against a 320px viewport). Pre-dates the `/about` work and is present on every
-  page; `responsive.spec.ts` only measures the closed state, which is why it went unseen.

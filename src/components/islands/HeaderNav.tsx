@@ -20,7 +20,7 @@ export interface HeaderNavProps {
  */
 export default function HeaderNav({ items, activeId, action, version }: HeaderNavProps) {
   const [open, setOpen] = useState(false);
-  const panelRef = useRef<HTMLDivElement | null>(null);
+  const panelRef = useRef<HTMLElement | null>(null);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
 
   useEffect(() => {
@@ -57,47 +57,53 @@ export default function HeaderNav({ items, activeId, action, version }: HeaderNa
   const actionClass = action.href ? 'header-action' : 'header-action header-action--current';
 
   return (
-    <nav className="header-nav" aria-label="Primary">
-      <ul className="header-nav__list">
-        {items.map((item) => (
-          <li key={item.id}>
-            <a
-              className="header-nav__link"
-              href={item.href}
-              aria-current={item.id === activeId ? 'page' : undefined}
-            >
-              {item.label}
-            </a>
-          </li>
-        ))}
-      </ul>
+    <>
+      <nav className="header-nav" aria-label="Primary">
+        <ul className="header-nav__list">
+          {items.map((item) => (
+            <li key={item.id}>
+              <a
+                className="header-nav__link"
+                href={item.href}
+                aria-current={item.id === activeId ? 'page' : undefined}
+              >
+                {item.label}
+              </a>
+            </li>
+          ))}
+        </ul>
 
-      {action.href ? (
-        <a className={actionClass} href={action.href}>
-          {action.label}
-        </a>
-      ) : (
-        <span className={actionClass} aria-current="page">
-          {action.label}
-        </span>
-      )}
+        {action.href ? (
+          <a className={actionClass} href={action.href}>
+            {action.label}
+          </a>
+        ) : (
+          <span className={actionClass} aria-current="page">
+            {action.label}
+          </span>
+        )}
 
-      <span className="header-version">{`Site / ${version}`}</span>
+        <span className="header-version">{`Site / ${version}`}</span>
 
-      <button
-        ref={buttonRef}
-        className="header-menu-button"
-        type="button"
-        aria-expanded={open}
-        aria-controls="header-panel"
-        onClick={() => setOpen((value) => !value)}
-      >
-        {open ? 'Close' : 'Menu'}
-      </button>
+        <button
+          ref={buttonRef}
+          className="header-menu-button"
+          type="button"
+          aria-expanded={open}
+          aria-controls="header-panel"
+          onClick={() => setOpen((value) => !value)}
+        >
+          {open ? 'Close' : 'Menu'}
+        </button>
+      </nav>
 
-      <div
+      {/* Sibling of the nav rather than a child of it. The panel is a full-width row of the
+          header line; inside the nav's flex row it would sit beside the menu button and push
+          the document sideways at narrow widths. */}
+      <nav
         className="header-panel"
         id="header-panel"
+        aria-label="Menu"
         ref={panelRef}
         data-open={open ? 'true' : 'false'}
       >
@@ -124,7 +130,7 @@ export default function HeaderNav({ items, activeId, action, version }: HeaderNa
         )}
 
         <span className="header-version">{`Site / ${version}`}</span>
-      </div>
-    </nav>
+      </nav>
+    </>
   );
 }
