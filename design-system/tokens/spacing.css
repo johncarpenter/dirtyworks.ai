@@ -1,0 +1,59 @@
+/* Dirtyworks.ai spatial system.
+   8px implementation unit. Rhythm is exposed through large jumps: 16 / 32 / 64 / 128. */
+
+:root {
+  --unit: 8px;
+
+  --space-0: 0;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+  --space-9: 96px;
+  --space-10: 128px;
+  --space-11: 192px;
+
+  /* Rhythm aliases — the four sizes a composition should actually jump between */
+  --rhythm-tight: 16px;
+  --rhythm-step: 32px;
+  --rhythm-band: 64px;
+  --rhythm-chapter: 128px;
+
+  /* Grid: 12 desktop / 6 tablet / 4 mobile */
+  --grid-columns-count: 12; /* @kind other */
+  --grid-gutter: 24px;
+  --grid-max: 1440px; /* @kind spacing */
+  --page-margin: clamp(20px, 4vw, 80px);
+
+  /* Section padding */
+  --band-pad-y: clamp(48px, 7vw, 128px);
+  --band-pad-y-tight: clamp(32px, 4vw, 64px);
+
+  /* Controlled-irregularity allowances */
+  --offset-hard: 16px; /* hard offset blocks shift 8–24px */
+  --offset-hard-max: 24px;
+  --rotate-a: -1.5deg; /* @kind other */ /* rotations stay between -3deg and +3deg */
+  --rotate-b: 2deg; /* @kind other */
+  --crop-max: 15%; /* @kind other */ /* display words may crop up to 15% */
+
+  /* Interaction */
+  --target-min: 44px;
+  --focus-width: 3px;
+  --focus-offset: 2px;
+}
+
+@media (max-width: 900px) {
+  :root {
+    --grid-columns-count: 6; /* @kind other */
+    --grid-gutter: 16px;
+  }
+}
+@media (max-width: 600px) {
+  :root {
+    --grid-columns-count: 4; /* @kind other */
+  }
+}

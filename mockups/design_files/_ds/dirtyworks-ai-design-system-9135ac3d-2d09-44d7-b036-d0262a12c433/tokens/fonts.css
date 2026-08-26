@@ -1,0 +1,20 @@
+/* Dirtyworks.ai typefaces.
+   No licensed font binaries were supplied with the brand materials. The creative
+   direction names three open Google fonts by role, so they are loaded from the
+   Google Fonts CDN rather than self-hosted. Swap these @import lines for local
+   @font-face rules when production files land in assets/fonts/. */
+
+@import url("https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=Instrument+Serif:ital@0;1&family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap");
+
+/* Icon set: Material Symbols Sharp — a square-cornered, variable-weight icon
+   font substituted for the (undefined) brand icon set. Sharp corners and
+   adjustable stroke weight match the 0–3px radius surface system. */
+@import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp:opsz,wght,FILL,GRAD@24,500,0,0&display=block");
+
+:root {
+  --font-display: "Archivo", "Arial Black", "Helvetica Neue", sans-serif;
+  --font-sans: "Archivo", "Helvetica Neue", Helvetica, sans-serif;
+  --font-serif: "Instrument Serif", "Times New Roman", Georgia, serif;
+  --font-mono: "IBM Plex Mono", "SFMono-Regular", Menlo, Consolas, monospace;
+  --font-icon: "Material Symbols Sharp";
+}

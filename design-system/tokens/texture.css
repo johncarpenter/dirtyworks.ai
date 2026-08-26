@@ -1,0 +1,73 @@
+/* Dirtyworks.ai texture library — code-native, no raster generations.
+   Texture is visible at display scale and must disappear behind reading text.
+   Never apply texture to body-copy fields or form inputs. */
+
+:root {
+  --texture-opacity-strong: 0.16; /* @kind other */
+  --texture-opacity: 0.09; /* @kind other */
+  --texture-opacity-faint: 0.05; /* @kind other */
+
+  --halftone-size: 6px;
+  --halftone-dot: 1.6px;
+  --grid-size: 32px;
+}
+
+/* Paper grain: fine crosshatch of warm noise over bone. */
+.dw-tex-paper {
+  position: relative;
+  isolation: isolate;
+}
+.dw-tex-paper::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: var(--texture-opacity-faint);
+  background-image: repeating-linear-gradient(
+      0deg,
+      rgba(17, 17, 15, 0.5) 0 1px,
+      transparent 1px 3px
+    ),
+    repeating-linear-gradient(90deg, rgba(17, 17, 15, 0.4) 0 1px, transparent 1px 4px);
+}
+
+/* Halftone: dot screen for image and field treatments. */
+.dw-tex-halftone {
+  background-image: radial-gradient(
+    var(--halftone-dot) at 50% 50%,
+    var(--ink) 99%,
+    transparent 100%
+  );
+  background-size: var(--halftone-size) var(--halftone-size);
+}
+
+/* Carbon transfer: heavy diagonal toner drag, dark fields only. */
+.dw-tex-carbon {
+  background-image: repeating-linear-gradient(
+    -18deg,
+    rgba(243, 236, 221, 0.05) 0 2px,
+    transparent 2px 7px
+  );
+}
+
+/* Blueprint field: cobalt ground with white technical grid. */
+.dw-tex-blueprint {
+  background-color: var(--blueprint);
+  background-image: repeating-linear-gradient(
+      0deg,
+      rgba(255, 255, 255, 0.18) 0 1px,
+      transparent 1px var(--grid-size)
+    ),
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.18) 0 1px, transparent 1px var(--grid-size));
+}
+
+/* Registration drift: offset colour ghost behind a heavy display word. */
+.dw-tex-registration {
+  text-shadow: 3px 2px 0 var(--signal-orange), -2px -1px 0 rgba(40, 85, 255, 0.35);
+}
+
+/* Toner edge: uneven ink edge on a hard rule or band. */
+.dw-tex-toner {
+  box-shadow: inset 0 -2px 0 rgba(17, 17, 15, 0.35), inset 0 2px 0 rgba(17, 17, 15, 0.12);
+}

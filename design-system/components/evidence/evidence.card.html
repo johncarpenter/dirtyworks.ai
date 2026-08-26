@@ -1,0 +1,40 @@
+<!-- @dsCard group="Components" viewport="700x380" name="Evidence — labels, rails, registers" subtitle="Proof stamps, source fragments, ownership rows, redaction reveal" -->
+<!DOCTYPE html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.css"><script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script><script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script><script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script><script src="../../_ds_bundle.js"></script><style>body{background:var(--bone);padding:20px;font-family:var(--font-sans)}#root{display:grid;gap:18px}.grp{display:flex;gap:12px;flex-wrap:wrap;align-items:center}.cap{font-family:var(--font-mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--steel);margin-bottom:8px}</style></head><body><div id="root"></div>
+<script type="text/babel">
+const { ProofLabel, EvidenceRail, OwnerRow, Redaction, CaseMetric } = window.DirtyworksAiDesignSystem_9135ac;
+const App = () => {
+  const [open, setOpen] = React.useState(false);
+  return <>
+    <div><div className="cap">Proof labels</div><div className="grp">
+      <ProofLabel status="source" value="03">Source</ProofLabel>
+      <ProofLabel status="owner" value="Named">Owner</ProofLabel>
+      <ProofLabel status="permission" value="Tested">Permission</ProofLabel>
+      <ProofLabel status="answer" value="Supported">Answer</ProofLabel>
+      <ProofLabel status="gap" value="Open">Gap</ProofLabel>
+      <ProofLabel status="human">Action / human</ProofLabel>
+      <ProofLabel status="change" value="Logged">Change</ProofLabel>
+      <ProofLabel status="operated">Status / operated</ProofLabel>
+    </div></div>
+    <div><div className="cap">Evidence rail — misaligned</div>
+      <EvidenceRail items={[
+        {text:'The current procedure is somewhere in SharePoint.', origin:'SHAREPOINT / OPS', status:'gap', statusLabel:'Open gap'},
+        {text:'The last project solved this. Nobody can find it.', origin:'PROJECT ARCHIVE / 2024', status:'source', statusLabel:'Unindexed'},
+        {text:'New staff keep asking the same five people.', status:'human', statusLabel:'Person-dependent'}]}/>
+    </div>
+    <div><div className="cap">Ownership register</div>
+      <OwnerRow index={1} item="Field service procedures" owner="B. Nguyen" checked="2026-08-11" status="operated" statusLabel="Current"/>
+      <OwnerRow index={2} item="Rate schedule (2024)" checked="2024-03-02" status="gap" statusLabel="Stale"/>
+    </div>
+    <div><div className="cap">Redaction reveal — click. Bar inverts on dark grounds.</div>
+      <div className="grp" style={{gap:24}}>
+        <Redaction covered="THE AI" revealed="THE OPERATION" open={open} onToggle={()=>setOpen(!open)}/>
+        <span style={{background:'var(--ink)',padding:'10px 16px'}}><Redaction tone="bone" covered="THE AI" revealed="THE OPERATION" open={open} onToggle={()=>setOpen(!open)}/></span>
+      </div>
+    </div>
+    <div><div className="cap">Case metric</div>
+      <CaseMetric value="14→2" unit="min" label="Time to find the current field procedure" baseline="14 min median, 12 events" period="30 days post-launch" method="Timed observation, same question class" source="Launch report" hypothesis/>
+    </div>
+  </>;
+};
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script></body></html>

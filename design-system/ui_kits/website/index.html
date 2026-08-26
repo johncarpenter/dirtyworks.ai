@@ -1,0 +1,211 @@
+<!-- @dsCard group="Website" viewport="1440x900" name="Home — hero + evidence" subtitle="Interruption hero, source strip, misaligned evidence register" -->
+<!-- @startingPoint section="Website" subtitle="Dirtyworks.ai marketing site, five surfaces" viewport="1440x900" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dirtyworks.ai — Managed knowledge and AI operations</title>
+<link rel="stylesheet" href="../../styles.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>body{background:var(--bone)}#root{min-height:100vh}header button{white-space:nowrap}header a[style*="inline-flex"],header button[style*="inline-flex"]{white-space:nowrap}@media (max-width:1180px){header>div{gap:16px!important}header nav{gap:16px!important}}@media (max-width:1000px){section>div[style*="grid-template-columns"]{grid-template-columns:1fr!important}header span[style*="--type-label-sm"]{display:none}}</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel" src="home-sections.jsx"></script>
+<script type="text/babel" src="page-sections.jsx"></script>
+<script type="text/babel">
+const { SiteHeader, SiteFooter, CTABand, Declaration, PullQuote, ProofLabel, Button, ControlRegister, WorkOrder, CaseMetric, AnnotatedComparison } = window.DirtyworksAiDesignSystem_9135ac;
+
+const NAV = [
+  { id: "work", label: "Work" },
+  { id: "method", label: "Method" },
+  { id: "trust", label: "Trust" },
+  { id: "msps", label: "For MSPs" },
+  { id: "notes", label: "Notes" },
+];
+
+function Work({ go }) {
+  return <>
+    <Hero onCta={() => go("contact")} />
+    <ProblemBand />
+    <ContrarianBand />
+    <ManagedBand />
+    <MspBand onNavigate={go} />
+    <ManifestoBand />
+    <CTABand folio="11 / Conversion" heading="Show us the last answer your team had to chase."
+      support="One question domain. A paid, fixed-scope review. A real decision at the end — including stop."
+      primary={{ label: "Start with one question domain", onClick: () => go("contact") }}
+      secondary={{ label: "Read the operating model", onClick: () => go("method") }} />
+  </>;
+}
+
+function Method({ go }) {
+  return <>
+    <Band tone="bone" pad="tight">
+      <Declaration label="04 / Method" descriptor="Review · Launch · Operate · Improve. A loop, not a project plan." size="h1">
+        Good answers begin before the question.
+      </Declaration>
+    </Band>
+    <MethodBand />
+    <ManagedBand />
+    <Band tone="bone">
+      <Folio>Operating record / illustrative</Folio>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0,1fr))", gap: "var(--space-8)" }}>
+        <CaseMetric value="14→2" unit="min" label="Time to find the current field procedure"
+          baseline="14 min median, 12 events" period="30 days post-launch" method="Timed observation, same question class" source="Illustrative example" hypothesis />
+        <CaseMetric value="41" unit="% fewer" label="Expert interruptions per week"
+          baseline="Self-reported, 3 experienced staff" period="30 days post-launch" method="Weekly count" source="Illustrative example" hypothesis />
+        <CaseMetric value="100" unit="% pass" label="Critical permission tests at acceptance"
+          baseline="Defined in review" period="At launch acceptance" method="Permission test suite" source="Launch acceptance criteria" />
+      </div>
+    </Band>
+    <CTABand tone="orange" folio="06 / The first offer" heading="Start with one question domain."
+      support="A paid, fixed-scope review. Seven to ten business days. A real decision at the end."
+      primary={{ label: "Book a review", onClick: () => go("contact") }} />
+  </>;
+}
+
+function Trust({ go }) {
+  return <>
+    <Band tone="ink" pad="tight">
+      <Declaration label="06 / Trust" tone="bone" descriptor="Limitations first. Credentials second." size="h1">
+        “I don’t know” is a feature.
+      </Declaration>
+    </Band>
+    <Band tone="bone" pad="tight">
+      <Folio>Stated limitations</Folio>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(3,minmax(0,1fr))", gap: "var(--space-6)" }}>
+        {[["We do not claim perfect answers.","Every supported answer shows its source so a person can check it."],
+          ["We do not claim complete security.","We name the control, the holder, and the test. Nothing more."],
+          ["We do not own your source truth.","Approval, accuracy and consequential decisions stay with your people."]].map(([h,b]) => (
+          <div key={h} style={{ borderTop: "var(--border-emphasis) solid var(--signal-orange)", paddingTop: "12px" }}>
+            <div style={{ fontFamily: "var(--font-sans)", fontWeight: 700, fontSize: "20px", lineHeight: 1.15, letterSpacing: "-0.015em" }}>{h}</div>
+            <p style={{ margin: "10px 0 0", fontSize: "var(--type-body-sm)", lineHeight: 1.5, color: "var(--steel)" }}>{b}</p>
+          </div>
+        ))}
+      </div>
+    </Band>
+    <TrustBand />
+    <Band tone="sheet">
+      <Folio>Incident voice / example</Folio>
+      <div style={{ display: "grid", gridTemplateColumns: "minmax(0,1fr) minmax(0,1fr)", gap: "var(--space-8)", alignItems: "center" }}>
+        <PullQuote size="sm" attribution="Incident note" context="Format example">
+          At 10:14 MT we disabled the connector. No further retrieval is possible while we investigate.
+        </PullQuote>
+        <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+          <ProofLabel status="change" value="Logged">Change</ProofLabel>
+          <ProofLabel status="human" value="Named">Escalation</ProofLabel>
+          <ProofLabel status="permission" value="Disabled">Connector</ProofLabel>
+          <ProofLabel status="neutral" value="2026-08-25 10:14 MT">Timestamp</ProofLabel>
+        </div>
+      </div>
+    </Band>
+    <FitBand />
+    <CTABand folio="11 / Conversion" heading="Read it before you send us anything."
+      support="Nothing in a website form should be sensitive. Bring us the event, not the documents."
+      primary={{ label: "Show us where work gets stuck", onClick: () => go("contact") }} />
+  </>;
+}
+
+function Msps({ go }) {
+  return <>
+    <Band tone="bone" pad="tight">
+      <Declaration label="09 / For MSPs" descriptor="Referral · Co-managed · White-label" size="h1">
+        Keep the account. Add the practice.
+      </Declaration>
+    </Band>
+    <Band tone="sheet">
+      <Folio>Three partner models</Folio>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(3,minmax(0,1fr))", gap: "0", borderTop: "var(--border-editorial) solid var(--ink)" }}>
+        {[["Referral","MSP introduces. Dirtyworks.ai contracts, delivers and supports.","MSP brand stays out of delivery."],
+          ["Co-managed","Shared delivery with a written responsibility seam per control.","Both names appear to the customer."],
+          ["White-label","MSP contracts and brands. Dirtyworks.ai operates behind it.","Requires explicit liability and margin terms."]].map(([t,b,n],i) => (
+          <div key={t} style={{ padding: "var(--space-5)", borderRight: i < 2 ? "var(--border-ordinary) solid var(--ink)" : "none", background: i === 1 ? "var(--bone-3)" : "transparent" }}>
+            <div style={{ fontFamily: "var(--font-mono)", fontSize: "var(--type-label)", fontWeight: 600, letterSpacing: "var(--track-label)", textTransform: "uppercase", color: i === 1 ? "var(--signal-orange)" : "var(--steel)" }}>
+              0{i + 1} / {t}
+            </div>
+            <p style={{ margin: "12px 0 0", fontSize: "var(--type-body-sm)", lineHeight: 1.5, fontWeight: 600 }}>{b}</p>
+            <p style={{ margin: "10px 0 0", fontFamily: "var(--font-mono)", fontSize: "var(--type-label-sm)", letterSpacing: "0.04em", color: "var(--steel)", lineHeight: 1.6 }}>{n}</p>
+          </div>
+        ))}
+      </div>
+      <p style={{ margin: "var(--space-5) 0 0", fontFamily: "var(--font-mono)", fontSize: "var(--type-label-sm)", letterSpacing: "0.04em", color: "var(--steel)" }}>
+        Wholesale economics are not published before live-partner validation.
+      </p>
+    </Band>
+    <Band tone="ink">
+      <Folio tone="bone">Responsibility seam</Folio>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(3,minmax(0,1fr))", gap: "var(--space-6)" }}>
+        {[["MSP","Infrastructure, identity, endpoint security, and the account relationship as agreed.","source"],
+          ["Dirtyworks.ai","Knowledge method, source configuration, evaluation, answer quality, support and change.","gap"],
+          ["Customer","Source approval, permission decisions, and every consequential decision.","human"]].map(([who,what,st]) => (
+          <div key={who} style={{ border: "var(--border-ordinary) solid var(--steel)", padding: "var(--space-5)", display: "grid", gap: "12px", alignContent: "start" }}>
+            <ProofLabel status={st} size="sm">Owns</ProofLabel>
+            <div style={{ fontFamily: "var(--font-display)", fontWeight: 800, fontSize: "28px", lineHeight: 1, letterSpacing: "-0.02em", textTransform: "uppercase" }}>{who}</div>
+            <p style={{ margin: 0, fontSize: "var(--type-body-sm)", lineHeight: 1.5, color: "var(--steel-2)" }}>{what}</p>
+          </div>
+        ))}
+      </div>
+    </Band>
+    <Band tone="bone">
+      <Folio>One-customer design pilot</Folio>
+      <WorkOrder loopLabel="Channel review returns to discovery" steps={[
+        { name: "Discovery", detail: "Which client questions keep arriving, and which ones the MSP cannot currently answer.", marks: [{ label: "PARTNER", value: "1", status: "neutral" }] },
+        { name: "Qualification", detail: "One client, one question domain, named sponsor, and a written responsibility seam.", annotation: "No seam, no pilot." },
+        { name: "Paid review", detail: "The standard Knowledge Reliability Review, delivered with the MSP present.", marks: [{ label: "SOURCE", value: "≤3", status: "source" }] },
+        { name: "Launch + 90-day channel review", detail: "Measure delivery effort, margin, support load, and whether the practice repeats.", marks: [{ label: "STATUS", value: "OPERATED", status: "operated" }] },
+      ]} />
+    </Band>
+    <CTABand tone="orange" folio="09 / Partner pilot" heading="Design a partner pilot."
+      support="One client. One question domain. A written seam before anything goes to production."
+      primary={{ label: "Start a partner conversation", onClick: () => go("contact") }} />
+  </>;
+}
+
+function Notes() {
+  return <>
+    <Band tone="bone" pad="tight">
+      <Declaration label="Notes / Index" descriptor="Thesis · evidence type · date · reading time" size="h1">
+        Notes on the work behind AI.
+      </Declaration>
+    </Band>
+    <NotesBand />
+  </>;
+}
+
+function Contact() {
+  return <>
+    <Band tone="ink" pad="tight">
+      <Declaration label="Contact / 01" tone="bone" descriptor="One event is enough to start." size="h1">
+        Show us where work gets stuck.
+      </Declaration>
+    </Band>
+    <ConversionBand />
+  </>;
+}
+
+function App() {
+  const [page, setPage] = React.useState("work");
+  const go = (id) => { setPage(id); window.scrollTo(0, 0); };
+  const Page = { work: Work, method: Method, trust: Trust, msps: Msps, notes: Notes, contact: Contact }[page] || Work;
+  return (
+    <>
+      <SiteHeader items={NAV} active={page} onNavigate={go} version="Doc 0.1 / 2026-08" cta={{ label: "Show us where work gets stuck", onClick: () => go("contact") }} />
+      <Page go={go} />
+      <SiteFooter onNavigate={go} location="Calgary, Alberta / Canada" version="Doc 0.1 / 2026-08-25"
+        columns={[
+          { title: "Surfaces", links: NAV },
+          { title: "Company", links: [{ id: "work", label: "About" }, { id: "trust", label: "Fit and non-fit" }, { id: "contact", label: "Contact" }] },
+          { title: "Legal", links: [{ id: "trust", label: "Privacy" }, { id: "trust", label: "Terms" }, { id: "trust", label: "Accessibility" }] },
+        ]} />
+    </>
+  );
+}
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+</script>
+</body>
+</html>

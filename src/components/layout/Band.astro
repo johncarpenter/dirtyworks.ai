@@ -1,0 +1,30 @@
+---
+/* One page band. Ground, separators and padding are the only variables; every Home section and
+   every other page's sections are this component plus content. */
+type Ground = 'bone' | 'bone-2' | 'ink';
+type Variant = 'default' | 'hero' | 'manifesto';
+
+interface Props {
+  ground?: Ground;
+  variant?: Variant;
+  id?: string;
+  labelledBy?: string;
+  class?: string;
+}
+
+const { ground = 'bone', variant = 'default', id, labelledBy, class: className } = Astro.props;
+---
+
+<section
+  id={id}
+  aria-labelledby={labelledBy}
+  class:list={[
+    'band',
+    `band--${ground}`,
+    variant === 'hero' && 'band--hero',
+    variant === 'manifesto' && 'band--manifesto',
+    className,
+  ]}
+>
+  <div class="band__inner"><slot /></div>
+</section>

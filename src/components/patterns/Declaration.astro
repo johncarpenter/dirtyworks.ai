@@ -1,0 +1,68 @@
+---
+/* Composite: the oversized declaration. Every section on the site sets its own display scale, so
+   the clamp, leading, tracking and weight arrive as props lifted literally from the prototype
+   inline styles rather than from --type-display (research.md D-07 #1). The slot carries markup so
+   a section can colour or highlight one word. */
+interface Props {
+  as?: 'h1' | 'h2' | 'h3';
+  /** font-size, verbatim from the prototype, e.g. "clamp(52px,7.6vw,134px)" */
+  size: string;
+  /** line-height, e.g. "0.84" */
+  leading: string;
+  /** letter-spacing, e.g. "-0.035em" */
+  tracking: string;
+  weight?: 700 | 800 | 900;
+  /** optional measure, e.g. "24ch" */
+  measure?: string;
+  id?: string;
+  class?: string;
+}
+
+const {
+  as: Tag = 'h2',
+  size,
+  leading,
+  tracking,
+  weight = 900,
+  measure,
+  id,
+  class: className,
+} = Astro.props as Props;
+
+/* The literals travel as custom properties rather than as direct declarations: an inline
+   `font-size` would outrank every stylesheet rule, and the narrow-viewport guard below has to be
+   able to win. */
+const declared = [
+  `--decl-size:${size}`,
+  `--decl-leading:${leading}`,
+  `--decl-tracking:${tracking}`,
+  `--decl-weight:${weight}`,
+  measure ? `--decl-measure:${measure}` : null,
+]
+  .filter(Boolean)
+  .join(';');
+---
+
+<Tag id={id} class:list={['declaration', className]} style={declared}><slot /></Tag>
+
+<style>
+  .declaration {
+    margin: 0;
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    font-size: var(--decl-size);
+    line-height: var(--decl-leading);
+    letter-spacing: var(--decl-tracking);
+    font-weight: var(--decl-weight);
+    max-width: var(--decl-measure, none);
+  }
+
+  /* At 320–400px a single display word can be wider than the viewport, and the prototype's clamp
+     floor is a desktop floor. Ceiling the type here rather than letting the page scroll: min()
+     leaves every heading that already fits untouched. */
+  @media (max-width: 400px) {
+    .declaration {
+      font-size: min(var(--decl-size), 13vw);
+    }
+  }
+</style>

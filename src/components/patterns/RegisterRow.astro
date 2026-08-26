@@ -1,0 +1,122 @@
+---
+/* Composite 3: the workhorse. A mono label column, a body column, and a mono or serif detail
+   column, separated by hairlines. Alternating rows take a bone-2 ground AND a 24px left offset —
+   that offset is the deliberate irregularity, not decoration, and it is part of the pattern
+   rather than a per-page grid violation (research.md D-07 #4). */
+interface Props {
+  label: string;
+  detail?: string;
+  /** even rows carry the ground and the offset */
+  offset?: boolean;
+  /** the last row closes the register with an ink rule */
+  last?: boolean;
+  hairline?: 'rule' | 'rule-strong';
+  labelTone?: 'orange' | 'ink';
+  class?: string;
+}
+
+const {
+  label,
+  detail,
+  offset = false,
+  last = false,
+  hairline = 'rule',
+  labelTone = 'orange',
+  class: className,
+} = Astro.props;
+---
+
+<div
+  class:list={[
+    'register-row',
+    offset && 'register-row--offset',
+    last && 'register-row--last',
+    hairline === 'rule-strong' && 'register-row--hairline-strong',
+    className,
+  ]}
+>
+  <p class:list={['register-row__label', labelTone === 'ink' && 'register-row__label--ink']}>
+    {label}
+  </p>
+  <div class="register-row__body"><slot /></div>
+  {detail ? <p class="register-row__detail">{detail}</p> : <div></div>}
+</div>
+
+<style>
+  .register-row {
+    display: grid;
+    grid-template-columns: minmax(180px, 0.6fr) minmax(0, 1.4fr) minmax(0, 1fr);
+    gap: clamp(16px, 3vw, 48px);
+    padding: 26px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .register-row > * {
+    min-width: 0;
+  }
+
+  .register-row--hairline-strong {
+    border-bottom-color: var(--rule-strong);
+  }
+
+  .register-row--offset {
+    padding: 26px 0 26px 24px;
+    background: var(--bone-2);
+  }
+
+  .register-row--last {
+    border-bottom: 1.5px solid var(--ink);
+  }
+
+  .register-row:hover {
+    background: var(--bone-2);
+  }
+
+  .register-row__label {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: var(--weight-label);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink);
+    /* Label text is ink for AA; the orange signal survives as a marker bar. */
+    border-left: 3px solid var(--signal-orange);
+    padding-left: 10px;
+  }
+
+  .register-row__label--ink {
+    color: var(--ink);
+  }
+
+  .register-row__body {
+    font-size: 18px;
+    line-height: 1.48;
+  }
+
+  .register-row__body :global(p) {
+    margin: 0;
+  }
+
+  .register-row__detail {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--steel);
+    line-height: 1.7;
+  }
+
+  @media (max-width: 720px) {
+    /* Registers become stacked records with the label above the value. No horizontal scroll. */
+    .register-row {
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    .register-row--offset {
+      padding-left: 12px;
+    }
+  }
+</style>

@@ -1,0 +1,122 @@
+---
+/* /about — built completely, published never (yet).
+
+   Founder name, biography, credentials and photograph are outstanding sponsor inputs. Rather than
+   invent them or leave the page unwritten, the page exists in full and the route carries
+   `published: false` in src/content/routes.ts. That flag already removes /about from navigation
+   and from every CTA target; the empty response below removes it from the build, so the address
+   falls through to the 404 page instead of shipping the OPEN GAP annotation panel publicly.
+
+   To publish: land the real founder content, delete the FOUNDER_PROFILE entry from
+   src/content/placeholders.ts — which removes the gap panel — and flip the route to published. */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Band from '../components/layout/Band.astro';
+import Folio from '../components/ui/Folio.astro';
+import CTABand from '../components/patterns/CTABand.astro';
+import Beliefs from '../components/sections/about/Beliefs.astro';
+import FounderGap from '../components/sections/about/FounderGap.astro';
+import { hrefFor, isPublished } from '../content/routes';
+import {
+  CTA,
+  FOUNDER_FOLIO,
+  FOUNDER_GAP_NOTE,
+  FOUNDER_GAP_TITLE,
+  FOUNDER_PARAGRAPHS,
+  HERO,
+} from '../content/pages/about';
+
+if (!isPublished('about')) {
+  // A response with no body writes no file: the route is absent from dist/ entirely.
+  return new Response(null, { status: 404 });
+}
+
+const [lead, ...body] = FOUNDER_PARAGRAPHS;
+---
+
+<BaseLayout route="about">
+  <Band ground="bone" variant="hero">
+    <Folio text={HERO.folio} />
+    <h1 class="about-hero__heading">
+      {HERO.lineOne}<br /><span class="about-hero__line-two"
+        >{HERO.lineTwoBefore}<span class="about-hero__emphasis">{HERO.lineTwoEmphasis}</span>{
+          HERO.lineTwoAfter
+        }</span
+      >
+    </h1>
+  </Band>
+
+  <Band ground="bone-2" labelledBy="founder-folio">
+    <div class="founder">
+      <div class="founder__copy">
+        <Folio id="founder-folio" text={FOUNDER_FOLIO} />
+        <p class="founder__lead">{lead}</p>
+        {body.map((paragraph) => <p class="founder__body">{paragraph}</p>)}
+      </div>
+      <FounderGap title={FOUNDER_GAP_TITLE} note={FOUNDER_GAP_NOTE} />
+    </div>
+  </Band>
+
+  <Beliefs />
+
+  <CTABand
+    folio={CTA.folio}
+    heading={CTA.heading}
+    support={CTA.support}
+    primary={{ label: CTA.primaryLabel, href: hrefFor('start') }}
+    secondary={{ label: CTA.secondaryLabel, href: hrefFor('method') }}
+  />
+</BaseLayout>
+
+<style>
+  .about-hero__heading {
+    font-weight: var(--weight-display-max);
+    font-size: clamp(46px, 6.8vw, 122px);
+    line-height: 0.84;
+    letter-spacing: -0.035em;
+  }
+
+  .about-hero__line-two {
+    display: inline-block;
+    margin-left: -0.05em;
+  }
+
+  .about-hero__emphasis {
+    color: var(--orange-press);
+  }
+
+  .founder {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(280px, 1fr);
+    gap: clamp(32px, 5vw, 80px);
+    align-items: start;
+  }
+
+  .founder > * {
+    min-width: 0;
+  }
+
+  .founder__lead {
+    margin: 0;
+    font-size: clamp(19px, 1.4vw, 26px);
+    line-height: 1.38;
+    max-width: 52ch;
+  }
+
+  .founder__body {
+    margin: 24px 0 0;
+    font-size: 18px;
+    line-height: 1.52;
+    max-width: 56ch;
+  }
+
+  /* The prototype tightens the gap between the two body paragraphs by 4px. */
+  .founder__body + .founder__body {
+    margin-top: 20px;
+  }
+
+  @media (max-width: 900px) {
+    .founder {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>

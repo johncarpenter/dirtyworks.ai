@@ -1,0 +1,167 @@
+---
+/* /method §02 — the lifecycle work order. Five columns on a wide viewport: step, inputs, work
+   performed, customer decision, output + gate. Every step is one record, so at narrow widths the
+   record stacks rather than scrolling sideways, and the step numbers keep the sequence readable.
+   Alternating steps take the register's 24px offset. */
+import Band from '../../layout/Band.astro';
+import Folio from '../../ui/Folio.astro';
+import ProofLabel from '../../ui/ProofLabel.astro';
+import type { GateTone } from '../../../content/pages/method';
+import type { ProofStatus } from '../../../types/proof';
+import { METHOD_LIFECYCLE } from '../../../content/pages/method';
+
+const { folio, heading, steps } = METHOD_LIFECYCLE;
+
+/* Gate colour by meaning: review gates are blueprint, the approval stop gate is orange, the
+   release gate is acid, and the two gates that return work to the customer are outlined. */
+const GATE_STATUS: Record<GateTone, ProofStatus> = {
+  review: 'source',
+  stop: 'gap',
+  release: 'operated',
+  outlined: 'neutral',
+};
+---
+
+<Band ground="bone-2" labelledBy="lifecycle-heading" class="lifecycle">
+  <Folio text={folio} />
+  <h2 id="lifecycle-heading">{heading}</h2>
+
+  <ol class="lifecycle__steps">
+    {
+      steps.map((step, index) => (
+        <li
+          class:list={[
+            'lifecycle__step',
+            index % 2 === 1 && 'lifecycle__step--offset',
+            index === steps.length - 1 && 'lifecycle__step--last',
+          ]}
+        >
+          <div class="lifecycle__id">
+            <h3 class="lifecycle__name">{step.name}</h3>
+            <p class="lifecycle__marker">{step.step}</p>
+          </div>
+
+          <div class="lifecycle__cell">
+            <p class="lifecycle__label">Inputs</p>
+            <p class="lifecycle__value">{step.inputs}</p>
+          </div>
+
+          <div class="lifecycle__cell">
+            <p class="lifecycle__label">Work performed</p>
+            <p class="lifecycle__value">{step.work}</p>
+          </div>
+
+          <div class="lifecycle__cell">
+            <p class="lifecycle__label">Customer decision</p>
+            <p class="lifecycle__value">{step.decision}</p>
+          </div>
+
+          <div class="lifecycle__cell">
+            <p class="lifecycle__label">Output / gate</p>
+            <p class="lifecycle__value">{step.output}</p>
+            <span class="lifecycle__gate">
+              <ProofLabel
+                status={GATE_STATUS[step.gateTone]}
+                size="sm"
+                outlined={step.gateTone === 'outlined'}
+              >
+                {step.gate}
+              </ProofLabel>
+            </span>
+          </div>
+        </li>
+      ))
+    }
+  </ol>
+</Band>
+
+<style>
+  .lifecycle h2 {
+    font-weight: 900;
+    font-size: clamp(32px, 3.8vw, 68px);
+    line-height: 0.88;
+    letter-spacing: -0.035em;
+    margin: 0 0 56px;
+  }
+
+  .lifecycle__steps {
+    border-top: 1.5px solid var(--ink);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .lifecycle__step {
+    display: grid;
+    /* Five cells per step, always. The prototype writes the four record columns as
+       `repeat(auto-fit, minmax(150px, 1fr))`, which at any width too narrow for four of them wraps
+       cells onto a second grid row instead of stacking the record; `repeat(4, ...)` is the same
+       layout on a wide viewport and degrades into the stacked record below.
+       The name track's 120px prototype minimum is also narrower than "Stabilize" set at 30px
+       Archivo (164px), which made the step name overlap the inputs column — hence 176px. */
+    grid-template-columns: minmax(176px, 0.45fr) repeat(4, minmax(0, 1fr));
+    gap: clamp(14px, 2.5vw, 32px);
+    padding: 28px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .lifecycle__step > * {
+    min-width: 0;
+  }
+
+  /* The alternating 24px offset is the register's deliberate irregularity, not decoration. */
+  .lifecycle__step--offset {
+    padding-left: 24px;
+  }
+
+  .lifecycle__step--last {
+    border-bottom: 1.5px solid var(--ink);
+  }
+
+  .lifecycle__name {
+    font-weight: 900;
+    font-size: 30px;
+    letter-spacing: -0.035em;
+  }
+
+  .lifecycle__marker {
+    margin: 6px 0 0;
+  }
+
+  .lifecycle__label,
+  .lifecycle__marker {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    /* --steel, not --steel-2: 10px text on bone-2 needs the AA-passing muted tone. */
+    color: var(--steel);
+  }
+
+  .lifecycle__label {
+    margin: 0 0 8px;
+  }
+
+  .lifecycle__value {
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.45;
+  }
+
+  .lifecycle__gate {
+    display: inline-block;
+    margin-top: 10px;
+  }
+
+  @media (max-width: 900px) {
+    /* One step, one stacked record. Nothing scrolls sideways. */
+    .lifecycle__step {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    .lifecycle__step--offset {
+      padding-left: 12px;
+    }
+  }
+</style>

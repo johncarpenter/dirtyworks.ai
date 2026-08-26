@@ -1,0 +1,73 @@
+---
+/* Home §07. The left column sticks at 108px — clear of the 76px header — while the seven-step work
+   order scrolls past it. The stop-condition note sits with the heading, not in the steps. */
+import Band from '../../layout/Band.astro';
+import Folio from '../../ui/Folio.astro';
+import Button from '../../ui/Button.astro';
+import Declaration from '../../patterns/Declaration.astro';
+import WorkOrder from '../../patterns/WorkOrder.astro';
+import { METHOD, WORK_ORDER_STEPS } from '../../../content/pages/home';
+---
+
+<Band ground="bone" labelledBy="method-heading">
+  <Folio text={METHOD.folio} />
+
+  <div class="method__grid">
+    <div class="method__sticky">
+      <Declaration
+        id="method-heading"
+        size="clamp(34px,4.2vw,74px)"
+        leading="0.86"
+        tracking="-0.035em"
+        weight={900}
+      >
+        {METHOD.heading}
+      </Declaration>
+      <p class="method__text">{METHOD.support}</p>
+      <div class="method__action">
+        <Button href={METHOD.action.href} variant="secondary">{METHOD.action.label}</Button>
+      </div>
+    </div>
+
+    <WorkOrder steps={WORK_ORDER_STEPS} loopLabel={METHOD.loopLabel} />
+  </div>
+</Band>
+
+<style>
+  .method__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.75fr) minmax(0, 1.5fr);
+    gap: clamp(32px, 5vw, 80px);
+    align-items: start;
+  }
+
+  .method__grid > * {
+    min-width: 0;
+  }
+
+  .method__sticky {
+    position: sticky;
+    top: 108px;
+  }
+
+  .method__text {
+    margin: 26px 0 0;
+    font-size: 18px;
+    line-height: 1.52;
+    max-width: 42ch;
+  }
+
+  .method__action {
+    margin-top: 32px;
+  }
+
+  @media (max-width: 900px) {
+    .method__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .method__sticky {
+      position: static;
+    }
+  }
+</style>

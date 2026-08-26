@@ -1,0 +1,114 @@
+---
+/* Home §06, ink band. The proof sequence runs SOURCE -> OWNER -> PERMISSION -> ANSWER -> GAP ->
+   CHANGE. Each chip states its own state in text; the connectors are decorative and hidden from
+   assistive technology, which reads the chips as the list they are. */
+import Band from '../../layout/Band.astro';
+import Folio from '../../ui/Folio.astro';
+import Button from '../../ui/Button.astro';
+import ProofLabel from '../../ui/ProofLabel.astro';
+import Declaration from '../../patterns/Declaration.astro';
+import PullQuote from '../../patterns/PullQuote.astro';
+import { KNOWLEDGE, KNOWLEDGE_CHIPS } from '../../../content/pages/home';
+---
+
+<Band ground="ink" labelledBy="knowledge-heading">
+  <Folio text={KNOWLEDGE.folio} tone="dark" />
+
+  <Declaration
+    id="knowledge-heading"
+    size="clamp(30px,3.6vw,64px)"
+    leading="0.9"
+    tracking="-0.03em"
+    weight={900}
+    measure="24ch"
+  >
+    {KNOWLEDGE.heading}
+  </Declaration>
+
+  <div class="knowledge__grid">
+    <div>
+      <p class="knowledge__text">{KNOWLEDGE.paragraphs[0]}</p>
+      <p class="knowledge__text knowledge__text--last">{KNOWLEDGE.paragraphs[1]}</p>
+
+      <ol class="knowledge__sequence">
+        {
+          KNOWLEDGE_CHIPS.map((chip, index) => (
+            <li class="knowledge__step">
+              <ProofLabel status={chip.status} outlined={chip.outlined}>{chip.text}</ProofLabel>
+              {
+                index < KNOWLEDGE_CHIPS.length - 1 ? (
+                  <span class="knowledge__arrow" aria-hidden="true">→</span>
+                ) : null
+              }
+            </li>
+          ))
+        }
+      </ol>
+
+      <div class="knowledge__action">
+        <Button href={KNOWLEDGE.action.href} variant="evidence">{KNOWLEDGE.action.label}</Button>
+      </div>
+    </div>
+
+    <PullQuote tone="dark" size="clamp(28px,2.8vw,46px)" leading="1.1">
+      {KNOWLEDGE.quote}
+    </PullQuote>
+  </div>
+</Band>
+
+<style>
+  .knowledge__grid {
+    margin-top: 48px;
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+    gap: clamp(32px, 5vw, 80px);
+    align-items: start;
+  }
+
+  .knowledge__grid > * {
+    min-width: 0;
+  }
+
+  .knowledge__text {
+    margin: 0;
+    font-size: 18px;
+    line-height: 1.52;
+    max-width: 56ch;
+  }
+
+  .knowledge__text--last {
+    margin: 20px 0 40px;
+  }
+
+  .knowledge__sequence {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+    padding: 24px 0;
+    list-style: none;
+    border-top: 1px solid var(--ink-3);
+    border-bottom: 1px solid var(--ink-3);
+  }
+
+  .knowledge__step {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .knowledge__arrow {
+    color: var(--steel-2);
+  }
+
+  .knowledge__action {
+    margin-top: 36px;
+  }
+
+  @media (max-width: 900px) {
+    .knowledge__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>

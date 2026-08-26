@@ -1,0 +1,44 @@
+---
+/* Composite 1: the section marker above every heading.
+   1.5px x 40px orange rule, then mono 11px/600 at 0.18em uppercase.
+   Uses --type-label-sm + --weight-label, not the token layer's .dw-folio role class
+   (12px/400) — see research.md D-07 #2. */
+interface Props {
+  /** the full folio string, e.g. "03 / What we operate" */
+  text: string;
+  tone?: 'light' | 'dark';
+  id?: string;
+}
+const { text, tone = 'light', id } = Astro.props;
+---
+
+<p class:list={['folio', tone === 'dark' && 'folio--dark']} id={id}>
+  <span class="folio__rule" aria-hidden="true"></span>
+  <span class="folio__text">{text}</span>
+</p>
+
+<style>
+  .folio {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin: 0 0 36px;
+    font-family: var(--font-mono);
+    font-size: var(--type-label-sm);
+    font-weight: var(--weight-label);
+    letter-spacing: var(--track-label-wide);
+    text-transform: uppercase;
+    color: var(--steel);
+  }
+
+  .folio--dark {
+    color: var(--steel-2);
+  }
+
+  .folio__rule {
+    flex: none;
+    height: 1.5px;
+    width: 40px;
+    background: var(--signal-orange);
+  }
+</style>

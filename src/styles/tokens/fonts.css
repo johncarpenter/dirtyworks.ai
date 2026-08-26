@@ -1,0 +1,44 @@
+/* Dirtyworks.ai typefaces — self-hosted.
+
+   All three families are SIL Open Font License 1.1, which permits self-hosted web embedding;
+   public/fonts/OFL.txt carries the licence text.
+
+   Two Google Fonts @import lines were removed: they were the only external URLs in the whole CSS
+   surface, and an @import inside a Vite-inlined stylesheet is also an ordering hazard.
+   Material Symbols Sharp was dropped entirely — this build uses no icons.
+
+   Archivo ships a variable font only as .ttf (658KB), so the six static woff2 weights the site
+   actually uses are served instead. IBM Plex Mono uses its variable roman build (one file covers
+   400-600). Instrument Serif is NOT variable and exists only at weight 400 upright + italic —
+   never specify another weight for it, or the browser will synthesise one. */
+
+@font-face { font-family: "Archivo"; src: url("/fonts/Archivo-Regular.woff2") format("woff2");
+             font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: "Archivo"; src: url("/fonts/Archivo-Medium.woff2") format("woff2");
+             font-weight: 500; font-style: normal; font-display: swap; }
+@font-face { font-family: "Archivo"; src: url("/fonts/Archivo-SemiBold.woff2") format("woff2");
+             font-weight: 600; font-style: normal; font-display: swap; }
+@font-face { font-family: "Archivo"; src: url("/fonts/Archivo-Bold.woff2") format("woff2");
+             font-weight: 700; font-style: normal; font-display: swap; }
+@font-face { font-family: "Archivo"; src: url("/fonts/Archivo-ExtraBold.woff2") format("woff2");
+             font-weight: 800; font-style: normal; font-display: swap; }
+@font-face { font-family: "Archivo"; src: url("/fonts/Archivo-Black.woff2") format("woff2");
+             font-weight: 900; font-style: normal; font-display: swap; }
+
+@font-face { font-family: "IBM Plex Mono";
+             src: url("/fonts/IBMPlexMono-Var-Roman.woff2") format("woff2-variations");
+             font-weight: 100 700; font-style: normal; font-display: swap; }
+
+@font-face { font-family: "Instrument Serif";
+             src: url("/fonts/InstrumentSerif-Regular.woff2") format("woff2");
+             font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: "Instrument Serif";
+             src: url("/fonts/InstrumentSerif-Italic.woff2") format("woff2");
+             font-weight: 400; font-style: italic; font-display: swap; }
+
+:root {
+  --font-display: "Archivo", "Arial Black", "Helvetica Neue", sans-serif;
+  --font-sans: "Archivo", "Helvetica Neue", Helvetica, sans-serif;
+  --font-serif: "Instrument Serif", "Times New Roman", Georgia, serif;
+  --font-mono: "IBM Plex Mono", "SFMono-Regular", Menlo, Consolas, monospace;
+}

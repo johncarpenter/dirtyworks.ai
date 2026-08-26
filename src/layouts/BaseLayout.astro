@@ -1,0 +1,70 @@
+---
+import '../styles/tokens.css';
+import '../styles/site.css';
+import '../styles/chrome.css';
+import SiteHeader from '../components/layout/SiteHeader.astro';
+import SiteFooter from '../components/layout/SiteFooter.astro';
+import { routeById, type RouteId } from '../content/routes';
+
+interface Props {
+  route: RouteId;
+  /** override for pages outside the route table, e.g. 404 */
+  title?: string;
+  description?: string | null;
+}
+
+const { route, title: titleOverride, description: descriptionOverride } = Astro.props;
+const entry = routeById(route);
+const title = titleOverride ?? entry.title;
+const description = descriptionOverride ?? entry.description;
+const canonical = new URL(entry.path, Astro.site ?? 'https://dirtyworks.ai').href;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    {description ? <meta name="description" content={description} /> : null}
+    <link rel="canonical" href={canonical} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    {description ? <meta property="og:description" content={description} /> : null}
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content="/og/dirtyworks-ai.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link
+      rel="preload"
+      href="/fonts/Archivo-Black.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/IBMPlexMono-Var-Roman.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+
+    <!-- Progressive-enhancement gate: collapsible chrome is opt-in once scripting is proven.
+         Without this class the mobile navigation panel stays open, so a visitor with no
+         JavaScript still has working navigation. -->
+    <script is:inline>
+      document.documentElement.classList.add('js');
+    </script>
+  </head>
+
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <SiteHeader activeRoute={route} />
+    <main id="main">
+      <slot />
+    </main>
+    <SiteFooter />
+  </body>
+</html>

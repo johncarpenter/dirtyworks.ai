@@ -1,0 +1,93 @@
+---
+/* /notes — the editorial index. It publishes with three notes in preparation and nine titles in
+   the queue, and says so in the hero rather than dressing the gap up as a blog. */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Band from '../components/layout/Band.astro';
+import Folio from '../components/ui/Folio.astro';
+import CTABand from '../components/patterns/CTABand.astro';
+import NotesIndex from '../components/sections/notes/NotesIndex.astro';
+import { hrefFor } from '../content/routes';
+import { CTA, HERO, PUBLISHING_STATE } from '../content/pages/notes';
+---
+
+<BaseLayout route="notes">
+  <Band ground="bone" variant="hero">
+    <div class="notes-hero">
+      <div class="notes-hero__copy">
+        <Folio text={HERO.folio} />
+        <h1 class="notes-hero__heading">{HERO.heading}</h1>
+        <p class="notes-hero__lead">{HERO.lead}</p>
+      </div>
+      <aside class="notes-state" aria-label={PUBLISHING_STATE.label}>
+        <span class="notes-state__label">{PUBLISHING_STATE.label}</span>
+        <p class="notes-state__body">{PUBLISHING_STATE.body}</p>
+      </aside>
+    </div>
+  </Band>
+
+  <NotesIndex />
+
+  <CTABand
+    folio={CTA.folio}
+    heading={CTA.heading}
+    support={CTA.support}
+    primary={{ label: CTA.primaryLabel, href: hrefFor('start') }}
+    secondary={{ label: CTA.secondaryLabel, href: hrefFor('services') }}
+  />
+</BaseLayout>
+
+<style>
+  .notes-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1.3fr) minmax(260px, 1fr);
+    gap: clamp(32px, 5vw, 72px);
+    align-items: end;
+  }
+
+  .notes-hero > * {
+    min-width: 0;
+  }
+
+  .notes-hero__heading {
+    font-weight: var(--weight-display-max);
+    font-size: clamp(46px, 6.6vw, 118px);
+    line-height: 0.85;
+    letter-spacing: -0.035em;
+  }
+
+  .notes-hero__lead {
+    margin: 32px 0 0;
+    font-size: clamp(19px, 1.4vw, 26px);
+    line-height: 1.36;
+    max-width: 50ch;
+  }
+
+  .notes-state {
+    background: var(--bone-3);
+    border: 1.5px solid var(--ink);
+    padding: 20px;
+  }
+
+  .notes-state__label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--steel-2);
+    margin-bottom: 12px;
+  }
+
+  .notes-state__body {
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.45;
+  }
+
+  @media (max-width: 900px) {
+    .notes-hero {
+      grid-template-columns: minmax(0, 1fr);
+      align-items: start;
+    }
+  }
+</style>

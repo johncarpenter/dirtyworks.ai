@@ -1,0 +1,107 @@
+---
+/* Catalogue §02. The five questions a product must answer before it is listed at all. The chips
+   are blueprint because each one is a source of explanation, not a verdict. */
+import Band from '../../layout/Band.astro';
+import Folio from '../../ui/Folio.astro';
+import ProofLabel from '../../ui/ProofLabel.astro';
+import { APPROVAL_QUESTIONS } from '../../../content/pages/catalogue';
+
+const { folio, heading, intro, questions } = APPROVAL_QUESTIONS;
+const headingId = 'approval-questions-heading';
+---
+
+<Band ground="bone-2" labelledBy={headingId}>
+  <Folio text={folio} />
+  <div class="approval">
+    <div>
+      <h2 class="approval__heading" id={headingId}>{heading}</h2>
+      <p class="approval__intro">{intro}</p>
+    </div>
+
+    <div class="approval__list">
+      {
+        questions.map((question, index) => (
+          <div class:list={['question', index === questions.length - 1 && 'question--last']}>
+            <span class="question__chip">
+              <ProofLabel status="source" value={question.state}>
+                {question.label}
+              </ProofLabel>
+            </span>
+            <p class="question__text">{question.question}</p>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</Band>
+
+<style>
+  .approval {
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.4fr);
+    gap: clamp(32px, 5vw, 72px);
+    align-items: start;
+  }
+
+  .approval > * {
+    min-width: 0;
+  }
+
+  .approval__heading {
+    font-weight: 800;
+    font-size: clamp(30px, 3.2vw, 58px);
+    line-height: 0.9;
+    letter-spacing: -0.03em;
+  }
+
+  .approval__intro {
+    margin: 26px 0 0;
+    font-size: 18px;
+    line-height: 1.52;
+    max-width: 44ch;
+  }
+
+  .approval__list {
+    border-top: 1.5px solid var(--ink);
+  }
+
+  .question {
+    display: grid;
+    grid-template-columns: minmax(150px, 0.5fr) minmax(0, 1fr);
+    gap: clamp(16px, 3vw, 40px);
+    padding: 22px 0;
+    border-bottom: 1px solid var(--rule);
+    align-items: baseline;
+  }
+
+  .question > * {
+    min-width: 0;
+  }
+
+  .question--last {
+    border-bottom: 1.5px solid var(--ink);
+  }
+
+  .question__chip {
+    justify-self: start;
+  }
+
+  .question__text {
+    margin: 0;
+    font-size: 18px;
+    line-height: 1.48;
+  }
+
+  @media (max-width: 900px) {
+    .approval {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 720px) {
+    .question {
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+  }
+</style>

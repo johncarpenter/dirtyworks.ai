@@ -1,0 +1,250 @@
+---
+/* Catalogue §03. Seven jobs, expanded. Each row states the operating tier, the job, the
+   prerequisites, the candidate products as plain text, the listing state, the purchase route, and
+   the operating work the service adds on top of the licence.
+
+   There is no buy button and no per-seat figure here, and there must never be one: the page sells
+   an operating model, and the software invoice is a separate question answered at quote. The
+   disclaimer carries the VERIFY AT QUOTE stamp registered in src/content/claim-artefacts.ts. */
+import Band from '../../layout/Band.astro';
+import Folio from '../../ui/Folio.astro';
+import Button from '../../ui/Button.astro';
+import ProofLabel from '../../ui/ProofLabel.astro';
+import ClaimStamp from '../../ui/ClaimStamp.astro';
+import { PRODUCT_MENU } from '../../../content/pages/catalogue';
+
+const { folio, categories, primary, secondary, disclaimer } = PRODUCT_MENU;
+---
+
+<Band ground="bone">
+  <Folio text={folio} />
+
+  <div class="menu">
+    {
+      categories.map((category, index) => (
+        <div
+          class:list={[
+            'category',
+            index % 2 === 1 && 'category--offset',
+            index === categories.length - 1 && 'category--last',
+          ]}
+        >
+          <div>
+            <p class="category__word">{category.word}</p>
+            <p class="category__tier">{category.tier}</p>
+          </div>
+
+          <div>
+            <p class="category__job">{category.job}</p>
+            <div class="category__expand" data-category-expand>
+              <p class="category__detail">{category.detail}</p>
+              <p class="category__candidates">{category.candidates}</p>
+            </div>
+          </div>
+
+          <div class="category__terms">
+            <ProofLabel status={category.status}>{category.state}</ProofLabel>
+            <p class="category__route">{category.route}</p>
+            <p class="category__emphasis">{category.emphasis}</p>
+          </div>
+        </div>
+      ))
+    }
+  </div>
+
+  <button class="menu__toggle" type="button" data-menu-toggle hidden aria-expanded="true">
+    Show prerequisites and products
+  </button>
+
+  <div class="menu__actions">
+    <Button href={primary.href}>{primary.label}</Button>
+    <Button href={secondary.href} variant="ghost">{secondary.label}</Button>
+    <p class="menu__note">
+      <ClaimStamp state="VERIFY AT QUOTE" /> {disclaimer}
+    </p>
+  </div>
+</Band>
+
+<script is:inline>
+  (() => {
+    const narrow = window.matchMedia('(max-width: 900px)');
+    const toggle = document.querySelector('[data-menu-toggle]');
+    const panels = document.querySelectorAll('[data-category-expand]');
+    if (!toggle || panels.length === 0) return;
+
+    let expanded = __omp_shell("narrow.matches;")
+
+    const render = () => {
+      toggle.hidden = __omp_shell("narrow.matches;")
+      toggle.setAttribute('aria-expanded', String(expanded));
+      toggle.textContent = expanded
+        ? 'Hide prerequisites and products'
+        : 'Show prerequisites and products';
+      for (const panel of panels) {
+        panel.hidden = narrow.matches && !expanded;
+      }
+    };
+
+    toggle.addEventListener('click', () => {
+      expanded = __omp_shell("expanded;")
+      render();
+    });
+
+    narrow.addEventListener('change', () => {
+      expanded = __omp_shell("narrow.matches;")
+      render();
+    });
+
+    render();
+  })();
+</script>
+
+<style>
+  .menu {
+    border-top: 1.5px solid var(--ink);
+  }
+
+  .category {
+    display: grid;
+    grid-template-columns: minmax(120px, 0.5fr) minmax(0, 1.6fr) minmax(0, 1fr);
+    gap: clamp(16px, 3vw, 40px);
+    padding: 28px 0;
+    border-bottom: 1px solid var(--rule);
+    align-items: start;
+  }
+
+  .category > * {
+    min-width: 0;
+  }
+
+  .category--offset {
+    padding: 28px 0 28px 24px;
+    background: var(--bone-2);
+  }
+
+  .category--last {
+    border-bottom: 1.5px solid var(--ink);
+  }
+
+  .category__word {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: 34px;
+    letter-spacing: -0.035em;
+    text-transform: uppercase;
+  }
+
+  .category__tier {
+    margin: 8px 0 0;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--steel-2);
+  }
+
+  .category__job {
+    margin: 0;
+    font-size: 19px;
+    font-weight: 700;
+    line-height: 1.28;
+  }
+
+  .category__detail {
+    margin: 10px 0 0;
+    font-size: 16.5px;
+    line-height: 1.5;
+    color: var(--ink-3);
+  }
+
+  .category__candidates {
+    margin: 12px 0 0;
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--steel);
+    line-height: 1.7;
+    overflow-wrap: break-word;
+  }
+
+  .category__terms {
+    display: grid;
+    gap: 8px;
+    justify-items: start;
+  }
+
+  .category__terms > * {
+    min-width: 0;
+  }
+
+  .category__route {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--steel);
+    line-height: 1.7;
+  }
+
+  .category__emphasis {
+    margin: 0;
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 17px;
+    line-height: 1.25;
+    color: var(--blueprint-press);
+  }
+
+  .menu__actions {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-top: 36px;
+    align-items: center;
+  }
+
+  .menu__note {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--steel-2);
+    max-width: 34ch;
+    line-height: 1.7;
+  }
+
+  .menu__toggle {
+    margin-top: 20px;
+    background: transparent;
+    color: var(--ink);
+    border: 1.5px solid var(--ink);
+    border-radius: 0;
+    padding: 12px 16px;
+    min-height: var(--target-min);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: var(--weight-label);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .menu__toggle:hover {
+    background: var(--bone-3);
+  }
+
+  @media (max-width: 900px) {
+    /* Categories stack rather than scroll sideways; the candidate list wraps. */
+    .category {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    .category--offset {
+      padding-left: 12px;
+    }
+  }
+</style>

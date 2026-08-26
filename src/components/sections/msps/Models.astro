@@ -1,0 +1,108 @@
+---
+/* /msps 03 — three partner models, each answering the same three questions so they can be
+   compared rather than admired.
+
+   The co-managed card carries an orange hard offset and an 8px lift. That is this page's one
+   deliberate break in the grid — it marks the model we can actually operate at depth. Do not add
+   a second violation to this page. */
+import Band from '../../layout/Band.astro';
+import Folio from '../../ui/Folio.astro';
+import { MODEL_FIELD_LABELS, MODEL_NOTE, PARTNER_MODELS } from '../../../content/pages/msps';
+---
+
+<Band ground="bone" labelledBy="models-folio">
+  <Folio text="03 / Three models" id="models-folio" />
+
+  <div class="models">
+    {
+      PARTNER_MODELS.map((model) => (
+        <article class:list={['model', `model--${model.emphasis}`]}>
+          <h3 class="model__name">{model.name}</h3>
+          <dl class="model__fields">
+            <dt>{MODEL_FIELD_LABELS.customerRelationship}</dt>
+            <dd>{model.customerRelationship}</dd>
+            <dt>{MODEL_FIELD_LABELS.visibility}</dt>
+            <dd>{model.visibility}</dd>
+            <dt>{MODEL_FIELD_LABELS.seam}</dt>
+            <dd>{model.seam}</dd>
+          </dl>
+        </article>
+      ))
+    }
+  </div>
+
+  <p class="models__note">{MODEL_NOTE}</p>
+</Band>
+
+<style>
+  .models {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
+  }
+
+  .model {
+    min-width: 0;
+    padding: 28px 24px;
+    background: var(--bone-3);
+    border: 1.5px solid var(--ink);
+  }
+
+  .model--ink {
+    box-shadow: var(--shadow-hard);
+  }
+
+  /* The single violation: orange offset plus an 8px lift out of the row. */
+  .model--orange {
+    box-shadow: var(--shadow-hard-orange);
+    transform: translateY(-8px);
+  }
+
+  .model__name {
+    margin: 0 0 20px;
+    font-weight: var(--weight-display-max);
+    font-size: 32px;
+    letter-spacing: -0.035em;
+  }
+
+  .model__fields {
+    display: grid;
+    margin: 0;
+  }
+
+  .model__fields dt {
+    margin: 0 0 6px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--steel-2);
+  }
+
+  .model__fields dd + dt {
+    margin-top: 16px;
+  }
+
+  .model__fields dd {
+    margin: 0;
+    font-size: 16.5px;
+    line-height: 1.45;
+  }
+
+  .models__note {
+    margin: 32px 0 0;
+    font-family: var(--font-mono);
+    font-size: var(--type-label-sm);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--steel);
+    line-height: 1.8;
+  }
+
+  @media (max-width: 380px) {
+    /* Below ~340px the 300px track would outgrow the band's inner width and scroll the page. */
+    .models {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

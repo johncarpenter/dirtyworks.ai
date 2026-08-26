@@ -1,0 +1,324 @@
+/* The intake form on /start. Values from Start.dc.html:10 (field base), :30-70 (sheet, divider,
+   need chips, consent block) and :21-27 (confirmation panel). The island renders these class
+   names, so the styles live here rather than in a scoped block. */
+
+.intake,
+.intake-confirm {
+  background: var(--bone-3);
+  border: 1.5px solid var(--ink);
+  box-shadow: 6px 6px 0 var(--ink);
+}
+
+.intake__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 16px 24px;
+  border-bottom: 1.5px solid var(--ink);
+  font-family: var(--font-mono);
+  font-size: var(--type-label-sm);
+  font-weight: var(--weight-label);
+  letter-spacing: var(--track-label-wide);
+  text-transform: uppercase;
+  color: var(--steel);
+}
+
+.intake__body {
+  padding: 28px 24px;
+  display: grid;
+  gap: 22px;
+}
+
+.intake__pair,
+.intake__optional {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.intake__pair > *,
+.intake__optional > * {
+  min-width: 0;
+}
+
+.field {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+}
+
+.field__label {
+  font-family: var(--font-mono);
+  font-size: var(--type-label-sm);
+  font-weight: var(--weight-label);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.field__required {
+  color: var(--ink);
+}
+
+.field__error {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--error);
+}
+
+.intake__divider {
+  margin: 8px 0 0;
+  padding-top: 18px;
+  border-top: 1px solid var(--rule);
+  font-family: var(--font-mono);
+  font-size: var(--type-label-sm);
+  font-weight: var(--weight-label);
+  letter-spacing: var(--track-label-wide);
+  text-transform: uppercase;
+  color: var(--steel);
+}
+
+/* --------------------------------------------------------------- needs */
+
+.needs {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 12px;
+}
+
+.needs__legend {
+  padding: 0;
+  font-family: var(--font-mono);
+  font-size: var(--type-label-sm);
+  font-weight: var(--weight-label);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.needs__options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* Real checkboxes with a 44px target, not the prototype's static spans. */
+.needs__option {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: var(--target-min);
+  padding: 9px 12px;
+  background: var(--bone-3);
+  border: 1.5px solid var(--ink);
+  border-radius: 1px;
+  font-family: var(--font-mono);
+  font-size: var(--type-label-sm);
+  font-weight: var(--weight-label);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.needs__option:hover {
+  background: var(--bone-2);
+}
+
+/* Selection is carried by the checkbox state and the checkmark, not by colour alone. */
+.needs__option[data-checked='true'] {
+  background: var(--verified-acid);
+}
+
+.needs__option input {
+  width: 16px;
+  height: 16px;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  accent-color: var(--ink);
+}
+
+/* --------------------------------------------------------------- decoy */
+
+.decoy {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* --------------------------------------------------------------- consent */
+
+.consent {
+  background: var(--bone);
+  border-left: 3px solid var(--signal-orange);
+  padding: 18px 20px;
+}
+
+.consent__caption {
+  margin: 0 0 10px;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: var(--weight-label);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.consent__body {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.consent__stamp {
+  margin: 10px 0 0;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--steel-2);
+}
+
+/* --------------------------------------------------------------- actions and alerts */
+
+.intake__actions {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  align-items: center;
+  padding-top: 4px;
+}
+
+.intake__submit {
+  background: var(--signal-orange);
+  color: var(--ink);
+  border: 1.5px solid var(--ink);
+  border-radius: 0;
+  box-shadow: 3px 3px 0 var(--ink);
+  padding: 17px 26px;
+  min-height: var(--target-min);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: var(--weight-label);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.intake__submit:hover:not(:disabled) {
+  background: var(--orange-press);
+}
+
+.intake__submit:active:not(:disabled) {
+  box-shadow: 1px 1px 0 var(--ink);
+  transform: translate(1px, 1px);
+}
+
+.intake__status {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--steel);
+}
+
+.intake__alert {
+  margin: 0;
+  background: var(--error-field);
+  border-left: 3px solid var(--error);
+  padding: 16px 18px;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.intake__alert a {
+  text-decoration: underline;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 3px;
+}
+
+/* --------------------------------------------------------------- confirmation */
+
+.intake-confirm {
+  background: var(--ink);
+  color: var(--bone);
+  box-shadow: 6px 6px 0 var(--signal-orange);
+  padding: 32px 28px;
+  display: grid;
+  gap: 18px;
+  justify-items: start;
+}
+
+.intake-confirm__chip {
+  margin: 0;
+  background: var(--verified-acid);
+  color: var(--ink);
+  border-radius: 2px;
+  padding: 4px 8px;
+  font-family: var(--font-mono);
+  font-size: var(--type-label-sm);
+  font-weight: var(--weight-label);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.intake-confirm__heading {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(28px, 3vw, 48px);
+  line-height: 0.9;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  color: var(--bone);
+}
+
+.intake-confirm__body {
+  margin: 0;
+  font-size: 17px;
+  line-height: 1.5;
+  max-width: 52ch;
+}
+
+.intake-confirm__again {
+  background: transparent;
+  color: var(--bone);
+  border: 1.5px solid var(--bone);
+  border-radius: 0;
+  padding: 14px 20px;
+  min-height: var(--target-min);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: var(--weight-label);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.intake-confirm__again:hover {
+  background: var(--ink-2);
+}
+
+/* --------------------------------------------------------------- no-script fallback */
+
+.intake-noscript {
+  background: var(--bone-3);
+  border: 1.5px solid var(--ink);
+  box-shadow: 6px 6px 0 var(--ink);
+  padding: 28px 24px;
+  display: grid;
+  gap: 16px;
+}
+
+.intake-noscript ul {
+  margin: 0;
+  padding-left: 20px;
+  line-height: 1.6;
+}

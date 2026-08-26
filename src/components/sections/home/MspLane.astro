@@ -1,0 +1,147 @@
+---
+/* Home §10, ink band. The three-party responsibility seam. The Dirtyworks.ai row is shifted 16px
+   and indented a further 24px on a raised dark field with a 3px orange edge — the second and last
+   of the page's deliberate grid violations. Every party is named in text, so the colour coding is
+   never the only signal. */
+import Band from '../../layout/Band.astro';
+import Folio from '../../ui/Folio.astro';
+import Button from '../../ui/Button.astro';
+import Declaration from '../../patterns/Declaration.astro';
+import { MSP_LANE, SEAM_ROWS } from '../../../content/pages/home';
+---
+
+<Band ground="ink" labelledBy="msp-lane-heading">
+  <Folio text={MSP_LANE.folio} tone="dark" />
+
+  <div class="msp-lane__grid">
+    <div>
+      <Declaration
+        id="msp-lane-heading"
+        size="clamp(34px,4.2vw,76px)"
+        leading="0.86"
+        tracking="-0.035em"
+        weight={900}
+      >
+        {MSP_LANE.heading}
+      </Declaration>
+
+      {MSP_LANE.paragraphs.map((text) => <p class="msp-lane__text">{text}</p>)}
+
+      <div class="msp-lane__action">
+        <Button href={MSP_LANE.action.href} size="lg">{MSP_LANE.action.label}</Button>
+      </div>
+    </div>
+
+    <div>
+      <div class="msp-lane__seam-title">{MSP_LANE.seamTitle}</div>
+      <ul class="msp-lane__seam">
+        {
+          SEAM_ROWS.map((row) => (
+            <li class:list={['msp-lane__row', `msp-lane__row--${row.tone}`]}>
+              <p class="msp-lane__party">{row.party}</p>
+              <p class="msp-lane__body">{row.body}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</Band>
+
+<style>
+  .msp-lane__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+    gap: clamp(32px, 5vw, 80px);
+    align-items: start;
+  }
+
+  .msp-lane__grid > * {
+    min-width: 0;
+  }
+
+  .msp-lane__text {
+    margin: 26px 0 0;
+    font-size: 18px;
+    line-height: 1.52;
+    max-width: 48ch;
+  }
+
+  .msp-lane__text + .msp-lane__text {
+    margin-top: 20px;
+  }
+
+  .msp-lane__action {
+    margin-top: 36px;
+  }
+
+  .msp-lane__seam-title {
+    padding-bottom: 10px;
+    font-family: var(--font-mono);
+    font-size: var(--type-label-sm);
+    font-weight: var(--weight-label);
+    letter-spacing: var(--track-label-wide);
+    text-transform: uppercase;
+    color: var(--steel-2);
+    border-bottom: 1.5px solid var(--ink-3);
+  }
+
+  .msp-lane__seam {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .msp-lane__row {
+    padding: 22px 0;
+    border-bottom: 1px solid var(--ink-3);
+  }
+
+  /* Violation 2 of 2: the box shifts 16px and the text indents a further 24px. */
+  .msp-lane__row--dirtyworks {
+    margin-left: 16px;
+    padding: 22px 0 22px 24px;
+    border-left: 3px solid var(--signal-orange);
+    background: var(--ink-2);
+  }
+
+  .msp-lane__party {
+    margin: 0 0 10px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: var(--weight-label);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .msp-lane__row--msp .msp-lane__party {
+    color: var(--blueprint-light);
+  }
+
+  .msp-lane__row--dirtyworks .msp-lane__party {
+    color: var(--signal-orange);
+  }
+
+  .msp-lane__row--customer .msp-lane__party {
+    color: var(--verified-acid);
+  }
+
+  .msp-lane__body {
+    margin: 0;
+    font-size: 17px;
+    line-height: 1.48;
+  }
+
+  @media (max-width: 900px) {
+    .msp-lane__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .msp-lane__row--dirtyworks {
+      margin-left: 8px;
+      padding-left: 12px;
+    }
+  }
+</style>

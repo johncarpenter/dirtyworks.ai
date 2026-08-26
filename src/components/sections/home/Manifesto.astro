@@ -1,0 +1,86 @@
+---
+/* Home §11. A 6px editorial rule above, no folio, and the only acid on the page besides the status
+   chips: the single word `works`. The fourteen work nouns run as one mono line. */
+import Band from '../../layout/Band.astro';
+import Declaration from '../../patterns/Declaration.astro';
+import { MANIFESTO, WORK_NOUNS } from '../../../content/pages/home';
+
+const nouns = WORK_NOUNS.map((noun) => `${noun}.`).join(' ');
+---
+
+<Band ground="bone-2" variant="manifesto" labelledBy="manifesto-heading">
+  <div class="manifesto__grid">
+    <Declaration
+      id="manifesto-heading"
+      size="clamp(44px,6.4vw,116px)"
+      leading="0.84"
+      tracking="-0.04em"
+      weight={900}
+    >
+      {MANIFESTO.headingLines[0]}<br />{MANIFESTO.headingLines[1]}<br />{
+        MANIFESTO.headingFinalBefore
+      }<span class="manifesto__highlight">{MANIFESTO.headingHighlight}</span>{
+        MANIFESTO.headingFinalAfter
+      }
+    </Declaration>
+
+    <div>
+      <p class="manifesto__lede">{MANIFESTO.lede}</p>
+      <p class="manifesto__nouns">{nouns}</p>
+      <p class="manifesto__closing">{MANIFESTO.closing}</p>
+    </div>
+  </div>
+</Band>
+
+<style>
+  .manifesto__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    gap: clamp(32px, 5vw, 80px);
+    align-items: end;
+  }
+
+  .manifesto__grid > * {
+    min-width: 0;
+  }
+
+  .manifesto__highlight {
+    background: var(--verified-acid);
+    color: var(--ink);
+    padding: 0 0.06em;
+  }
+
+  .manifesto__lede {
+    margin: 0;
+    font-size: 18px;
+    line-height: 1.52;
+    max-width: 44ch;
+  }
+
+  .manifesto__nouns {
+    margin: 20px 0 0;
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    line-height: 1.9;
+    color: var(--ink-3);
+    max-width: 44ch;
+  }
+
+  .manifesto__closing {
+    margin: 28px 0 0;
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: clamp(24px, 2.4vw, 38px);
+    line-height: 1.12;
+    max-width: 24ch;
+  }
+
+  @media (max-width: 900px) {
+    .manifesto__grid {
+      grid-template-columns: minmax(0, 1fr);
+      align-items: start;
+    }
+  }
+</style>

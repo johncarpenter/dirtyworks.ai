@@ -1,0 +1,63 @@
+---
+/* Home §02. The unmanaged stack, with the evidence rail of seven illustrative events. The rail is
+   server-rendered in its aligned state; the island only animates it into that state on scroll. */
+import Band from '../../layout/Band.astro';
+import Folio from '../../ui/Folio.astro';
+import Declaration from '../../patterns/Declaration.astro';
+import EvidenceRail from '../../patterns/EvidenceRail.astro';
+import EvidenceRailIsland from '../../islands/EvidenceRail';
+import { EVIDENCE_ITEMS, PROBLEM } from '../../../content/pages/home';
+---
+
+<Band ground="bone-2" labelledBy="problem-heading">
+  <Folio text={PROBLEM.folio} />
+
+  <div class="problem__grid">
+    <div>
+      <Declaration
+        id="problem-heading"
+        size="clamp(30px,3.4vw,60px)"
+        leading="0.94"
+        tracking="-0.025em"
+        weight={800}
+      >
+        {PROBLEM.heading}
+      </Declaration>
+      {PROBLEM.paragraphs.map((text) => <p class="problem__text">{text}</p>)}
+    </div>
+
+    <EvidenceRailIsland client:visible>
+      <EvidenceRail items={EVIDENCE_ITEMS} title={PROBLEM.railTitle} />
+    </EvidenceRailIsland>
+  </div>
+</Band>
+
+<style>
+  .problem__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr);
+    gap: clamp(32px, 5vw, 80px);
+    align-items: start;
+  }
+
+  .problem__grid > * {
+    min-width: 0;
+  }
+
+  .problem__text {
+    margin: 26px 0 0;
+    font-size: 18px;
+    line-height: 1.52;
+    max-width: 54ch;
+  }
+
+  .problem__text + .problem__text {
+    margin-top: 20px;
+  }
+
+  @media (max-width: 900px) {
+    .problem__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>

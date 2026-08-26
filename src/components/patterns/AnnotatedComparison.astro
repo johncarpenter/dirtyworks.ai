@@ -1,0 +1,178 @@
+---
+/* Composite: two fields with one decisive contrast. The left column is struck through because it
+   is the thing being displaced; the right column carries the position. One row is filled acid and
+   the margin annotation names it in words, so the state is never colour alone.
+
+   Each row is its own two-column grid so a narrow viewport can stack it while keeping the pairing
+   intact — the per-cell mono captions appear only in the stacked state. */
+export interface ComparisonRow {
+  left: string;
+  right: string;
+  decisive?: boolean;
+}
+
+interface Props {
+  leftTitle: string;
+  rightTitle: string;
+  rows: readonly ComparisonRow[];
+  annotation?: string;
+  class?: string;
+}
+
+const { leftTitle, rightTitle, rows, annotation, class: className } = Astro.props;
+---
+
+<div class:list={['comparison', className]}>
+  <div class="comparison__head">
+    <span class="comparison__title">{leftTitle}</span>
+    <span class="comparison__title comparison__title--accent">{rightTitle}</span>
+  </div>
+
+  <ul class="comparison__rows">
+    {
+      rows.map((row) => (
+        <li class:list={['comparison__row', row.decisive && 'comparison__row--decisive']}>
+          <span class="comparison__cell comparison__cell--left">
+            <span class="comparison__caption" aria-hidden="true">{leftTitle}</span>
+            <span class="comparison__struck">{row.left}</span>
+          </span>
+          <span class="comparison__cell comparison__cell--right">
+            <span class="comparison__caption" aria-hidden="true">{rightTitle}</span>
+            <span>{row.right}</span>
+          </span>
+        </li>
+      ))
+    }
+  </ul>
+
+  {annotation ? <p class="comparison__annotation">{annotation}</p> : null}
+</div>
+
+<style>
+  .comparison {
+    border-top: 6px solid var(--ink);
+  }
+
+  .comparison__head {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-bottom: 1.5px solid var(--ink);
+  }
+
+  .comparison__head > * {
+    min-width: 0;
+  }
+
+  .comparison__title {
+    padding: 10px 20px 10px 0;
+    font-family: var(--font-mono);
+    font-size: var(--type-label);
+    font-weight: var(--weight-label);
+    letter-spacing: var(--track-label-wide);
+    text-transform: uppercase;
+    color: var(--steel);
+  }
+
+  .comparison__title--accent {
+    padding: 10px 20px;
+    border-left: 1.5px solid var(--ink);
+    color: var(--ink);
+  }
+
+  .comparison__rows {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .comparison__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .comparison__row > * {
+    min-width: 0;
+  }
+
+  .comparison__cell {
+    display: block;
+    border-bottom: 1px solid var(--rule);
+    font-size: var(--type-body-sm);
+    line-height: 1.4;
+  }
+
+  .comparison__cell--left {
+    padding: 16px 20px 16px 0;
+    color: var(--steel);
+  }
+
+  .comparison__cell--right {
+    padding: 16px 20px;
+    border-left: 1.5px solid var(--ink);
+    font-weight: var(--weight-label);
+    color: var(--ink);
+  }
+
+  .comparison__row--decisive .comparison__cell--right {
+    background: var(--verified-acid);
+    color: var(--ink);
+  }
+
+  .comparison__struck {
+    text-decoration: line-through;
+    text-decoration-color: var(--steel-2);
+    text-decoration-thickness: 1px;
+  }
+
+  /* Column captions belong to the stacked state only. */
+  .comparison__caption {
+    display: none;
+    font-family: var(--font-mono);
+    font-size: var(--type-label-sm);
+    font-weight: var(--weight-label);
+    letter-spacing: var(--track-label);
+    text-transform: uppercase;
+    color: var(--steel);
+    margin-bottom: 6px;
+  }
+
+  .comparison__annotation {
+    margin: 24px 0 0;
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: clamp(22px, 2vw, 32px);
+    line-height: 1.15;
+    color: var(--orange-press);
+    max-width: 38ch;
+  }
+
+  @media (max-width: 720px) {
+    /* Stack, but never separate a pair: each row keeps its two cells adjacent and labelled. */
+    .comparison__head {
+      display: none;
+    }
+
+    .comparison__row {
+      grid-template-columns: 1fr;
+      border-bottom: 1.5px solid var(--ink);
+      padding: 4px 0 12px;
+    }
+
+    .comparison__cell {
+      border-bottom: 0;
+    }
+
+    .comparison__cell--left {
+      padding: 12px 0 8px;
+    }
+
+    .comparison__cell--right {
+      padding: 12px;
+      border-left: 3px solid var(--ink);
+    }
+
+    .comparison__caption {
+      display: block;
+    }
+  }
+</style>

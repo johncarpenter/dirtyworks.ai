@@ -1,0 +1,92 @@
+---
+/* The production annotation beside the provisional founder copy: the sponsor inputs that are
+   still missing, named one by one.
+
+   The list is not retyped here — it is the FOUNDER_PROFILE entry in src/content/placeholders.ts,
+   which is also what keeps /about unpublished and what scripts/check-content.ts reads. Resolving
+   the gap therefore happens in exactly one place: delete the registry entry, and this panel stops
+   rendering while the route becomes publishable. */
+import { PLACEHOLDERS } from '../../../content/placeholders';
+import ProofLabel from '../../ui/ProofLabel.astro';
+
+interface Props {
+  title: string;
+  /** the serif line that closes the panel */
+  note: string;
+}
+
+const { title, note } = Astro.props;
+
+const gap = PLACEHOLDERS.find((p) => p.key === 'FOUNDER_PROFILE');
+const requires = gap?.requires ?? [];
+---
+
+{
+  gap && requires.length > 0 ? (
+    <aside class="founder-gap" aria-label={title}>
+      <div class="founder-gap__head">
+        <span class="founder-gap__title">{title}</span>
+        <ProofLabel status="gap" size="sm">
+          {gap.state}
+        </ProofLabel>
+      </div>
+      <ul class="founder-gap__list">
+        {requires.map((item) => (
+          <li>{item}</li>
+        ))}
+      </ul>
+      <p class="founder-gap__note">{note}</p>
+    </aside>
+  ) : null
+}
+
+<style>
+  .founder-gap {
+    background: var(--bone-3);
+    border: 1.5px solid var(--ink);
+    padding: 24px 22px;
+    min-width: 0;
+  }
+
+  .founder-gap__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+    flex-wrap: wrap;
+    border-bottom: 1.5px solid var(--ink);
+    padding-bottom: 12px;
+    margin-bottom: 16px;
+  }
+
+  .founder-gap__title {
+    font-family: var(--font-mono);
+    font-size: var(--type-label-sm);
+    font-weight: var(--weight-label);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .founder-gap__list {
+    display: grid;
+    gap: 11px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    line-height: 1.5;
+  }
+
+  .founder-gap__note {
+    margin: 18px 0 0;
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 18px;
+    line-height: 1.2;
+    color: var(--ink-3);
+  }
+</style>

@@ -17,6 +17,15 @@ Sync Impact Report
   RATIFICATION_DATE, LAST_AMENDED_DATE. No bracket tokens remain.
 - Deferred items: none. RATIFICATION_DATE is set to the date of this first adoption because no
   earlier adoption exists in the repository.
+
+Amendment 1.0.0 → 1.0.1 (PATCH, 2026-08-25)
+- Trigger: registry verification during `/speckit.plan` (specs/001-build-marketing-website/research.md
+  D-01) proved the `@astrojs/react` version fact wrong.
+- Change: Technology And Platform Constraints now pins `@astrojs/react` 4.x as the Astro 5 line and
+  records that the package declares no `astro` peer, so the Astro major must be identified by the
+  bundled Vite major instead of by peer-range checking.
+- Classification: PATCH — a factual correction to an existing constraint. No principle added,
+  removed, or redefined; the intent (pin integrations to the Astro major) is unchanged.
 -->
 
 # Dirtyworks.ai Marketing Website Constitution
@@ -144,12 +153,17 @@ or leak data. It earns disproportionate rigour.
 
 The stack is fixed for this site. Substitutions REQUIRE an amendment.
 
-- Astro 5 (`output: 'static'`), React 19 islands via `@astrojs/react` 5.x, `@astrojs/cloudflare`
+- Astro 5 (`output: 'static'`), React 19 islands via `@astrojs/react` 4.x, `@astrojs/cloudflare`
   12.x, TypeScript strict via `astro/tsconfigs/strict`, Vitest via `getViteConfig()`, Playwright,
   Wrangler 4.x. Node 20+ for the build.
 - Adapter and integration versions MUST be pinned against the Astro major. `@astrojs/cloudflare`
-  14.x requires Astro 7 and MUST NOT be installed here. Check `peerDependencies.astro` before any
-  adapter or integration install.
+  14.x requires Astro 7 and MUST NOT be installed here; check `peerDependencies.astro` before any
+  adapter install.
+- `@astrojs/react` declares **no** `astro` peer dependency at any version, so a mismatch raises no
+  install error. Its Astro major is identified by the Vite major it bundles: 4.x ships Vite 6 and is
+  the Astro 5 line; 5.x ships Vite 7 (Astro 6); 6.x ships Vite 8 (Astro 7). Installing 5.x here
+  silently duplicates a Vite major in the dependency tree. Pin 4.x and verify by comparing the
+  integration's bundled `vite` version against Astro's.
 - `imageService: 'compile'` is REQUIRED — sharp is unavailable in Workers.
 - `platformProxy` MUST be disabled under test (`{ enabled: !process.env.VITEST }`); its `workerd`
   process otherwise prevents Vitest from exiting.
@@ -231,4 +245,4 @@ MUST be corrected.
   Where content and visual authority disagree, `mockups/README.md` governs words, structure, and
   calls to action; `design-system/readme.md` governs tokens, components, and interaction patterns.
 
-**Version**: 1.0.0 | **Ratified**: 2026-08-25 | **Last Amended**: 2026-08-25
+**Version**: 1.0.1 | **Ratified**: 2026-08-25 | **Last Amended**: 2026-08-25

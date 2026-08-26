@@ -1,0 +1,163 @@
+---
+/* Composite 8: control / mechanism / holder / state + status.
+   Public 7-row extract on Home, full 12-row register on /trust. */
+import ProofLabel from '../ui/ProofLabel.astro';
+import type { ProofStatus } from '../../types/proof';
+
+export interface ControlRow {
+  control: string;
+  mechanism: string;
+  holder: string;
+  state: string;
+  status?: ProofStatus;
+}
+
+interface Props {
+  rows: readonly ControlRow[];
+  caption?: string;
+  note?: string;
+  tone?: 'light' | 'dark';
+}
+
+const { rows, caption, note, tone = 'light' } = Astro.props;
+---
+
+<div class:list={['control-register', tone === 'dark' && 'control-register--dark']}>
+  {caption ? <p class="control-register__caption">{caption}</p> : null}
+
+  <div class="control-register__head" aria-hidden="true">
+    <span>Control</span><span>Mechanism</span><span>Holder</span><span>State</span>
+  </div>
+
+  <ul class="control-register__rows">
+    {
+      rows.map((row) => (
+        <li class="control-register__row">
+          <span class="control-register__control">{row.control}</span>
+          <span class="control-register__mechanism">{row.mechanism}</span>
+          <span class="control-register__holder">{row.holder}</span>
+          <span class="control-register__state">
+            <ProofLabel status={row.status} size="sm">{row.state}</ProofLabel>
+          </span>
+        </li>
+      ))
+    }
+  </ul>
+
+  {note ? <p class="control-register__note">{note}</p> : null}
+</div>
+
+<style>
+  .control-register__caption,
+  .control-register__head {
+    font-family: var(--font-mono);
+    font-size: var(--type-label-sm);
+    font-weight: var(--weight-label);
+    letter-spacing: var(--track-label-wide);
+    text-transform: uppercase;
+    color: var(--steel);
+  }
+
+  .control-register__caption {
+    margin: 0 0 12px;
+  }
+
+  .control-register__head,
+  .control-register__row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr) minmax(0, 1fr) minmax(0, 0.7fr);
+    gap: clamp(12px, 2vw, 28px);
+    align-items: baseline;
+  }
+
+  .control-register__head > *,
+  .control-register__row > * {
+    min-width: 0;
+  }
+
+  .control-register__head {
+    padding-bottom: 10px;
+    border-bottom: 1.5px solid var(--ink);
+  }
+
+  .control-register__rows {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .control-register__row {
+    padding: 18px 0;
+    border-bottom: 1px solid var(--rule);
+    font-size: 16px;
+    line-height: 1.45;
+  }
+
+  .control-register__row:nth-child(even) {
+    background: var(--bone-2);
+    padding-left: 24px;
+  }
+
+  .control-register__control {
+    font-weight: var(--weight-strong);
+  }
+
+  .control-register__mechanism {
+    color: var(--ink);
+  }
+
+  .control-register__holder {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--steel);
+  }
+
+  .control-register__note {
+    margin: 18px 0 0;
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--steel);
+    line-height: 1.7;
+  }
+
+  .control-register--dark .control-register__head,
+  .control-register--dark .control-register__caption,
+  .control-register--dark .control-register__note {
+    color: var(--steel-2);
+  }
+
+  .control-register--dark .control-register__head {
+    border-bottom-color: var(--steel);
+  }
+
+  .control-register--dark .control-register__row {
+    border-bottom-color: var(--ink-3);
+  }
+
+  .control-register--dark .control-register__row:nth-child(even) {
+    background: var(--ink-2);
+  }
+
+  .control-register--dark .control-register__holder {
+    color: var(--steel-2);
+  }
+
+  @media (max-width: 720px) {
+    .control-register__head {
+      display: none;
+    }
+
+    .control-register__row {
+      grid-template-columns: 1fr;
+      gap: 6px;
+    }
+
+    .control-register__row:nth-child(even) {
+      padding-left: 12px;
+    }
+  }
+</style>

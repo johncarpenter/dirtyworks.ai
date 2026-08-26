@@ -1,0 +1,94 @@
+---
+/* /method §03 — the six outcomes a review may end in. Deploying is one of them; stopping is
+   another, and it is stated as plainly as the rest. Each chip names its own outcome in text, so
+   the colour grouping never carries meaning alone. */
+import Band from '../../layout/Band.astro';
+import Folio from '../../ui/Folio.astro';
+import ProofLabel from '../../ui/ProofLabel.astro';
+import type { OutcomeTone } from '../../../content/pages/method';
+import type { ProofStatus } from '../../../types/proof';
+import { METHOD_OUTCOMES } from '../../../content/pages/method';
+
+const { folio, heading, body, outcomes } = METHOD_OUTCOMES;
+
+const OUTCOME_STATUS: Record<OutcomeTone, ProofStatus> = {
+  deploy: 'operated',
+  alternative: 'source',
+  human: 'neutral',
+  stop: 'gap',
+};
+---
+
+<Band ground="ink" labelledBy="outcomes-heading" class="outcomes">
+  <Folio text={folio} tone="dark" />
+
+  <div class="outcomes__split">
+    <div>
+      <h2 id="outcomes-heading">{heading}</h2>
+      <ul class="outcomes__chips">
+        {
+          outcomes.map((outcome) => (
+            <li>
+              <ProofLabel
+                status={OUTCOME_STATUS[outcome.tone]}
+                outlined={outcome.tone === 'human'}
+              >
+                {outcome.label}
+              </ProofLabel>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <p class="outcomes__body">{body}</p>
+  </div>
+</Band>
+
+<style>
+  .outcomes__split {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    gap: clamp(32px, 5vw, 80px);
+    align-items: start;
+  }
+
+  .outcomes__split > * {
+    min-width: 0;
+  }
+
+  .outcomes h2 {
+    font-weight: 900;
+    font-size: clamp(30px, 3.6vw, 64px);
+    line-height: 0.89;
+    letter-spacing: -0.03em;
+  }
+
+  .outcomes__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 36px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* Outcome chips are the section's device, so they carry the prototype's larger chip setting. */
+  .outcomes__chips :global(.chip) {
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    padding: 8px 12px;
+  }
+
+  .outcomes__body {
+    margin: 0;
+    font-size: 18px;
+    line-height: 1.52;
+  }
+
+  @media (max-width: 900px) {
+    .outcomes__split {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

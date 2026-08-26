@@ -1,0 +1,74 @@
+---
+/* 03 / Operating beliefs. Seven statements on the ink ground, each on its own hairline row with a
+   mono index. They are set in display type because they are the argument of the page, not a list
+   of values. */
+import Band from '../../layout/Band.astro';
+import Folio from '../../ui/Folio.astro';
+import { BELIEFS, BELIEFS_FOLIO } from '../../../content/pages/about';
+---
+
+<Band ground="ink" labelledBy="beliefs-folio">
+  <Folio id="beliefs-folio" text={BELIEFS_FOLIO} tone="dark" />
+  <ol class="beliefs">
+    {
+      BELIEFS.map((belief, i) => (
+        <li class:list={['beliefs__row', i === BELIEFS.length - 1 && 'beliefs__row--last']}>
+          <span class="beliefs__index">{belief.index}</span>
+          <span class="beliefs__text">{belief.text}</span>
+        </li>
+      ))
+    }
+  </ol>
+</Band>
+
+<style>
+  .beliefs {
+    display: grid;
+    gap: 0;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1.5px solid var(--ink-3);
+  }
+
+  .beliefs__row {
+    display: grid;
+    grid-template-columns: 76px minmax(0, 1fr);
+    gap: 24px;
+    padding: 26px 0;
+    border-bottom: 1px solid var(--ink-3);
+    align-items: baseline;
+  }
+
+  .beliefs__row > * {
+    min-width: 0;
+  }
+
+  .beliefs__row--last {
+    border-bottom-width: 1.5px;
+  }
+
+  .beliefs__index {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    color: var(--signal-orange);
+  }
+
+  .beliefs__text {
+    font-family: var(--font-display);
+    font-weight: var(--weight-display);
+    font-size: clamp(22px, 2.4vw, 40px);
+    line-height: 1;
+    letter-spacing: -0.025em;
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 720px) {
+    .beliefs__row {
+      grid-template-columns: 1fr;
+      gap: 10px;
+      padding: 22px 0;
+    }
+  }
+</style>

@@ -1,0 +1,188 @@
+---
+import '../styles/intake.css';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Band from '../components/layout/Band.astro';
+import Folio from '../components/ui/Folio.astro';
+import Button from '../components/ui/Button.astro';
+import StartForm from '../components/islands/StartForm';
+import { CONTACT_EMAIL, INTAKE_MAILTO_SUBJECT } from '../content/site';
+import { hrefFor } from '../content/routes';
+
+const mailto = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(INTAKE_MAILTO_SUBJECT)}`;
+
+const nextSteps = [
+  'We read the event and reply with what we would look at first.',
+  'If a paid review makes sense, you get a fixed scope before any work starts.',
+  'If it does not, we say so. Stop is a valid outcome.',
+];
+---
+
+<BaseLayout route="start">
+  <Band ground="bone" variant="hero">
+    <Folio text="Start / 01 — Map the current state" />
+    <h1 class="start__heading">
+      Show us what is already in the <span class="start__emphasis">stack</span>.
+    </h1>
+    <p class="start__support">
+      One recent event is enough: missing access, an unmanaged account, abandoned licences, an
+      integration failure, unexpected spend, unclear policy, an unsupported team, or an answer
+      nobody could verify.
+    </p>
+  </Band>
+
+  <Band ground="bone-2" class="start__body">
+    <div class="start__grid">
+      <div>
+        <StartForm client:load />
+
+        <noscript>
+          <div class="intake-noscript">
+            <h2>Send the same details by email</h2>
+            <p>
+              The intake form needs JavaScript to validate and send. Email
+              <a href={mailto}>{CONTACT_EMAIL}</a> instead and include:
+            </p>
+            <ul>
+              <li>Name, company, role, and a work email we can reply to</li>
+              <li>What somebody was trying to do</li>
+              <li>What happened</li>
+              <li>The product or system involved, and who owns it today</li>
+            </ul>
+            <p>
+              Do not include passwords, API keys, customer or employee records, private documents,
+              health or financial information, or other sensitive data.
+            </p>
+          </div>
+        </noscript>
+      </div>
+
+      <div class="start__sidebar">
+        <div class="start__panel">
+          <p class="start__panel-title">What happens next</p>
+          <ol class="start__steps">
+            {
+              nextSteps.map((step, index) => (
+                <li>
+                  <span class="start__step-index">{String(index + 1).padStart(2, '0')}</span>
+                  <span>{step}</span>
+                </li>
+              ))
+            }
+          </ol>
+        </div>
+
+        <div class="start__partner">
+          <p class="start__panel-title start__panel-title--light">Partner enquiry instead?</p>
+          <p class="start__partner-body">
+            MSPs bring one client, one problem, and the seam they want written down.
+          </p>
+          <Button href={hrefFor('msps')} variant="ghost">Design a partner pilot</Button>
+        </div>
+      </div>
+    </div>
+  </Band>
+</BaseLayout>
+
+<style>
+  .start__heading {
+    font-weight: 900;
+    font-size: clamp(46px, 7vw, 126px);
+    line-height: 0.86;
+    letter-spacing: -0.035em;
+    max-width: 24ch;
+  }
+
+  .start__emphasis {
+    color: var(--orange-press);
+  }
+
+  .start__support {
+    margin: 34px 0 0;
+    font-size: clamp(19px, 1.5vw, 28px);
+    line-height: 1.34;
+    max-width: 52ch;
+  }
+
+  .start__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(280px, 1fr);
+    gap: clamp(32px, 5vw, 72px);
+    align-items: start;
+  }
+
+  .start__grid > * {
+    min-width: 0;
+  }
+
+  .start__sidebar {
+    display: grid;
+    gap: 24px;
+    position: sticky;
+    top: 108px;
+  }
+
+  .start__panel {
+    background: var(--ink);
+    color: var(--bone);
+    padding: 26px 22px;
+  }
+
+  .start__panel-title {
+    margin: 0 0 14px;
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    /* On the ink panel: --steel is 3.28:1 and fails, --steel-2 is 5.68:1. */
+    color: var(--steel-2);
+  }
+
+  .start__panel-title--light {
+    color: var(--steel);
+  }
+
+  .start__steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 14px;
+  }
+
+  .start__steps li {
+    display: flex;
+    gap: 14px;
+    align-items: baseline;
+    font-size: 16.5px;
+    line-height: 1.45;
+  }
+
+  .start__step-index {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--signal-orange);
+  }
+
+  .start__partner {
+    background: var(--bone-3);
+    border: 1.5px solid var(--ink);
+    padding: 22px 20px;
+  }
+
+  .start__partner-body {
+    margin: 0 0 16px;
+    font-size: 16.5px;
+    line-height: 1.45;
+  }
+
+  @media (max-width: 900px) {
+    .start__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .start__sidebar {
+      position: static;
+    }
+  }
+</style>

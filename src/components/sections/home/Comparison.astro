@@ -1,0 +1,61 @@
+---
+/* Home §05. Access versus operation. The renewal row is the decisive one and the margin annotation
+   names it in words, so the acid fill is never the only signal. */
+import Band from '../../layout/Band.astro';
+import Folio from '../../ui/Folio.astro';
+import Declaration from '../../patterns/Declaration.astro';
+import AnnotatedComparison from '../../patterns/AnnotatedComparison.astro';
+import { COMPARISON, COMPARISON_ROWS } from '../../../content/pages/home';
+---
+
+<Band ground="bone" labelledBy="comparison-heading">
+  <Folio text={COMPARISON.folio} />
+
+  <div class="comparison-section__grid">
+    <div>
+      <Declaration
+        id="comparison-heading"
+        size="clamp(36px,4.4vw,80px)"
+        leading="0.86"
+        tracking="-0.035em"
+        weight={900}
+      >
+        {COMPARISON.heading}
+      </Declaration>
+      <p class="comparison-section__text">{COMPARISON.support}</p>
+    </div>
+
+    <AnnotatedComparison
+      leftTitle={COMPARISON.leftTitle}
+      rightTitle={COMPARISON.rightTitle}
+      rows={COMPARISON_ROWS}
+      annotation={COMPARISON.annotation}
+    />
+  </div>
+</Band>
+
+<style>
+  .comparison-section__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.35fr);
+    gap: clamp(32px, 5vw, 80px);
+    align-items: start;
+  }
+
+  .comparison-section__grid > * {
+    min-width: 0;
+  }
+
+  .comparison-section__text {
+    margin: 26px 0 0;
+    font-size: 18px;
+    line-height: 1.52;
+    max-width: 46ch;
+  }
+
+  @media (max-width: 900px) {
+    .comparison-section__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>

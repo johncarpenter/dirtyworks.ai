@@ -1,0 +1,100 @@
+---
+/* /msps 05 — the one-customer pilot. Seven steps, and the seventh is the honest one: repeat,
+   revise, or stop. Stopping is a valid outcome, so it is written down as one. */
+import Band from '../../layout/Band.astro';
+import Folio from '../../ui/Folio.astro';
+import { PILOT_HEADING, PILOT_STEPS } from '../../../content/pages/msps';
+---
+
+<Band ground="bone-2" labelledBy="pilot-heading">
+  <Folio text="05 / One-customer pilot" />
+
+  <div class="pilot">
+    <h2 class="pilot__heading" id="pilot-heading">{PILOT_HEADING}</h2>
+
+    <ol class="pilot__steps">
+      {
+        PILOT_STEPS.map((step, index) => (
+          <li class:list={['pilot__step', index === PILOT_STEPS.length - 1 && 'pilot__step--last']}>
+            <span class="pilot__index">{step.index}</span>
+            <p class="pilot__text">{step.text}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</Band>
+
+<style>
+  .pilot {
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.5fr);
+    gap: clamp(32px, 5vw, 72px);
+    align-items: start;
+  }
+
+  .pilot > * {
+    min-width: 0;
+  }
+
+  .pilot__heading {
+    margin: 0;
+    font-weight: var(--weight-display-max);
+    font-size: clamp(32px, 3.8vw, 68px);
+    line-height: 0.87;
+    letter-spacing: -0.035em;
+  }
+
+  .pilot__steps {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1.5px solid var(--ink);
+  }
+
+  .pilot__step {
+    display: grid;
+    grid-template-columns: 56px minmax(0, 1fr);
+    gap: 20px;
+    align-items: baseline;
+    padding: 20px 0;
+    /* #C9C0AA in the prototype: the hairline this register uses. */
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .pilot__step > * {
+    min-width: 0;
+  }
+
+  .pilot__step--last {
+    border-bottom: 1.5px solid var(--ink);
+  }
+
+  .pilot__index {
+    font-family: var(--font-display);
+    font-weight: var(--weight-display-max);
+    font-size: 24px;
+    letter-spacing: -0.03em;
+    color: var(--orange-press);
+  }
+
+  .pilot__text {
+    margin: 0;
+    font-size: 18px;
+    line-height: 1.45;
+  }
+
+  @media (max-width: 900px) {
+    .pilot {
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .pilot__step {
+      grid-template-columns: 40px minmax(0, 1fr);
+      gap: 14px;
+    }
+  }
+</style>

@@ -1,0 +1,40 @@
+---
+/* Home §12. The CTA band, and immediately below it inside the same ink region the sensitive-data
+   note. The 1px rule sits ABOVE the paragraph, as a border-top on the paragraph itself — the
+   prototype, not the README, is the authority for that detail (research.md D-07 #6). */
+import CTABand from '../../patterns/CTABand.astro';
+import { CONVERSION } from '../../../content/pages/home';
+import { SENSITIVE_DATA_NOTE } from '../../../content/site';
+---
+
+<CTABand
+  folio={CONVERSION.folio}
+  heading={CONVERSION.heading}
+  support={CONVERSION.support}
+  primary={CONVERSION.primary}
+  secondary={CONVERSION.secondary}
+>
+  <div class="conversion__note">
+    <p>{SENSITIVE_DATA_NOTE}</p>
+  </div>
+</CTABand>
+
+<style>
+  /* Two classes deep on purpose: the ink band styles `p` directly, so a single-class rule would
+     lose the cascade and the note would render at full bone. */
+  .conversion__note {
+    margin-top: clamp(48px, 6vw, 88px);
+  }
+
+  .conversion__note p {
+    margin: 0;
+    padding-top: 20px;
+    border-top: 1px solid var(--ink-3);
+    font-family: var(--font-mono);
+    font-size: var(--type-label-sm);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--steel-2);
+    line-height: 1.8;
+  }
+</style>

@@ -1,0 +1,144 @@
+---
+/* Services §02. Eight capabilities, each in three columns: what it is called, what is included,
+   and where it stops.
+
+   The boundary cell is the argument of the page, so it is set at the same size and the same ink as
+   the "included" column and marked with a 3px orange edge. The prototype sets it at 15.5px in
+   muted #3A3A34; mockups/README.md:181 overrides that with "give it equal visual weight", and a
+   limit rendered as fine print is a limit nobody reads. Everything else is lifted literally. */
+import Band from '../../layout/Band.astro';
+import Folio from '../../ui/Folio.astro';
+import { SCOPE_REGISTER } from '../../../content/pages/services';
+
+const { folio, heading, boundaryCaption, rows } = SCOPE_REGISTER;
+const headingId = 'scope-register-heading';
+---
+
+<Band ground="bone-2" labelledBy={headingId}>
+  <Folio text={folio} />
+  <h2 class="scope__heading" id={headingId}>{heading}</h2>
+
+  <div class="scope__register">
+    {
+      rows.map((row, index) => (
+        <div
+          class:list={[
+            'scope-row',
+            index % 2 === 1 && 'scope-row--offset',
+            index === rows.length - 1 && 'scope-row--last',
+          ]}
+        >
+          <div class="scope-row__name">
+            <p class="scope-row__label">{row.label}</p>
+            <p class="scope-row__service">{row.service}</p>
+          </div>
+          <p class="scope-row__included">{row.included}</p>
+          <div class="scope-row__boundary">
+            <p class="scope-row__caption">{boundaryCaption}</p>
+            <p class="scope-row__limit">{row.boundary}</p>
+          </div>
+        </div>
+      ))
+    }
+  </div>
+</Band>
+
+<style>
+  .scope__heading {
+    margin: 0 0 56px;
+    font-weight: 800;
+    font-size: clamp(30px, 3.2vw, 58px);
+    line-height: 0.92;
+    letter-spacing: -0.03em;
+    max-width: 28ch;
+  }
+
+  .scope__register {
+    display: grid;
+    gap: 2px;
+    border-top: 1.5px solid var(--ink);
+    padding-top: 2px;
+  }
+
+  .scope-row {
+    display: grid;
+    grid-template-columns: minmax(200px, 0.85fr) minmax(0, 1.3fr) minmax(0, 1fr);
+    gap: clamp(16px, 3vw, 40px);
+    padding: 28px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .scope-row > * {
+    min-width: 0;
+  }
+
+  /* Alternating rows take the ground and the 24px offset. The prototype's third bone step has no
+     token in the vendored set, so the alternation swaps between the two page grounds instead —
+     bone rows inside a bone-2 band, mirroring the catalogue register. */
+  .scope-row--offset {
+    padding: 28px 0 28px 24px;
+    background: var(--bone);
+  }
+
+  .scope-row--last {
+    border-bottom: 1.5px solid var(--ink);
+  }
+
+  .scope-row__label {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: var(--weight-label);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink);
+    /* Label text is ink for AA; the orange signal survives as a marker bar. */
+    border-left: 3px solid var(--signal-orange);
+    padding-left: 10px;
+  }
+
+  .scope-row__service {
+    margin: 8px 0 0;
+    font-size: 19px;
+    font-weight: 700;
+    line-height: 1.24;
+  }
+
+  .scope-row__included {
+    margin: 0;
+    font-size: 17px;
+    line-height: 1.5;
+  }
+
+  .scope-row__boundary {
+    border-left: 3px solid var(--signal-orange);
+    padding-left: 16px;
+  }
+
+  .scope-row__caption {
+    margin: 0 0 7px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--steel-2);
+  }
+
+  .scope-row__limit {
+    margin: 0;
+    font-size: 17px;
+    line-height: 1.45;
+  }
+
+  @media (max-width: 900px) {
+    /* The boundary stacks under its row. It never shrinks to fit a narrow track. */
+    .scope-row {
+      grid-template-columns: 1fr;
+      gap: 18px;
+    }
+
+    .scope-row--offset {
+      padding-left: 12px;
+    }
+  }
+</style>

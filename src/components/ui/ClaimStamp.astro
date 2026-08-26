@@ -1,0 +1,38 @@
+---
+/* Renders a publication-state stamp. These are the brand's emotive markers and they ship:
+   ILLUSTRATIVE and VERIFY AT QUOTE must remain visible in production. */
+import type { ClaimStamp } from '../../types/claims';
+
+interface Props {
+  state: ClaimStamp;
+  /** override the visible text while keeping the state semantics */
+  label?: string;
+  tone?: 'light' | 'dark';
+}
+const { state, label, tone = 'light' } = Astro.props;
+const text = label ?? state;
+---
+
+<span
+  class:list={['claim-stamp', tone === 'dark' && 'claim-stamp--dark']}
+  data-claim-state={state}
+>{text}</span>
+
+<style>
+  .claim-stamp {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    font-weight: var(--weight-label);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink);
+    /* The orange moved from the text to a rule: brand orange cannot carry 10.5px copy at AA
+       (2.65:1 on bone), but it can still mark the stamp. */
+    border-bottom: 2px solid var(--signal-orange);
+    padding-bottom: 1px;
+  }
+
+  .claim-stamp--dark {
+    color: var(--signal-orange);
+  }
+</style>

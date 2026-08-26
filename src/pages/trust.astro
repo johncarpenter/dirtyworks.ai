@@ -1,0 +1,136 @@
+---
+/* /trust. Section order is load-bearing: the hero, then what we do NOT promise, then the twelve
+   controls, then compliance readiness, then the illustrative incident voice, then exit.
+   Limitations before the register is the page's argument — do not reorder them. */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Band from '../components/layout/Band.astro';
+import Folio from '../components/ui/Folio.astro';
+import ControlRegister from '../components/patterns/ControlRegister.astro';
+import CTABand from '../components/patterns/CTABand.astro';
+import Limitations from '../components/sections/trust/Limitations.astro';
+import IncidentVoice from '../components/sections/trust/IncidentVoice.astro';
+import Exit from '../components/sections/trust/Exit.astro';
+import { hrefFor } from '../content/routes';
+import {
+  TRUST_HERO,
+  TRUST_REGISTER,
+  TRUST_COMPLIANCE,
+  TRUST_CTA,
+} from '../content/pages/trust';
+---
+
+<BaseLayout route="trust">
+  <Band variant="hero" labelledBy="trust-hero-heading" class="trust-hero">
+    <Folio text={TRUST_HERO.folio} />
+    <h1 class="trust-hero__heading" id="trust-hero-heading">
+      {TRUST_HERO.headingLead}<span class="accent">{TRUST_HERO.headingAccent}</span>{
+        TRUST_HERO.headingTail
+      }
+    </h1>
+    <p class="trust-hero__lead">{TRUST_HERO.lead}</p>
+  </Band>
+
+  <Limitations />
+
+  <Band ground="bone-2" labelledBy="register-heading" class="register-band">
+    <Folio text={TRUST_REGISTER.folio} />
+    <h2 class="register-band__heading" id="register-heading">{TRUST_REGISTER.heading}</h2>
+    <p class="register-band__lead">{TRUST_REGISTER.lead}</p>
+    <ControlRegister
+      rows={TRUST_REGISTER.rows}
+      caption={TRUST_REGISTER.caption}
+      note={TRUST_REGISTER.note}
+    />
+  </Band>
+
+  <Band labelledBy="compliance-heading" class="compliance">
+    <div class="compliance__split">
+      <div>
+        <Folio text={TRUST_COMPLIANCE.folio} />
+        <h2 class="compliance__heading" id="compliance-heading">{TRUST_COMPLIANCE.heading}</h2>
+      </div>
+      <p class="compliance__body">{TRUST_COMPLIANCE.body}</p>
+    </div>
+  </Band>
+
+  <IncidentVoice />
+
+  <Exit />
+
+  <CTABand
+    folio={TRUST_CTA.folio}
+    heading={TRUST_CTA.heading}
+    support={TRUST_CTA.support}
+    primary={{ label: TRUST_CTA.primaryLabel, href: hrefFor('start') }}
+    secondary={{ label: TRUST_CTA.secondaryLabel, href: hrefFor('services') }}
+  />
+</BaseLayout>
+
+<style>
+  .accent {
+    /* --orange-press, not --signal-orange: brand orange is 2.65:1 on bone and fails AA even at
+       display size. The darker step reads 3.5:1 and is in the palette. */
+    color: var(--orange-press);
+  }
+
+  .trust-hero__heading {
+    font-weight: 900;
+    font-size: clamp(52px, 7.6vw, 140px);
+    line-height: 0.84;
+    letter-spacing: -0.035em;
+  }
+
+  .trust-hero__lead {
+    margin: 40px 0 0;
+    font-size: clamp(19px, 1.5vw, 28px);
+    line-height: 1.34;
+    max-width: 54ch;
+  }
+
+  .register-band__heading {
+    font-weight: 800;
+    font-size: clamp(28px, 3.2vw, 56px);
+    line-height: 0.92;
+    letter-spacing: -0.03em;
+    max-width: 26ch;
+    margin: 0 0 20px;
+  }
+
+  .register-band__lead {
+    margin: 0 0 48px;
+    font-size: 18px;
+    line-height: 1.52;
+    max-width: 60ch;
+  }
+
+  .compliance__split {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+    gap: clamp(32px, 5vw, 80px);
+    align-items: start;
+  }
+
+  .compliance__split > * {
+    min-width: 0;
+  }
+
+  .compliance__heading {
+    font-weight: 900;
+    font-size: clamp(30px, 3.6vw, 62px);
+    line-height: 0.88;
+    letter-spacing: -0.035em;
+  }
+
+  .compliance__body {
+    margin: 0;
+    font-size: 19px;
+    line-height: 1.5;
+    align-self: end;
+  }
+
+  @media (max-width: 900px) {
+    .compliance__split {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

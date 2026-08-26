@@ -1,0 +1,214 @@
+---
+/* Composite: the work order. A numbered vertical lifecycle on a single spine — deliberately not
+   four equal cards. Each step may carry marks (gate, output, cadence) and one serif annotation,
+   and the loop label states that operating returns to the beginning. */
+import ProofLabel from '../ui/ProofLabel.astro';
+import type { ProofStatus } from '../../types/proof';
+
+export interface StepMark {
+  label: string;
+  value?: string;
+  status?: ProofStatus;
+}
+
+export interface WorkOrderStep {
+  name: string;
+  detail: string;
+  annotation?: string;
+  marks?: readonly StepMark[];
+}
+
+interface Props {
+  steps: readonly WorkOrderStep[];
+  loopLabel?: string;
+  class?: string;
+}
+
+const { steps, loopLabel, class: className } = Astro.props;
+const pad = (n: number) => String(n).padStart(2, '0');
+---
+
+<div class:list={['work-order', className]}>
+  <span class="work-order__spine" aria-hidden="true"></span>
+
+  <ol class="work-order__steps">
+    {
+      steps.map((step, index) => (
+        <li class="work-order__step">
+          <span
+            class:list={[
+              'work-order__number',
+              index === steps.length - 1 && 'work-order__number--final',
+            ]}
+          >
+            {pad(index + 1)}
+          </span>
+          <div class="work-order__body">
+            <h3 class="work-order__name">{step.name}</h3>
+            <p class="work-order__detail">{step.detail}</p>
+            {step.annotation ? <p class="work-order__annotation">{step.annotation}</p> : null}
+            {
+              step.marks?.length ? (
+                <div class="work-order__marks">
+                  {step.marks.map((mark) => (
+                    <ProofLabel status={mark.status} value={mark.value} size="sm">
+                      {mark.label}
+                    </ProofLabel>
+                  ))}
+                </div>
+              ) : null
+            }
+          </div>
+        </li>
+      ))
+    }
+  </ol>
+
+  {
+    loopLabel ? (
+      <p class="work-order__loop">
+        <span class="work-order__hook" aria-hidden="true"></span>
+        <span class="work-order__loop-text">↑ {loopLabel}</span>
+      </p>
+    ) : null
+  }
+</div>
+
+<style>
+  .work-order {
+    position: relative;
+  }
+
+  .work-order__spine {
+    position: absolute;
+    left: 27px;
+    top: 14px;
+    bottom: 52px;
+    width: 1.5px;
+    background: var(--ink);
+  }
+
+  .work-order__steps {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 8px;
+  }
+
+  .work-order__step {
+    display: grid;
+    grid-template-columns: 56px minmax(0, 1fr);
+    gap: 24px;
+    align-items: start;
+    padding-bottom: 24px;
+  }
+
+  .work-order__step > * {
+    min-width: 0;
+  }
+
+  .work-order__number {
+    position: relative;
+    z-index: 1;
+    width: 56px;
+    height: 56px;
+    display: grid;
+    place-items: center;
+    background: var(--ink);
+    color: var(--bone);
+    font-family: var(--font-mono);
+    font-weight: var(--weight-label);
+    font-size: 18px;
+  }
+
+  .work-order__number--final {
+    background: var(--verified-acid);
+    color: var(--ink);
+  }
+
+  .work-order__body {
+    border-top: 1.5px solid var(--ink);
+    padding-top: 10px;
+  }
+
+  .work-order__name {
+    margin: 0;
+    font-weight: var(--weight-display);
+    font-size: clamp(24px, 2.4vw, 38px);
+    letter-spacing: var(--track-heading);
+    line-height: 1;
+  }
+
+  .work-order__detail {
+    margin: 10px 0 0;
+    font-size: var(--type-body-sm);
+    line-height: 1.5;
+    max-width: 56ch;
+  }
+
+  .work-order__annotation {
+    margin: 10px 0 0;
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 20px;
+    line-height: 1.2;
+    color: var(--ink);
+    max-width: 40ch;
+  }
+
+  .work-order__marks {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 12px;
+  }
+
+  /* A mark like "Output / Portable exit package" is wider than a 320px column, and the chip is
+     nowrap by default. Marks are the one place a chip is allowed to wrap. */
+  .work-order__marks :global(.chip) {
+    white-space: normal;
+  }
+
+  .work-order__loop {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: -8px 0 0;
+    padding-left: 6px;
+  }
+
+  .work-order__hook {
+    flex: none;
+    width: 44px;
+    height: 44px;
+    border: 1.5px solid var(--blueprint);
+    border-top: 0;
+    border-right: 0;
+  }
+
+  .work-order__loop-text {
+    font-family: var(--font-mono);
+    font-size: var(--type-label-sm);
+    letter-spacing: var(--track-label);
+    text-transform: uppercase;
+    color: var(--blueprint);
+  }
+
+  @media (max-width: 560px) {
+    .work-order__spine {
+      left: 21px;
+    }
+
+    .work-order__step {
+      grid-template-columns: 44px minmax(0, 1fr);
+      gap: 14px;
+    }
+
+    .work-order__number {
+      width: 44px;
+      height: 44px;
+      font-size: 15px;
+    }
+  }
+</style>

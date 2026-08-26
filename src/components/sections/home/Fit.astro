@@ -1,0 +1,64 @@
+---
+/* Home §09. Two fit fields side by side, then the partner field full width. The auto-fit track
+   floor is min(320px, 100%) so a 320px viewport cannot be forced to scroll sideways. */
+import Band from '../../layout/Band.astro';
+import Folio from '../../ui/Folio.astro';
+import Declaration from '../../patterns/Declaration.astro';
+import FitField from '../../patterns/FitField.astro';
+import { FIT, FIT_FIELDS } from '../../../content/pages/home';
+
+const [professional, energy, partner] = FIT_FIELDS;
+---
+
+<Band ground="bone" labelledBy="fit-heading">
+  <Folio text={FIT.folio} />
+
+  <Declaration
+    id="fit-heading"
+    size="clamp(30px,3.2vw,58px)"
+    leading="0.92"
+    tracking="-0.03em"
+    weight={800}
+    measure="30ch"
+  >
+    {FIT.heading}
+  </Declaration>
+
+  <div class="fit__pair">
+    <FitField
+      segment={professional.segment}
+      label={professional.label}
+      summary={professional.summary}
+      included={professional.included}
+      excluded={professional.excluded}
+    />
+    <FitField
+      segment={energy.segment}
+      label={energy.label}
+      summary={energy.summary}
+      included={energy.included}
+      excluded={energy.excluded}
+    />
+  </div>
+
+  <FitField
+    segment={partner.segment}
+    label={partner.label}
+    summary={partner.summary}
+    included={partner.included}
+    excluded={partner.excluded}
+  />
+</Band>
+
+<style>
+  .fit__pair {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
+    gap: 32px;
+    margin: 56px 0 32px;
+  }
+
+  .fit__pair > * {
+    min-width: 0;
+  }
+</style>

@@ -1,0 +1,134 @@
+---
+/* Services §03. Five stages from first review to renewal or exit, each with the commercial
+   treatment stated in blueprint serif. OPERATE carries the bone-2 ground because it is the stage
+   the service actually is; the other four exist to get there and back out.
+
+   The closing note is why no price appears on this page, and it ships verbatim. */
+import Band from '../../layout/Band.astro';
+import Folio from '../../ui/Folio.astro';
+import { ENGAGEMENT_PATH } from '../../../content/pages/services';
+
+const { folio, heading, stages, priceNote } = ENGAGEMENT_PATH;
+const headingId = 'engagement-path-heading';
+---
+
+<Band ground="bone" labelledBy={headingId}>
+  <Folio text={folio} />
+  <div class="path">
+    <h2 class="path__heading" id={headingId}>{heading}</h2>
+
+    <div class="path__stages">
+      {
+        stages.map((stage, index) => (
+          <div
+            class:list={[
+              'stage',
+              stage.highlight && 'stage--highlight',
+              index === stages.length - 1 && 'stage--last',
+            ]}
+          >
+            <p class="stage__name">{stage.name}</p>
+            <p class="stage__description">{stage.description}</p>
+            <p class="stage__commercial">{stage.commercial}</p>
+          </div>
+        ))
+      }
+      <p class="path__note">{priceNote}</p>
+    </div>
+  </div>
+</Band>
+
+<style>
+  .path {
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.5fr);
+    gap: clamp(32px, 5vw, 72px);
+    align-items: start;
+  }
+
+  .path > * {
+    min-width: 0;
+  }
+
+  .path__heading {
+    font-weight: 900;
+    font-size: clamp(32px, 3.8vw, 68px);
+    line-height: 0.87;
+    letter-spacing: -0.035em;
+  }
+
+  .path__stages {
+    border-top: 1.5px solid var(--ink);
+  }
+
+  .stage {
+    display: grid;
+    grid-template-columns: minmax(110px, 0.4fr) minmax(0, 1.5fr) minmax(0, 0.9fr);
+    gap: clamp(14px, 2.5vw, 32px);
+    padding: 24px 0;
+    border-bottom: 1px solid var(--rule);
+    align-items: start;
+  }
+
+  .stage > * {
+    min-width: 0;
+  }
+
+  .stage--highlight {
+    background: var(--bone-2);
+  }
+
+  .stage--last {
+    border-bottom: 1.5px solid var(--ink);
+  }
+
+  .stage__name {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: 24px;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+  }
+
+  .stage__description {
+    margin: 0;
+    font-size: 17px;
+    line-height: 1.48;
+  }
+
+  .stage__commercial {
+    margin: 0;
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 18px;
+    line-height: 1.25;
+    color: var(--blueprint-press);
+  }
+
+  .path__note {
+    margin: 20px 0 0;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--steel);
+    line-height: 1.8;
+  }
+
+  @media (max-width: 900px) {
+    .path {
+      grid-template-columns: 1fr;
+    }
+
+    .stage {
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    .stage--highlight {
+      padding-left: 12px;
+      padding-right: 12px;
+    }
+  }
+</style>

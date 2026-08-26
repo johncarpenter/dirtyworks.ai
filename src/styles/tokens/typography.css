@@ -1,0 +1,139 @@
+/* Dirtyworks.ai type system.
+   Three roles: heavy grotesk architecture, expressive serif countervoice,
+   precise mono for evidence and operations. */
+
+:root {
+  /* Weights */
+  --weight-body: 400;
+  --weight-medium: 500;
+  --weight-label: 600;
+  --weight-strong: 700;
+  --weight-display: 800;
+  --weight-display-max: 900;
+
+  /* Display / headline ramp (web) */
+  --type-display: clamp(64px, 10vw, 168px);
+  --type-display-sm: clamp(48px, 8vw, 72px);
+  --type-h1: clamp(40px, 5.4vw, 104px);
+  --type-h2: clamp(30px, 3.4vw, 64px);
+  --type-h3: clamp(24px, 2.2vw, 40px);
+  --type-h4: 24px;
+
+  /* Reading ramp */
+  --type-lead: clamp(20px, 1.6vw, 30px);
+  --type-body: clamp(17px, 1.15vw, 20px);
+  --type-body-sm: 16px;
+  --type-caption: 14px;
+
+  /* Evidence / mono ramp */
+  --type-label: 13px;
+  --type-label-sm: 11px;
+  --type-folio: 12px;
+
+  /* Deck ramp — pt-equivalent px at 1280×720 scale */
+  --deck-display: 96px;
+  --deck-h1: 64px;
+  --deck-h2: 44px;
+  --deck-lead: 30px;
+  --deck-body: 22px;
+  --deck-label: 14px;
+
+  /* Line heights */
+  --leading-display: 0.86;
+  --leading-tight: 0.96;
+  --leading-heading: 1.06;
+  --leading-lead: 1.28;
+  --leading-body: 1.52;
+  --leading-label: 1.2;
+
+  /* Tracking */
+  --track-display: -0.03em;
+  --track-heading: -0.015em;
+  --track-body: 0; /* @kind other */
+  --track-label: 0.12em;
+  --track-label-wide: 0.18em;
+
+  /* Measure */
+  --measure-body: 64ch; /* 55–75 characters */
+  --measure-lead: 44ch;
+  --measure-narrow: 36ch;
+}
+
+/* Role classes — the shorthand the components and cards use. */
+.dw-display {
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--type-display);
+  line-height: var(--leading-display);
+  letter-spacing: var(--track-display);
+  text-transform: uppercase;
+  text-wrap: balance;
+  margin: 0;
+}
+.dw-h1 {
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--type-h1);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--track-display);
+  margin: 0;
+}
+.dw-h2 {
+  font-family: var(--font-display);
+  font-weight: var(--weight-strong);
+  font-size: var(--type-h2);
+  line-height: var(--leading-heading);
+  letter-spacing: var(--track-heading);
+  margin: 0;
+}
+.dw-h3 {
+  font-family: var(--font-sans);
+  font-weight: var(--weight-strong);
+  font-size: var(--type-h3);
+  line-height: var(--leading-heading);
+  letter-spacing: var(--track-heading);
+  margin: 0;
+}
+.dw-lead {
+  font-family: var(--font-sans);
+  font-weight: var(--weight-body);
+  font-size: var(--type-lead);
+  line-height: var(--leading-lead);
+  max-width: var(--measure-lead);
+  margin: 0;
+}
+.dw-body {
+  font-family: var(--font-sans);
+  font-weight: var(--weight-body);
+  font-size: var(--type-body);
+  line-height: var(--leading-body);
+  max-width: var(--measure-body);
+  text-wrap: pretty;
+  margin: 0;
+}
+.dw-serif {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-style: italic;
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+.dw-label {
+  font-family: var(--font-mono);
+  font-weight: var(--weight-medium);
+  font-size: var(--type-label);
+  line-height: var(--leading-label);
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  margin: 0;
+}
+.dw-folio {
+  font-family: var(--font-mono);
+  font-weight: 400;
+  font-size: var(--type-folio);
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin: 0;
+}

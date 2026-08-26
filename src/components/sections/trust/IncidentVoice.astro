@@ -1,0 +1,150 @@
+---
+/* /trust §05 — the illustrative incident voice. Registered as `trust-incident-voice` in
+   src/content/claim-artefacts.ts: the stamp is not decoration, the release gate requires it in the
+   rendered output. The copy states, in words, that this is a voice and a sequence rather than a
+   historical event. */
+import Band from '../../layout/Band.astro';
+import Folio from '../../ui/Folio.astro';
+import ClaimStamp from '../../ui/ClaimStamp.astro';
+import { TRUST_INCIDENT } from '../../../content/pages/trust';
+
+const { folio, heading, body, stampLabel, entries } = TRUST_INCIDENT;
+---
+
+<Band ground="ink" labelledBy="incident-heading" class="incident">
+  <Folio text={folio} tone="dark" />
+
+  <div class="incident__split">
+    <div>
+      <h2 id="incident-heading">{heading}</h2>
+      <p class="incident__note">{body}</p>
+      <span class="incident__stamp">
+        <ClaimStamp state="ILLUSTRATIVE" label={stampLabel} tone="dark" />
+      </span>
+    </div>
+
+    <ol class="incident__timeline">
+      {
+        entries.map((entry, index) => (
+          <li
+            class:list={[
+              'incident__entry',
+              `incident__entry--${entry.tone}`,
+              index === entries.length - 1 && 'incident__entry--last',
+            ]}
+          >
+            <p class="incident__when">
+              {entry.time} / {entry.event}
+            </p>
+            <p class="incident__detail">{entry.detail}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</Band>
+
+<style>
+  .incident__split {
+    display: grid;
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.4fr);
+    gap: clamp(32px, 5vw, 80px);
+    align-items: start;
+  }
+
+  .incident__split > * {
+    min-width: 0;
+  }
+
+  .incident h2 {
+    font-weight: 900;
+    font-size: clamp(30px, 3.4vw, 58px);
+    line-height: 0.89;
+    letter-spacing: -0.03em;
+  }
+
+  .incident__note {
+    margin: 24px 0 0;
+    font-size: 17.5px;
+    line-height: 1.5;
+    max-width: 40ch;
+  }
+
+  /* The prototype sets this stamp as a filled chip rather than the bare mono mark. */
+  .incident__stamp {
+    display: inline-block;
+    margin-top: 24px;
+  }
+
+  .incident__stamp :global(.claim-stamp) {
+    display: inline-block;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    background: var(--signal-orange);
+    color: var(--ink);
+    border-radius: 2px;
+    padding: 5px 9px;
+  }
+
+  .incident__timeline {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-left: 1.5px solid var(--ink-3);
+  }
+
+  /* Each entry's own 3px border sits over the spine, so the spine reads as the unmarked remainder. */
+  .incident__entry {
+    margin-left: -1.5px;
+    padding: 0 0 28px 28px;
+    border-left: 3px solid var(--steel);
+  }
+
+  .incident__entry--last {
+    padding-bottom: 0;
+  }
+
+  .incident__when {
+    margin: 0 0 10px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: var(--weight-label);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .incident__detail {
+    margin: 0;
+    font-size: 18px;
+    line-height: 1.45;
+  }
+
+  .incident__entry--orange {
+    border-left-color: var(--signal-orange);
+  }
+
+  .incident__entry--orange .incident__when {
+    color: var(--signal-orange);
+  }
+
+  .incident__entry--blueprint {
+    border-left-color: var(--blueprint);
+  }
+
+  /* Blueprint text on ink is 3.5:1 and fails AA, so the blueprint role is carried by the border
+     while the label stays bone. Orange (6.1:1) and acid (16:1) keep the prototype's coloured
+     label. The entry's meaning is in its words either way. */
+  .incident__entry--acid {
+    border-left-color: var(--verified-acid);
+  }
+
+  .incident__entry--acid .incident__when {
+    color: var(--verified-acid);
+  }
+
+  @media (max-width: 900px) {
+    .incident__split {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

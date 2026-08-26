@@ -1,0 +1,18 @@
+<!-- @dsCard group="Components" viewport="700x400" name="Layout — comparison, fit field, CTA band" subtitle="Two-field contrast, bounded scope spread, hard conversion band" -->
+<!DOCTYPE html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.css"><script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script><script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script><script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script><script src="../../_ds_bundle.js"></script><style>body{background:var(--bone);padding:20px;font-family:var(--font-sans)}#root{display:grid;gap:18px}.grp{display:flex;gap:12px;flex-wrap:wrap;align-items:center}.cap{font-family:var(--font-mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--steel);margin-bottom:8px}</style></head><body><div id="root"></div>
+<script type="text/babel">
+const { AnnotatedComparison, FitField, CTABand } = window.DirtyworksAiDesignSystem_9135ac;
+const App = () => <>
+  <AnnotatedComparison leftTitle="A tool" rightTitle="An operated capability" rows={[
+    {left:'Connected', right:'Sources approved and owned'},
+    {left:'User access', right:'Permissions tested'},
+    {left:'Usage count', right:'Quality, gaps, risk and value reviewed'},
+    {left:'Cancel button', right:'Portable offboarding package', decisive:true}]}
+    annotation="Somebody owns Monday morning."/>
+  <FitField label="Fit / 01" segment="Professional services" summary="Approved firm methods, templates, software procedures and engagement administration."
+    included={['Firm methods and templates','Software procedures','Engagement administration','Onboarding']}
+    excluded={['Client records','Professional judgement','Employment decisions']}/>
+  <CTABand folio="11 / Conversion" heading="Show us the last answer your team had to chase." support="One question domain. A paid, fixed-scope review. A real decision at the end — including stop." primary={{label:'Start with one question domain'}} secondary={{label:'Read the operating model'}} style={{marginInline:'-20px'}}/>
+</>;
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script></body></html>

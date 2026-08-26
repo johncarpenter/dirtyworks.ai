@@ -1,0 +1,70 @@
+---
+/* Home §08. The non-certification statement is in the body copy, not a footnote, and the public
+   seven-row control extract carries the customer-owned note. */
+import Band from '../../layout/Band.astro';
+import Folio from '../../ui/Folio.astro';
+import Button from '../../ui/Button.astro';
+import Declaration from '../../patterns/Declaration.astro';
+import ControlRegister from '../../patterns/ControlRegister.astro';
+import { CONTROL_ROWS, TRUST } from '../../../content/pages/home';
+---
+
+<Band ground="bone-2" labelledBy="trust-heading">
+  <Folio text={TRUST.folio} />
+
+  <div class="trust__grid">
+    <div>
+      <Declaration
+        id="trust-heading"
+        size="clamp(34px,4vw,72px)"
+        leading="0.87"
+        tracking="-0.035em"
+        weight={900}
+      >
+        {TRUST.heading}
+      </Declaration>
+
+      {TRUST.paragraphs.map((text) => <p class="trust__text">{text}</p>)}
+
+      <div class="trust__action">
+        <Button href={TRUST.action.href} variant="secondary">{TRUST.action.label}</Button>
+      </div>
+    </div>
+
+    <ControlRegister rows={CONTROL_ROWS} caption={TRUST.caption} note={TRUST.note} />
+  </div>
+</Band>
+
+<style>
+  .trust__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.7fr) minmax(0, 1.6fr);
+    gap: clamp(32px, 5vw, 80px);
+    align-items: start;
+  }
+
+  .trust__grid > * {
+    min-width: 0;
+  }
+
+  .trust__text {
+    margin: 26px 0 0;
+    font-size: 18px;
+    line-height: 1.52;
+    max-width: 42ch;
+  }
+
+  .trust__text + .trust__text {
+    margin-top: 20px;
+  }
+
+  .trust__action {
+    margin-top: 32px;
+  }
+
+  @media (max-width: 900px) {
+    .trust__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>

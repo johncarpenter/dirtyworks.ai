@@ -1,0 +1,181 @@
+---
+/* Catalogue §05. The composer output as a hard-shadowed sheet, stamped ILLUSTRATIVE because it is
+   a structure and not an offer (registered as `catalogue-quote-sheet` in
+   src/content/claim-artefacts.ts, which the release gate reads).
+
+   Every commercial line resolves to "Verify at quote" or "Scoped at review" in orange mono. No
+   figure, no currency, no total — the sheet shows what a quote must answer, not what it costs. */
+import Band from '../../layout/Band.astro';
+import Folio from '../../ui/Folio.astro';
+import ClaimStamp from '../../ui/ClaimStamp.astro';
+import ProofLabel from '../../ui/ProofLabel.astro';
+import { QUOTE_SHEET } from '../../../content/pages/catalogue';
+
+const { folio, heading, intro, sheetLabel, lines } = QUOTE_SHEET;
+const headingId = 'quote-sheet-heading';
+---
+
+<Band ground="bone-2" labelledBy={headingId}>
+  <Folio text={folio} />
+  <div class="quote">
+    <div>
+      <h2 class="quote__heading" id={headingId}>{heading}</h2>
+      <p class="quote__intro">{intro}</p>
+    </div>
+
+    <div class="sheet">
+      <div class="sheet__head">
+        <span class="sheet__label">{sheetLabel}</span>
+        <span class="sheet__stamp"><ClaimStamp state="ILLUSTRATIVE" /></span>
+      </div>
+
+      <dl class="sheet__lines">
+        {
+          lines.map((line, index) => (
+            <div class:list={['line', index === lines.length - 1 && 'line--last']}>
+              <dt class="line__label">{line.label}</dt>
+              <dd class:list={['line__value', `line__value--${line.kind}`]}>
+                {
+                  line.kind === 'chip' ? (
+                    <ProofLabel status="source">{line.value}</ProofLabel>
+                  ) : (
+                    line.value
+                  )
+                }
+              </dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </div>
+</Band>
+
+<style>
+  .quote {
+    display: grid;
+    grid-template-columns: minmax(0, 0.75fr) minmax(0, 1.5fr);
+    gap: clamp(32px, 5vw, 72px);
+    align-items: start;
+  }
+
+  .quote > * {
+    min-width: 0;
+  }
+
+  .quote__heading {
+    font-weight: 800;
+    font-size: clamp(28px, 3vw, 52px);
+    line-height: 0.92;
+    letter-spacing: -0.03em;
+  }
+
+  .quote__intro {
+    margin: 24px 0 0;
+    font-size: 18px;
+    line-height: 1.52;
+    max-width: 42ch;
+  }
+
+  .sheet {
+    background: var(--bone-3);
+    border: 1.5px solid var(--ink);
+    box-shadow: var(--shadow-hard);
+  }
+
+  .sheet__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 20px;
+    border-bottom: 1.5px solid var(--ink);
+    background: var(--bone);
+  }
+
+  .sheet__label {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    font-weight: var(--weight-label);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  /* The stamp ships as an orange chip, so the stamp text switches to ink: orange on orange is
+     invisible and bone on orange is 2.2:1. Scoping the parent class outranks the component's own
+     colour rule without depending on stylesheet order. */
+  .sheet__stamp {
+    flex: none;
+    background: var(--signal-orange);
+    border: 1px solid var(--ink);
+    border-radius: 2px;
+    padding: 4px 8px;
+  }
+
+  .sheet__stamp :global([data-claim-state]) {
+    color: var(--ink);
+  }
+
+  .sheet__lines {
+    display: grid;
+    margin: 0;
+  }
+
+  .line {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 13px 20px;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .line--last {
+    border-bottom: 0;
+  }
+
+  .line__label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--steel);
+  }
+
+  .line__value {
+    margin: 0;
+    text-align: right;
+  }
+
+  .line__value--plain {
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  /* Commercial lines are always words, never numbers. */
+  .line__value--commercial {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+
+  @media (max-width: 900px) {
+    .quote {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 720px) {
+    /* Label above value, so neither column has to shrink to fit. */
+    .line {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .line__value {
+      text-align: left;
+    }
+  }
+</style>

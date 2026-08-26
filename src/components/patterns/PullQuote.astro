@@ -1,0 +1,55 @@
+---
+/* Composite: the serif countervoice. Reserved for human statements and counterpoints — a 3px
+   orange left border and a 24px indent, never a decorative flourish. */
+interface Props {
+  tone?: 'light' | 'dark';
+  /** font-size, verbatim from the prototype */
+  size?: string;
+  leading?: string;
+  measure?: string;
+  class?: string;
+}
+
+const {
+  tone = 'light',
+  size = 'clamp(28px,2.8vw,46px)',
+  leading = '1.1',
+  measure,
+  class: className,
+} = Astro.props;
+
+const declared = [
+  `--quote-size:${size}`,
+  `--quote-leading:${leading}`,
+  measure ? `--quote-measure:${measure}` : null,
+]
+  .filter(Boolean)
+  .join(';');
+---
+
+<blockquote class:list={['pull-quote', tone === 'dark' && 'pull-quote--dark', className]}>
+  <p class="pull-quote__text" style={declared}><slot /></p>
+</blockquote>
+
+<style>
+  .pull-quote {
+    margin: 0;
+    border-left: 3px solid var(--signal-orange);
+    padding-left: 24px;
+  }
+
+  .pull-quote__text {
+    margin: 0;
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: var(--weight-body);
+    font-size: var(--quote-size);
+    line-height: var(--quote-leading);
+    max-width: var(--quote-measure, none);
+    color: var(--ink);
+  }
+
+  .pull-quote--dark .pull-quote__text {
+    color: var(--bone);
+  }
+</style>

@@ -1,0 +1,255 @@
+---
+/* /msps 04 — the responsibility seam. Ten lines, three parties, thirty cells, and every cell
+   carries a word: OWNS, LEAD, PER MODEL, ESCALATION, or an explicit em dash for "no part in this
+   line". Colour marks which party carries the line; it never carries the meaning on its own
+   (constitution Principle IV, FR-047).
+
+   This is a real table, because it is a real table: ten rows of data indexed by party. Below 720px
+   it reflows into one record per line, with each cell naming its own party — the explicit ARIA
+   roles keep the table semantics that `display: block` would otherwise strip, and nothing ever
+   scrolls sideways. */
+import Band from '../../layout/Band.astro';
+import Folio from '../../ui/Folio.astro';
+import { SEAM_COLUMNS, SEAM_HEADING, SEAM_ROWS, type SeamCell } from '../../../content/pages/msps';
+
+const PARTIES = [
+  { key: 'msp', label: SEAM_COLUMNS.msp },
+  { key: 'dirtyworks', label: SEAM_COLUMNS.dirtyworks },
+  { key: 'customer', label: SEAM_COLUMNS.customer },
+] as const;
+
+const cellOf = (row: (typeof SEAM_ROWS)[number], key: (typeof PARTIES)[number]['key']): SeamCell =>
+  row[key];
+---
+
+<Band ground="ink" labelledBy="seam-heading">
+  <Folio text="04 / Responsibility seam" tone="dark" />
+  <h2 class="seam__heading" id="seam-heading">{SEAM_HEADING}</h2>
+
+  <table class="seam" role="table" aria-labelledby="seam-heading">
+    <thead role="rowgroup">
+      <tr class="seam__head" role="row">
+        <th class="seam__line-head" scope="col" role="columnheader">{SEAM_COLUMNS.line}</th>
+        {
+          PARTIES.map((party) => (
+            <th
+              class:list={['seam__party-head', `seam__party-head--${party.key}`]}
+              scope="col"
+              role="columnheader"
+            >
+              {party.label}
+            </th>
+          ))
+        }
+      </tr>
+    </thead>
+
+    <tbody role="rowgroup">
+      {
+        SEAM_ROWS.map((row, index) => (
+          <tr
+            class:list={[
+              'seam__row',
+              row.emphasis && 'seam__row--emphasis',
+              index === SEAM_ROWS.length - 1 && 'seam__row--last',
+            ]}
+            role="row"
+          >
+            <th class="seam__line" scope="row" role="rowheader">
+              {row.line}
+            </th>
+            {PARTIES.map((party) => {
+              const cell = cellOf(row, party.key);
+              return (
+                <td class:list={['seam__cell', `seam__cell--${party.key}`]} role="cell">
+                  <span class="seam__party">{party.label}</span>
+                  <span
+                    class:list={[
+                      'seam__word',
+                      cell.lead && 'seam__word--lead',
+                      cell.text === '—' && 'seam__word--none',
+                    ]}
+                  >
+                    {cell.text}
+                  </span>
+                </td>
+              );
+            })}
+          </tr>
+        ))
+      }
+    </tbody>
+  </table>
+</Band>
+
+<style>
+  .seam__heading {
+    margin: 0 0 48px;
+    font-weight: var(--weight-display-max);
+    font-size: clamp(30px, 3.6vw, 64px);
+    line-height: 0.88;
+    letter-spacing: -0.035em;
+    max-width: 26ch;
+  }
+
+  .seam {
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+    /* #2A2A26 in the prototype: the dark-field hairline. */
+    border-top: 1.5px solid var(--ink-3);
+    text-align: left;
+  }
+
+  /* table-layout: fixed reads its tracks from the header row: 1.3fr + three 0.5fr columns. */
+  .seam__line-head {
+    width: 46%;
+  }
+
+  .seam__party-head {
+    width: 18%;
+  }
+
+  .seam__head th {
+    padding: 14px clamp(12px, 2vw, 28px) 14px 0;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: var(--weight-body);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--steel-2);
+  }
+
+  /* Element-qualified so these beat the `.seam__head th` base rule. */
+  th.seam__party-head--msp {
+    color: var(--blueprint-light);
+  }
+
+  th.seam__party-head--dirtyworks {
+    color: var(--signal-orange);
+  }
+
+  th.seam__party-head--customer {
+    color: var(--verified-acid);
+  }
+
+  .seam__head,
+  .seam__row {
+    border-bottom: 1px solid var(--ink-3);
+  }
+
+  .seam__row--last {
+    border-bottom: 1.5px solid var(--ink-3);
+  }
+
+  .seam__row th,
+  .seam__row td {
+    padding: 16px clamp(12px, 2vw, 28px) 16px 0;
+    vertical-align: baseline;
+  }
+
+  .seam__line {
+    font-family: var(--font-sans);
+    font-size: 17px;
+    font-weight: var(--weight-body);
+    color: var(--bone);
+  }
+
+  /* The AI-account line is the one both sides get wrong: raised ground, orange edge, offset in. */
+  .seam__row--emphasis {
+    background: var(--ink-2);
+    border-left: 3px solid var(--signal-orange);
+  }
+
+  .seam__row--emphasis .seam__line {
+    padding-left: 24px;
+  }
+
+  .seam__word {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    letter-spacing: var(--track-label);
+    text-transform: uppercase;
+    color: var(--steel-2);
+  }
+
+  .seam__word--none {
+    color: var(--steel);
+  }
+
+  .seam__word--lead {
+    font-weight: var(--weight-label);
+  }
+
+  .seam__cell--msp .seam__word--lead {
+    color: var(--blueprint-light);
+  }
+
+  .seam__cell--dirtyworks .seam__word--lead {
+    color: var(--signal-orange);
+  }
+
+  .seam__cell--customer .seam__word--lead {
+    color: var(--verified-acid);
+  }
+
+  /* Each cell's own party name: redundant while the header row is visible, and the only column
+     identification once the table becomes a stack of records — so it takes the same steel-2 the
+     header row uses, not the fainter steel. */
+  .seam__party {
+    display: none;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--steel-2);
+  }
+
+  @media (max-width: 720px) {
+    .seam,
+    .seam thead,
+    .seam tbody,
+    .seam tr,
+    .seam th,
+    .seam td {
+      display: block;
+      width: auto;
+    }
+
+    .seam thead {
+      display: none;
+    }
+
+    .seam__row {
+      padding: 18px 0;
+    }
+
+    .seam__row th,
+    .seam__row td {
+      padding: 0;
+    }
+
+    .seam__line {
+      margin-bottom: 10px;
+    }
+
+    .seam td.seam__cell {
+      display: grid;
+      grid-template-columns: minmax(0, 110px) minmax(0, 1fr);
+      gap: 12px;
+      padding: 4px 0;
+    }
+
+    .seam__party {
+      display: block;
+    }
+
+    .seam__row--emphasis {
+      padding-left: 12px;
+    }
+
+    .seam__row--emphasis .seam__line {
+      padding-left: 0;
+    }
+  }
+</style>

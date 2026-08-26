@@ -1,0 +1,76 @@
+---
+/* /trust §06 — exit. The chips are the exit package itself; the last one records that access is
+   removed, which is the only chip that changes state rather than handing something over. */
+import Band from '../../layout/Band.astro';
+import Folio from '../../ui/Folio.astro';
+import ProofLabel from '../../ui/ProofLabel.astro';
+import { TRUST_EXIT } from '../../../content/pages/trust';
+
+const { folio, heading, body, chips } = TRUST_EXIT;
+---
+
+<Band ground="bone-2" labelledBy="exit-heading" class="exit">
+  <div class="exit__split">
+    <div>
+      <Folio text={folio} />
+      <h2 id="exit-heading">{heading}</h2>
+    </div>
+
+    <div>
+      <p class="exit__body">{body}</p>
+      <ul class="exit__chips">
+        {
+          chips.map((chip) => (
+            <li>
+              <ProofLabel status={chip.tone === 'acid' ? 'operated' : 'neutral'}>
+                {chip.label}
+              </ProofLabel>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</Band>
+
+<style>
+  .exit__split {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    gap: clamp(32px, 5vw, 80px);
+    align-items: end;
+  }
+
+  .exit__split > * {
+    min-width: 0;
+  }
+
+  .exit h2 {
+    font-weight: 900;
+    font-size: clamp(32px, 3.8vw, 68px);
+    line-height: 0.87;
+    letter-spacing: -0.035em;
+  }
+
+  .exit__body {
+    margin: 0;
+    font-size: 18px;
+    line-height: 1.52;
+  }
+
+  .exit__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 24px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  @media (max-width: 900px) {
+    .exit__split {
+      grid-template-columns: 1fr;
+      align-items: start;
+    }
+  }
+</style>

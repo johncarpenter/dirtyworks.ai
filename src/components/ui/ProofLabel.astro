@@ -1,0 +1,81 @@
+---
+/* Status chip. The state is ALWAYS text; colour is secondary and never carries meaning alone
+   (constitution Principle IV, FR-047). Palette by meaning, from mockups/README.md:131. */
+import type { ProofStatus } from '../../types/proof';
+
+interface Props {
+  status?: ProofStatus;
+  /** optional second half, rendered as "LABEL / VALUE" */
+  value?: string;
+  size?: 'sm' | 'md';
+  outlined?: boolean;
+}
+const { status = 'neutral', value, size = 'md', outlined = false } = Astro.props;
+---
+
+<span
+  class:list={['chip', `chip--${status}`, `chip--${size}`, outlined && 'chip--outlined']}
+  data-status={status}
+>
+  <slot />{value ? <span class="chip__value">{` / ${value}`}</span> : null}
+</span>
+
+<style>
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    font-family: var(--font-mono);
+    font-weight: var(--weight-label);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    border-radius: 2px;
+    padding: 4px 8px;
+    white-space: nowrap;
+  }
+
+  .chip--sm {
+    font-size: 10.5px;
+  }
+
+  .chip--md {
+    font-size: 11px;
+  }
+
+  /* verified / standard / managed */
+  .chip--answer,
+  .chip--operated {
+    background: var(--verified-acid);
+    color: var(--ink);
+    border: 1px solid var(--ink);
+  }
+
+  /* source / registered / monitored / method */
+  .chip--source,
+  .chip--permission,
+  .chip--change {
+    background: var(--blueprint);
+    color: var(--bone);
+  }
+
+  /* gap / illustrative / stop */
+  .chip--gap {
+    background: var(--signal-orange);
+    color: var(--ink);
+    border: 1px solid var(--ink);
+  }
+
+  /* neutral / conditional / candidate */
+  .chip--neutral,
+  .chip--human,
+  .chip--owner {
+    background: var(--bone-3);
+    color: var(--ink);
+    border: 1px solid var(--ink);
+  }
+
+  .chip--outlined {
+    background: transparent;
+    border: 1px solid currentColor;
+    color: inherit;
+  }
+</style>

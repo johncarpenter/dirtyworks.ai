@@ -1,0 +1,133 @@
+---
+/* Rebuilt from the design-system Button contract (.d.ts) with real hrefs and CSS-only interaction:
+   hover darkens the fill, press collapses the hard offset. No opacity fades, no lift, no scale. */
+interface Props {
+  variant?: 'primary' | 'secondary' | 'evidence' | 'ghost';
+  size?: 'sm' | 'md' | 'lg';
+  href?: string;
+  type?: 'button' | 'submit';
+  disabled?: boolean;
+  fullWidth?: boolean;
+  class?: string;
+}
+
+const {
+  variant = 'primary',
+  size = 'md',
+  href,
+  type = 'button',
+  disabled = false,
+  fullWidth = false,
+  class: className,
+} = Astro.props;
+
+const classes = [
+  'btn',
+  `btn--${variant}`,
+  `btn--${size}`,
+  fullWidth && 'btn--full',
+  className,
+];
+---
+
+{
+  href && !disabled ? (
+    <a class:list={classes} href={href}><slot /></a>
+  ) : (
+    <button class:list={classes} type={type} disabled={disabled}><slot /></button>
+  )
+}
+
+<style>
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-family: var(--font-mono);
+    font-weight: var(--weight-label);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    border-radius: 0;
+    border: 1.5px solid var(--ink);
+    min-height: var(--target-min);
+    text-align: center;
+  }
+
+  .btn--sm {
+    font-size: 11px;
+    padding: 9px 12px;
+  }
+
+  .btn--md {
+    font-size: 12px;
+    padding: 12px 18px;
+  }
+
+  .btn--lg {
+    font-size: 13px;
+    padding: 17px 26px;
+  }
+
+  .btn--full {
+    width: 100%;
+  }
+
+  .btn--primary {
+    background: var(--signal-orange);
+    color: var(--ink);
+    box-shadow: 3px 3px 0 var(--ink);
+  }
+
+  .btn--primary:hover {
+    background: var(--orange-press);
+    color: var(--ink);
+  }
+
+  .btn--secondary {
+    background: transparent;
+    color: var(--ink);
+    box-shadow: 3px 3px 0 var(--ink);
+  }
+
+  .btn--secondary:hover {
+    background: var(--bone-3);
+    color: var(--ink);
+  }
+
+  .btn--evidence {
+    background: var(--blueprint);
+    color: var(--bone);
+    border-color: var(--bone);
+    box-shadow: 3px 3px 0 var(--bone);
+  }
+
+  .btn--evidence:hover {
+    background: var(--blueprint-press);
+    color: var(--bone);
+  }
+
+  .btn--ghost {
+    background: transparent;
+    color: inherit;
+    box-shadow: none;
+  }
+
+  .btn--ghost:hover {
+    background: var(--bone-3);
+    color: var(--ink);
+  }
+
+  .btn:active {
+    box-shadow: 1px 1px 0 var(--ink);
+    transform: translate(1px, 1px);
+  }
+
+  .btn--evidence:active {
+    box-shadow: 1px 1px 0 var(--bone);
+  }
+
+  .btn--ghost:active {
+    transform: none;
+  }
+</style>

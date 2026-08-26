@@ -1,0 +1,86 @@
+---
+/* Catalogue §04, ink band. Four ways the software can be bought, and the serif line that keeps
+   them separate from the service: being in a partner program is not the same as holding resale
+   authority, and only the quote names the seller of record. */
+import Band from '../../layout/Band.astro';
+import Folio from '../../ui/Folio.astro';
+import { COMMERCIAL_ROUTE } from '../../../content/pages/catalogue';
+
+const { folio, heading, panels, boundary } = COMMERCIAL_ROUTE;
+const headingId = 'commercial-route-heading';
+---
+
+<Band ground="ink" labelledBy={headingId}>
+  <Folio text={folio} tone="dark" />
+  <h2 class="route__heading" id={headingId}>{heading}</h2>
+
+  <div class="route__panels">
+    {
+      panels.map((panel) => (
+        <div class="route-panel">
+          <div class="route-panel__route">{panel.route}</div>
+          <p class="route-panel__body">{panel.body}</p>
+        </div>
+      ))
+    }
+  </div>
+
+  <p class="route__boundary">{boundary}</p>
+</Band>
+
+<style>
+  .route__heading {
+    margin: 0 0 48px;
+    font-weight: 900;
+    font-size: clamp(30px, 3.6vw, 64px);
+    line-height: 0.9;
+    letter-spacing: -0.03em;
+    max-width: 30ch;
+  }
+
+  .route__panels {
+    display: grid;
+    /* min() keeps the 260px track from overflowing a 320px viewport. */
+    grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+    gap: 2px;
+    background: var(--ink-3);
+    border: 1px solid var(--ink-3);
+    margin-bottom: 40px;
+  }
+
+  .route__panels > * {
+    min-width: 0;
+  }
+
+  .route-panel {
+    background: var(--ink-2);
+    padding: 26px 22px;
+  }
+
+  .route-panel__route {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    font-weight: var(--weight-label);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--signal-orange);
+    margin-bottom: 14px;
+  }
+
+  .route-panel__body {
+    margin: 0;
+    font-size: 16.5px;
+    line-height: 1.5;
+  }
+
+  .route__boundary {
+    margin: 0;
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: clamp(22px, 2.2vw, 34px);
+    line-height: 1.15;
+    max-width: 40ch;
+    border-left: 3px solid var(--signal-orange);
+    padding-left: 24px;
+  }
+</style>

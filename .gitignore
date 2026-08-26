@@ -1,0 +1,32 @@
+# dependencies
+node_modules/
+
+# build output
+dist/
+.astro/
+.wrangler/
+
+# env and secrets
+.env
+.env.*
+__omp_shell(".env.example")
+.dev.vars
+
+# test output
+test-results/
+playwright-report/
+coverage/
+
+# editors and OS
+.DS_Store
+Thumbs.db
+*.swp
+.vscode/
+.idea/
+
+# logs
+*.log
+npm-debug.log*
+
+# harness-local session state
+.omp/

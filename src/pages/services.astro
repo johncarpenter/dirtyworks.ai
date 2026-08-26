@@ -1,0 +1,89 @@
+---
+/* /services — what the managed service covers, how an engagement runs, and where the boundary is.
+   Section order is the prototype's: hero, scope register, engagement path, responsibility
+   boundary, conversion. */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Band from '../components/layout/Band.astro';
+import Folio from '../components/ui/Folio.astro';
+import Button from '../components/ui/Button.astro';
+import CTABand from '../components/patterns/CTABand.astro';
+import ScopeRegister from '../components/sections/services/ScopeRegister.astro';
+import EngagementPath from '../components/sections/services/EngagementPath.astro';
+import ResponsibilityBoundary from '../components/sections/services/ResponsibilityBoundary.astro';
+import { SERVICES_HERO, SERVICES_CTA } from '../content/pages/services';
+
+const { folio, heading, lead, action } = SERVICES_HERO;
+---
+
+<BaseLayout route="services">
+  <Band ground="bone" variant="hero" labelledBy="services-hero-heading">
+    <Folio text={folio} />
+    <h1 class="hero__heading" id="services-hero-heading">
+      {heading.first}<br /><span class="hero__pull"
+        >{heading.secondPrefix}<span class="hero__emphasis">{heading.emphasis}</span
+        >{heading.secondSuffix}</span
+      >
+    </h1>
+    <div class="hero__foot">
+      <p class="hero__lead">{lead}</p>
+      <div><Button href={action.href} size="lg">{action.label}</Button></div>
+    </div>
+  </Band>
+
+  <ScopeRegister />
+  <EngagementPath />
+  <ResponsibilityBoundary />
+
+  <CTABand
+    folio={SERVICES_CTA.folio}
+    heading={SERVICES_CTA.heading}
+    support={SERVICES_CTA.support}
+    primary={SERVICES_CTA.primary}
+    secondary={SERVICES_CTA.secondary}
+  />
+</BaseLayout>
+
+<style>
+  .hero__heading {
+    font-weight: 900;
+    font-size: clamp(48px, 7vw, 124px);
+    line-height: 0.84;
+    letter-spacing: -0.035em;
+  }
+
+  /* The second line hangs left of the margin — the page's one deliberate grid violation. */
+  .hero__pull {
+    display: inline-block;
+    margin-left: -0.05em;
+  }
+
+  .hero__emphasis {
+    color: var(--orange-press);
+  }
+
+  .hero__foot {
+    display: grid;
+    grid-template-columns: minmax(0, 1.3fr) minmax(min(280px, 100%), 1fr);
+    gap: clamp(32px, 5vw, 72px);
+    align-items: end;
+    margin-top: 40px;
+  }
+
+  .hero__foot > * {
+    min-width: 0;
+  }
+
+  .hero__lead {
+    margin: 0;
+    font-size: clamp(19px, 1.5vw, 28px);
+    line-height: 1.34;
+    max-width: 52ch;
+  }
+
+  @media (max-width: 900px) {
+    .hero__foot {
+      grid-template-columns: 1fr;
+      align-items: start;
+    }
+  }
+</style>

@@ -1,0 +1,78 @@
+/* Dirtyworks.ai colour system — PROOF / WORK
+   Ratio target: 55% bone, 25% ink, 12% signal orange, 6% blueprint, 2% acid. */
+
+:root {
+  /* Core palette */
+  --ink: #11110f;
+  --bone: #f3ecdd;
+  --signal-orange: #ff5a1f;
+  --blueprint: #2855ff;
+  --verified-acid: #d8ff3e;
+  --steel: #636760;
+
+  /* Extensions — derived, not new brand colours */
+  --ink-2: #1d1d1a; /* raised dark field */
+  --ink-3: #33332e; /* dark field rule / muted dark text */
+  --bone-2: #ece3d0; /* sheet behind bone */
+  --bone-3: #fbf7ee; /* lifted sheet / input field */
+  --steel-2: #8b8e86; /* tertiary text, dark-field rules */
+  --rule: #d6cdb7; /* hairline on bone */
+  --rule-strong: #11110f;
+  --orange-press: #e2440d;
+  --blueprint-press: #1b3fd6;
+
+  /* Semantic error only — red is not a brand colour */
+  --error: #c1200b;
+  --error-field: #f7dfd9;
+
+  /* Semantic aliases: text */
+  --text-body: var(--ink);
+  --text-muted: var(--steel);
+  --text-faint: var(--steel-2);
+  --text-inverse: var(--bone);
+  --text-inverse-muted: var(--steel-2);
+  --text-link: var(--blueprint);
+  --text-link-hover: var(--blueprint-press);
+  --text-action: var(--signal-orange);
+  --text-error: var(--error);
+
+  /* Semantic aliases: surfaces */
+  --surface-page: var(--bone);
+  --surface-sheet: var(--bone-2);
+  --surface-lift: var(--bone-3);
+  --surface-dark: var(--ink);
+  --surface-dark-lift: var(--ink-2);
+  --surface-action: var(--signal-orange);
+  --surface-evidence: var(--blueprint);
+  --surface-verified: var(--verified-acid);
+  --surface-field: var(--bone-3);
+
+  /* Semantic aliases: lines */
+  --line-hairline: var(--rule);
+  --line-ordinary: var(--ink);
+  --line-editorial: var(--ink);
+  --line-evidence: var(--blueprint);
+  --line-dark: var(--ink-3);
+
+  /* Status colours — always paired with a label, never colour alone */
+  --status-open: var(--signal-orange);
+  --status-source: var(--blueprint);
+  --status-verified: var(--verified-acid);
+  --status-neutral: var(--steel);
+}
+
+/* Dark field scope: apply to any ink-ground band or slide. */
+.dw-dark {
+  --text-body: var(--bone);
+  --text-muted: var(--steel-2);
+  --text-faint: var(--steel);
+  --text-link: #7d99ff;
+  --text-link-hover: #a8bcff;
+  --surface-page: var(--ink);
+  --surface-sheet: var(--ink-2);
+  --surface-lift: var(--ink-2);
+  --surface-field: var(--ink-2);
+  --line-hairline: var(--ink-3);
+  --line-ordinary: var(--steel);
+  --line-editorial: var(--bone);
+}

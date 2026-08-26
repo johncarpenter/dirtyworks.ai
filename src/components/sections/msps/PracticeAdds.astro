@@ -1,0 +1,77 @@
+---
+/* /msps 02 — what the practice adds. Eight items a partner does not have to build twice, in a
+   hairline grid: the 1px gap over a rule-coloured ground is the grid's own separator, so the
+   cells need no borders of their own. */
+import Band from '../../layout/Band.astro';
+import Folio from '../../ui/Folio.astro';
+import { PRACTICE_HEADING, PRACTICE_ITEMS } from '../../../content/pages/msps';
+---
+
+<Band ground="bone-2" labelledBy="practice-adds-heading">
+  <Folio text="02 / What the practice adds" />
+  <h2 class="practice__heading" id="practice-adds-heading">{PRACTICE_HEADING}</h2>
+
+  <ol class="practice__grid">
+    {
+      PRACTICE_ITEMS.map((item) => (
+        <li class="practice__cell">
+          <span class="practice__index">{item.index}</span>
+          <span class="practice__text">{item.text}</span>
+        </li>
+      ))
+    }
+  </ol>
+</Band>
+
+<style>
+  .practice__heading {
+    margin: 0 0 48px;
+    font-weight: var(--weight-display);
+    font-size: clamp(28px, 3.2vw, 56px);
+    line-height: 0.92;
+    letter-spacing: -0.03em;
+    max-width: 28ch;
+  }
+
+  .practice__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    /* #C9C0AA in the prototype: the hairline ground the 1px gap reveals. */
+    background: var(--rule);
+    border: 1px solid var(--rule);
+  }
+
+  .practice__cell {
+    display: flex;
+    gap: 14px;
+    align-items: baseline;
+    min-width: 0;
+    padding: 22px 20px;
+    background: var(--bone);
+  }
+
+  .practice__index {
+    flex: none;
+    font-family: var(--font-mono);
+    font-size: var(--type-label-sm);
+    letter-spacing: var(--track-label);
+    color: var(--ink);
+  }
+
+  .practice__text {
+    min-width: 0;
+    font-size: 17px;
+    line-height: 1.42;
+  }
+
+  @media (max-width: 380px) {
+    /* Below ~340px the 300px track would outgrow the band's inner width and scroll the page. */
+    .practice__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

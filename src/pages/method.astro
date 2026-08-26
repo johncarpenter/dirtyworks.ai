@@ -1,0 +1,71 @@
+---
+/* /method. Hero, the seven-step lifecycle, the six valid review outcomes, the monthly operating
+   record, then conversion. */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Band from '../components/layout/Band.astro';
+import Folio from '../components/ui/Folio.astro';
+import CTABand from '../components/patterns/CTABand.astro';
+import Lifecycle from '../components/sections/method/Lifecycle.astro';
+import ValidOutcomes from '../components/sections/method/ValidOutcomes.astro';
+import MonthlyRecord from '../components/sections/method/MonthlyRecord.astro';
+import { hrefFor } from '../content/routes';
+import { METHOD_HERO, METHOD_CTA } from '../content/pages/method';
+---
+
+<BaseLayout route="method">
+  <Band variant="hero" labelledBy="method-hero-heading" class="method-hero">
+    <Folio text={METHOD_HERO.folio} />
+    <h1 class="method-hero__heading" id="method-hero-heading">
+      {METHOD_HERO.headingLead}<span class="accent">{METHOD_HERO.headingAccent}</span>{
+        METHOD_HERO.headingTail
+      }
+    </h1>
+    <p class="method-hero__lead">{METHOD_HERO.lead}</p>
+  </Band>
+
+  <Lifecycle />
+
+  <ValidOutcomes />
+
+  <MonthlyRecord />
+
+  <CTABand
+    folio={METHOD_CTA.folio}
+    heading={METHOD_CTA.heading}
+    support={METHOD_CTA.support}
+    primary={{ label: METHOD_CTA.primaryLabel, href: hrefFor('start') }}
+    secondary={{ label: METHOD_CTA.secondaryLabel, href: hrefFor('trust') }}
+  />
+</BaseLayout>
+
+<style>
+  .accent {
+    /* --orange-press, not --signal-orange: brand orange is 2.65:1 on bone and fails AA even at
+       display size. The darker step reads 3.5:1 and is in the palette. */
+    color: var(--orange-press);
+  }
+
+  .method-hero__heading {
+    font-weight: 900;
+    font-size: clamp(44px, 6.4vw, 116px);
+    line-height: 0.85;
+    letter-spacing: -0.035em;
+    max-width: 22ch;
+  }
+
+  /* At 320px the 44px floor still overflows on the longest word. Capping at 13vw keeps the whole
+     headline readable rather than cropping a word needed to understand the offer; min() leaves
+     every width that already fits untouched. */
+  @media (max-width: 400px) {
+    .method-hero__heading {
+      font-size: min(clamp(44px, 6.4vw, 116px), 13vw);
+    }
+  }
+
+  .method-hero__lead {
+    margin: 40px 0 0;
+    font-size: clamp(19px, 1.5vw, 28px);
+    line-height: 1.34;
+    max-width: 56ch;
+  }
+</style>

@@ -1,0 +1,316 @@
+/* Shared chrome: header, mobile panel, footer. Values lifted literally from the prototypes
+   (MarketingPage.dc.html:11 and :157-166). */
+
+/* ---------------------------------------------------------------- header */
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--bone);
+  border-bottom: 1.5px solid var(--ink);
+}
+
+.site-header__inner {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 clamp(20px, 4vw, 80px);
+  min-height: 76px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.wordmark {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 22px;
+  letter-spacing: -0.035em;
+  text-transform: none;
+  white-space: nowrap;
+}
+
+.wordmark__dot {
+  color: var(--orange-press);
+}
+
+.wordmark:hover {
+  color: inherit;
+}
+
+.header-nav {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.header-nav__list {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  white-space: nowrap;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.header-nav__link {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--steel);
+  padding-bottom: 4px;
+  border-bottom: 3px solid transparent;
+}
+
+.header-nav__link:hover {
+  color: var(--ink);
+  border-bottom-color: var(--signal-orange);
+}
+
+.header-nav__link[aria-current='page'] {
+  color: var(--ink);
+  border-bottom-color: var(--signal-orange);
+}
+
+.header-action {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  background: var(--signal-orange);
+  color: var(--ink);
+  border: 1.5px solid var(--ink);
+  border-radius: 0;
+  box-shadow: 3px 3px 0 var(--ink);
+  padding: 11px 16px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.header-action:hover {
+  background: var(--orange-press);
+  color: var(--ink);
+}
+
+.header-action:active {
+  box-shadow: 1px 1px 0 var(--ink);
+  transform: translate(1px, 1px);
+}
+
+.header-action--current {
+  background: var(--ink);
+  color: var(--bone);
+  box-shadow: none;
+  cursor: default;
+}
+
+.header-version {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--steel-2);
+  white-space: nowrap;
+}
+
+/* ---------------------------------------------------------------- mobile panel */
+
+.header-menu-button {
+  display: none;
+  background: transparent;
+  border: 1.5px solid var(--ink);
+  border-radius: 0;
+  padding: 11px 14px;
+  min-height: 44px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.header-menu-button:hover {
+  background: var(--bone-3);
+}
+
+.header-panel {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+  background: var(--bone);
+  border-bottom: 1.5px solid var(--ink);
+  padding: 20px clamp(20px, 4vw, 80px) 28px;
+  display: grid;
+  gap: 18px;
+}
+
+/* Progressive enhancement gate. The panel is VISIBLE by default so that a visitor without
+   JavaScript still has navigation at narrow widths; it is only collapsible once the inline
+   `js` class proves scripting is available. */
+.js .header-panel[data-open='false'] {
+  display: none;
+}
+
+@media (min-width: 1025px) {
+  .header-panel {
+    display: none;
+  }
+}
+
+/* The version marker is the first thing to go: between roughly 1024px and 1200px the nav links,
+   the action and the marker cannot share one 76px line without pushing past the viewport. */
+@media (max-width: 1200px) {
+  .header-version {
+    display: none;
+  }
+}
+
+.header-panel__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 14px;
+}
+
+.header-panel__link {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  display: block;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--rule);
+}
+
+@media (max-width: 1024px) {
+  .site-header__inner {
+    position: relative;
+    gap: 12px;
+  }
+
+  /* Direct children only. `.header-nav .header-action` also matched the panel's copy of the
+     action, which is the one the mobile visitor needs (FR-045). */
+  .header-nav > .header-nav__list,
+  .header-nav > .header-action,
+  .header-nav > .header-version {
+    display: none;
+  }
+
+  .js .header-menu-button {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  /* Without scripting the panel is simply part of the page, stacked under the header. */
+  .header-panel {
+    position: static;
+    border-bottom: 0;
+    border-top: 1.5px solid var(--ink);
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+/* ---------------------------------------------------------------- footer */
+
+.site-footer {
+  background: var(--ink);
+  color: var(--bone);
+  padding: clamp(56px, 7vw, 104px) clamp(20px, 4vw, 80px) 36px;
+}
+
+.site-footer__inner {
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+.site-footer__top {
+  display: grid;
+  /* The 280px minimum is load-bearing: the wordmark clamp overflows narrower tracks and collides
+     with the next column. Never switch to auto-fit. */
+  grid-template-columns: minmax(280px, 1.3fr) repeat(3, minmax(140px, 1fr));
+  gap: 48px;
+  padding-bottom: 56px;
+  border-bottom: 1px solid var(--ink-3);
+}
+
+.site-footer__wordmark {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(30px, 3.4vw, 56px);
+  letter-spacing: -0.04em;
+  display: block;
+}
+
+.site-footer__promise {
+  margin: 18px 0 0;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 24px;
+  line-height: 1.15;
+  max-width: 22ch;
+}
+
+.site-footer__contact {
+  margin: 24px 0 0;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--steel-2);
+  line-height: 1.9;
+}
+
+.site-footer__col {
+  display: grid;
+  gap: 10px;
+  align-content: start;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.site-footer__col-title {
+  font-size: 10.5px;
+  letter-spacing: 0.18em;
+  color: var(--steel-2);
+  margin-bottom: 4px;
+}
+
+.site-footer__inert {
+  color: var(--steel-2);
+}
+
+.site-footer__bottom {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+  padding-top: 24px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--steel-2);
+}
+
+@media (max-width: 900px) {
+  .site-footer__top {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+}

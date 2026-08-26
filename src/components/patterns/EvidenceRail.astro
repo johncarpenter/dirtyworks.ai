@@ -1,0 +1,179 @@
+---
+/* Composite: the evidence rail. A register of illustrative source fragments, each with a bracketed
+   reference and its claim stamp.
+
+   The static output is the ALIGNED, finished state (`data-aligned="true"`), so with no JavaScript
+   the rail is complete and correct. The island wraps this markup and only sets `data-animate` when
+   the rail scrolls into view, which runs the fragments through `dw-slide-into-alignment` and lands
+   them exactly where they already were. Motion is additive; nothing depends on it. */
+import ProofLabel from '../ui/ProofLabel.astro';
+import type { ProofStatus } from '../../types/proof';
+
+export interface EvidenceItem {
+  text: string;
+  status?: ProofStatus;
+  /** the chip text — the stamp, not the colour, carries the meaning */
+  statusLabel?: string;
+  origin?: string;
+}
+
+interface Props {
+  items: readonly EvidenceItem[];
+  title?: string;
+  class?: string;
+}
+
+const { items, title, class: className } = Astro.props;
+const pad = (n: number) => String(n).padStart(2, '0');
+---
+
+<div class:list={['evidence-rail', className]} data-evidence-rail data-aligned="true">
+  {
+    title ? (
+      <div class="evidence-rail__head">
+        <span class="evidence-rail__title">{title}</span>
+        <span class="evidence-rail__count">{pad(items.length)} items</span>
+      </div>
+    ) : null
+  }
+
+  <ol class="evidence-rail__items">
+    {
+      items.map((item, index) => (
+        <li class="evidence-rail__item" data-evidence-item>
+          <span class="evidence-rail__ref">[{pad(index + 1)}]</span>
+          <span class="evidence-rail__text">
+            {item.text}
+            {item.origin ? <span class="evidence-rail__origin">{item.origin}</span> : null}
+          </span>
+          {
+            item.status ? (
+              <span class="evidence-rail__status">
+                <ProofLabel status={item.status} size="sm">
+                  {item.statusLabel ?? item.status}
+                </ProofLabel>
+              </span>
+            ) : null
+          }
+        </li>
+      ))
+    }
+  </ol>
+</div>
+
+<style>
+  .evidence-rail {
+    display: grid;
+    gap: 8px;
+  }
+
+  .evidence-rail__head {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    justify-content: space-between;
+    border-bottom: 1.5px solid var(--ink);
+    padding-bottom: 8px;
+    margin-bottom: 12px;
+  }
+
+  .evidence-rail__title {
+    font-family: var(--font-mono);
+    font-size: var(--type-label);
+    font-weight: var(--weight-label);
+    letter-spacing: var(--track-label-wide);
+    text-transform: uppercase;
+  }
+
+  .evidence-rail__count {
+    font-family: var(--font-mono);
+    font-size: var(--type-label-sm);
+    letter-spacing: var(--track-label);
+    text-transform: uppercase;
+    color: var(--steel);
+    white-space: nowrap;
+  }
+
+  .evidence-rail__items {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 8px;
+  }
+
+  .evidence-rail__item {
+    display: grid;
+    grid-template-columns: 52px minmax(0, 1fr) auto;
+    align-items: start;
+    gap: 16px;
+    background: var(--bone-3);
+    border: 1px solid var(--rule);
+    border-left: 3px solid var(--ink);
+    padding: 12px 14px;
+  }
+
+  .evidence-rail__item > * {
+    min-width: 0;
+  }
+
+  .evidence-rail__ref {
+    font-family: var(--font-mono);
+    font-size: var(--type-label);
+    font-weight: var(--weight-label);
+    letter-spacing: 0.04em;
+    color: var(--blueprint);
+    padding-top: 2px;
+  }
+
+  .evidence-rail__text {
+    font-size: var(--type-body-sm);
+    line-height: 1.4;
+  }
+
+  .evidence-rail__origin {
+    display: block;
+    margin-top: 6px;
+    font-family: var(--font-mono);
+    font-size: var(--type-label-sm);
+    letter-spacing: var(--track-label);
+    text-transform: uppercase;
+    color: var(--steel);
+  }
+
+  /* Additive only: the finished state is the default, the animation just arrives at it. */
+  .evidence-rail[data-animate='true'] .evidence-rail__item {
+    animation: dw-slide-into-alignment var(--dur-slow) var(--ease-mech) both;
+  }
+
+  .evidence-rail[data-animate='true'] .evidence-rail__item:nth-child(2) {
+    animation-delay: 70ms;
+  }
+  .evidence-rail[data-animate='true'] .evidence-rail__item:nth-child(3) {
+    animation-delay: 140ms;
+  }
+  .evidence-rail[data-animate='true'] .evidence-rail__item:nth-child(4) {
+    animation-delay: 210ms;
+  }
+  .evidence-rail[data-animate='true'] .evidence-rail__item:nth-child(5) {
+    animation-delay: 280ms;
+  }
+  .evidence-rail[data-animate='true'] .evidence-rail__item:nth-child(6) {
+    animation-delay: 350ms;
+  }
+  .evidence-rail[data-animate='true'] .evidence-rail__item:nth-child(n + 7) {
+    animation-delay: 420ms;
+  }
+
+  @media (max-width: 560px) {
+    .evidence-rail__item {
+      grid-template-columns: 40px minmax(0, 1fr);
+      gap: 10px;
+    }
+
+    .evidence-rail__status {
+      grid-column: 2;
+      justify-self: start;
+    }
+  }
+</style>

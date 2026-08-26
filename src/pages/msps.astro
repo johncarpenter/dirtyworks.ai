@@ -1,0 +1,100 @@
+---
+/* /msps — the partner page. Five bands and the conversion block, in prototype order:
+   hero, what the practice adds, three models, responsibility seam, one-customer pilot, CTA.
+
+   The header action on this route is the partner action ("Design a partner pilot"); it comes from
+   routes.ts via BaseLayout and is never hand-rolled here. */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Band from '../components/layout/Band.astro';
+import Folio from '../components/ui/Folio.astro';
+import Button from '../components/ui/Button.astro';
+import CTABand from '../components/patterns/CTABand.astro';
+import PracticeAdds from '../components/sections/msps/PracticeAdds.astro';
+import Models from '../components/sections/msps/Models.astro';
+import SeamMatrix from '../components/sections/msps/SeamMatrix.astro';
+import Pilot from '../components/sections/msps/Pilot.astro';
+import { CTA, HERO } from '../content/pages/msps';
+import { hrefFor } from '../content/routes';
+---
+
+<BaseLayout route="msps">
+  <Band ground="bone" variant="hero" labelledBy="msps-hero-heading">
+    <Folio text={HERO.folio} />
+
+    <h1 class="hero__heading" id="msps-hero-heading">
+      {HERO.lineOne}<br /><span class="hero__pull"
+        >{HERO.lineTwoBefore}<span class="hero__accent">{HERO.lineTwoAccent}</span>{
+          HERO.lineTwoAfter
+        }</span
+      >
+    </h1>
+
+    <div class="hero__foot">
+      <p class="hero__lead">{HERO.lead}</p>
+      <div>
+        <Button href={hrefFor('start')} size="lg">{HERO.action}</Button>
+      </div>
+    </div>
+  </Band>
+
+  <PracticeAdds />
+  <Models />
+  <SeamMatrix />
+  <Pilot />
+
+  <CTABand
+    folio={CTA.folio}
+    heading={CTA.heading}
+    support={CTA.support}
+    primary={{ label: CTA.primaryLabel, href: hrefFor('start') }}
+    secondary={{ label: CTA.secondaryLabel, href: hrefFor('trust') }}
+  />
+</BaseLayout>
+
+<style>
+  .hero__heading {
+    margin: 0;
+    font-weight: var(--weight-display-max);
+    font-size: clamp(48px, 7vw, 126px);
+    line-height: 0.84;
+    letter-spacing: -0.035em;
+  }
+
+  /* The build-wide optical pull: the second line hangs left of the measure so the two lines read
+     as one block (research.md D-07 #4 — a device, not this page's violation). */
+  .hero__pull {
+    display: inline-block;
+    margin-left: -0.05em;
+  }
+
+  .hero__accent {
+    color: var(--orange-press);
+  }
+
+  .hero__foot {
+    display: grid;
+    grid-template-columns: minmax(0, 1.3fr) minmax(280px, 1fr);
+    gap: clamp(32px, 5vw, 72px);
+    align-items: end;
+    margin-top: 40px;
+  }
+
+  .hero__foot > * {
+    min-width: 0;
+  }
+
+  .hero__lead {
+    margin: 0;
+    font-size: clamp(19px, 1.5vw, 28px);
+    line-height: 1.34;
+    max-width: 54ch;
+  }
+
+  @media (max-width: 900px) {
+    .hero__foot {
+      grid-template-columns: 1fr;
+      gap: 32px;
+      align-items: start;
+    }
+  }
+</style>

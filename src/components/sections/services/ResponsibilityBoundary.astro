@@ -1,0 +1,95 @@
+---
+/* Services §04, ink band. Three panels naming who owns what. The 3px top border colours the panel
+   — orange for the work we operate, acid for what the customer keeps, blueprint for what belongs
+   to the MSP or IT provider — but the owner is written out in every panel, so the seam reads
+   without the colour. */
+import Band from '../../layout/Band.astro';
+import Folio from '../../ui/Folio.astro';
+import { RESPONSIBILITY_BOUNDARY } from '../../../content/pages/services';
+
+const { folio, heading, panels } = RESPONSIBILITY_BOUNDARY;
+const headingId = 'responsibility-boundary-heading';
+---
+
+<Band ground="ink" labelledBy={headingId}>
+  <Folio text={folio} tone="dark" />
+  <h2 class="boundary__heading" id={headingId}>{heading}</h2>
+
+  <div class="boundary__panels">
+    {
+      panels.map((panel) => (
+        <div class:list={['owner-panel', `owner-panel--${panel.tone}`]}>
+          <div class="owner-panel__owner">{panel.owner}</div>
+          <p class="owner-panel__body">{panel.body}</p>
+        </div>
+      ))
+    }
+  </div>
+</Band>
+
+<style>
+  .boundary__heading {
+    margin: 0 0 56px;
+    font-weight: 900;
+    font-size: clamp(34px, 4.4vw, 80px);
+    line-height: 0.86;
+    letter-spacing: -0.035em;
+  }
+
+  .boundary__panels {
+    display: grid;
+    /* min() keeps the 280px track from overflowing a 320px viewport. */
+    grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+    gap: 2px;
+    background: var(--ink-3);
+    border: 1px solid var(--ink-3);
+  }
+
+  .boundary__panels > * {
+    min-width: 0;
+  }
+
+  .owner-panel {
+    background: var(--ink-2);
+    padding: 28px 24px;
+  }
+
+  .owner-panel__owner {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: var(--weight-label);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .owner-panel--orange {
+    border-top: 3px solid var(--signal-orange);
+  }
+
+  .owner-panel--orange .owner-panel__owner {
+    color: var(--signal-orange);
+  }
+
+  .owner-panel--acid {
+    border-top: 3px solid var(--verified-acid);
+  }
+
+  .owner-panel--acid .owner-panel__owner {
+    color: var(--verified-acid);
+  }
+
+  .owner-panel--blueprint {
+    border-top: 3px solid var(--blueprint);
+  }
+
+  .owner-panel--blueprint .owner-panel__owner {
+    color: var(--blueprint-light);
+  }
+
+  .owner-panel__body {
+    margin: 0;
+    font-size: 17px;
+    line-height: 1.5;
+  }
+</style>

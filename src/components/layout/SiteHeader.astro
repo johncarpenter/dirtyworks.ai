@@ -1,0 +1,29 @@
+---
+import HeaderNav from '../islands/HeaderNav';
+import { headerNav } from '../../content/navigation';
+import { HEADER_ACTIONS, routeById, type RouteId } from '../../content/routes';
+import { SITE_VERSION } from '../../content/site';
+
+interface Props {
+  activeRoute: RouteId;
+}
+const { activeRoute } = Astro.props;
+const route = routeById(activeRoute);
+const action = HEADER_ACTIONS[route.headerAction];
+const items = headerNav.map((item) => ({ id: item.id, label: item.label, href: item.href }));
+---
+
+<header class="site-header">
+  <div class="site-header__inner">
+    <a class="wordmark" href="/" aria-label="Dirtyworks.ai home"
+      >dirtyworks<span class="wordmark__dot">.</span>ai</a
+    >
+    <HeaderNav
+      client:load
+      items={items}
+      activeId={activeRoute}
+      action={action}
+      version={SITE_VERSION}
+    />
+  </div>
+</header>

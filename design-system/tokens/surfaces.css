@@ -1,0 +1,73 @@
+/* Dirtyworks.ai surfaces: radii, borders, shadows, focus.
+   Radius 0–3px. No soft 16–24px card landscape. Shadows: none, or one hard offset. */
+
+:root {
+  --radius-0: 0px;
+  --radius-1: 2px; /* chips, inputs */
+  --radius-2: 3px; /* maximum permitted radius */
+
+  --border-hair: 1px;
+  --border-ordinary: 1.5px;
+  --border-emphasis: 3px;
+  --border-editorial: 6px;
+
+  /* One hard offset shadow. No ambient blur, no glassmorphism. */
+  --shadow-none: none;
+  --shadow-hard: 6px 6px 0 var(--ink);
+  --shadow-hard-sm: 3px 3px 0 var(--ink);
+  --shadow-hard-orange: 6px 6px 0 var(--signal-orange);
+  --shadow-hard-blueprint: 6px 6px 0 var(--blueprint);
+
+  /* Focus ring that fits the graphic system */
+  --focus-ring: 0 0 0 var(--focus-width) var(--blueprint);
+  --focus-ring-inverse: 0 0 0 var(--focus-width) var(--verified-acid);
+}
+
+/* Base resets consumers inherit */
+html {
+  -webkit-text-size-adjust: 100%;
+}
+body {
+  margin: 0;
+  background: var(--surface-page);
+  color: var(--text-body);
+  font-family: var(--font-sans);
+  font-size: var(--type-body);
+  line-height: var(--leading-body);
+  -webkit-font-smoothing: antialiased;
+}
+a {
+  color: var(--text-link);
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 3px;
+}
+a:hover {
+  color: var(--text-link-hover);
+  text-decoration-thickness: 3px;
+}
+:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+::selection {
+  background: var(--verified-acid);
+  color: var(--ink);
+}
+
+/* Structural helpers */
+.dw-sheet {
+  background: var(--surface-lift);
+  border: var(--border-ordinary) solid var(--line-ordinary);
+  border-radius: var(--radius-0);
+}
+.dw-rule {
+  border: 0;
+  border-top: var(--border-ordinary) solid var(--line-ordinary);
+  margin: 0;
+}
+.dw-rule--hair {
+  border-top: var(--border-hair) solid var(--line-hairline);
+}
+.dw-rule--editorial {
+  border-top: var(--border-editorial) solid var(--line-editorial);
+}

@@ -1,0 +1,38 @@
+---
+import { footerColumns } from '../../content/navigation';
+import { SITE_VERSION, SITE_BUILD_DATE, CONTACT_EMAIL, BRAND_PROMISE, LOCATION, ACCOUNTABILITY_LINE } from '../../content/site';
+---
+
+<footer class="site-footer">
+  <div class="site-footer__inner">
+    <div class="site-footer__top page-grid">
+      <div>
+        <span class="site-footer__wordmark"
+          >dirtyworks<span class="wordmark__dot">.</span>ai</span
+        >
+        <p class="site-footer__promise">{BRAND_PROMISE}</p>
+        <p class="site-footer__contact">
+          {LOCATION}<br /><a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
+        </p>
+      </div>
+
+      {
+        footerColumns.map((column) => (
+          <nav class="site-footer__col" aria-label={column.title}>
+            <span class="site-footer__col-title">{column.title}</span>
+            {column.items.map((item) => <a href={item.href}>{item.label}</a>)}
+            {
+              /* Inert until the copy exists — never a link to a placeholder page (FR-008). */
+              column.inert?.map((label) => <span class="site-footer__inert">{label}</span>)
+            }
+          </nav>
+        ))
+      }
+    </div>
+
+    <div class="site-footer__bottom">
+      <span>{ACCOUNTABILITY_LINE}</span>
+      <span>{`Site / ${SITE_VERSION} — ${SITE_BUILD_DATE}`}</span>
+    </div>
+  </div>
+</footer>

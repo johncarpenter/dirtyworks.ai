@@ -1,0 +1,144 @@
+---
+/* Composite: the bounded fit field. The excluded column is rendered at the SAME visual weight as
+   the included column — same type size, same rule, same list. What we will not do is content, not
+   a disclaimer, and it is the reason this pattern exists. */
+import ProofLabel from '../ui/ProofLabel.astro';
+
+interface Props {
+  segment: string;
+  label?: string;
+  summary: string;
+  included: readonly string[];
+  excluded: readonly string[];
+  class?: string;
+}
+
+const { segment, label, summary, included, excluded, class: className } = Astro.props;
+---
+
+<div class:list={['fit-field', className]}>
+  {label ? <ProofLabel status="neutral" size="sm">{label}</ProofLabel> : null}
+  <h3 class="fit-field__segment">{segment}</h3>
+  <p class="fit-field__summary">{summary}</p>
+
+  <div class="fit-field__cols">
+    <div class="fit-field__col fit-field__col--included">
+      <p class="fit-field__col-title">In scope</p>
+      <ul class="fit-field__list">
+        {
+          included.map((item) => (
+            <li class="fit-field__item">
+              <span class="fit-field__mark" aria-hidden="true">+</span>
+              <span>{item}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <div class="fit-field__col fit-field__col--excluded">
+      <p class="fit-field__col-title">Excluded initially</p>
+      <ul class="fit-field__list">
+        {
+          excluded.map((item) => (
+            <li class="fit-field__item">
+              <span class="fit-field__mark" aria-hidden="true">—</span>
+              <span>{item}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</div>
+
+<style>
+  .fit-field {
+    display: grid;
+    gap: 24px;
+    align-content: start;
+    border-top: 6px solid var(--ink);
+    padding-top: 24px;
+  }
+
+  .fit-field > * {
+    min-width: 0;
+  }
+
+  .fit-field :global(.chip) {
+    justify-self: start;
+  }
+
+  .fit-field__segment {
+    margin: 0;
+    font-weight: var(--weight-display);
+    font-size: clamp(30px, 3.2vw, 56px);
+    line-height: 0.98;
+    letter-spacing: var(--track-display);
+  }
+
+  .fit-field__summary {
+    margin: 0;
+    font-size: var(--type-body);
+    line-height: 1.5;
+    max-width: 48ch;
+  }
+
+  .fit-field__cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+  }
+
+  .fit-field__cols > * {
+    min-width: 0;
+  }
+
+  .fit-field__col-title {
+    margin: 0 0 10px;
+    padding-bottom: 6px;
+    font-family: var(--font-mono);
+    font-size: var(--type-label-sm);
+    font-weight: var(--weight-label);
+    letter-spacing: var(--track-label-wide);
+    text-transform: uppercase;
+    border-bottom: 1.5px solid currentColor;
+  }
+
+  .fit-field__col--included .fit-field__col-title,
+  .fit-field__col--included .fit-field__mark {
+    color: var(--blueprint);
+  }
+
+  .fit-field__col--excluded .fit-field__col-title,
+  .fit-field__col--excluded .fit-field__mark {
+    color: var(--ink);
+  }
+
+  .fit-field__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 8px;
+  }
+
+  .fit-field__item {
+    display: grid;
+    grid-template-columns: 16px minmax(0, 1fr);
+    gap: 8px;
+    font-size: var(--type-caption);
+    line-height: 1.45;
+  }
+
+  .fit-field__mark {
+    font-family: var(--font-mono);
+  }
+
+  @media (max-width: 560px) {
+    .fit-field__cols {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+  }
+</style>
