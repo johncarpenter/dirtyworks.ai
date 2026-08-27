@@ -1,7 +1,8 @@
 /* Services page content.
 
-   Copy is verbatim from mockups/design_files/Services.dc.html and mockups/README.md §2. Headings
-   are authored in sentence case and uppercased by CSS.
+   Copy is verbatim from mockups/design_files/Services.dc.html and mockups/README.md §2, except
+   the hero — see the note on SERVICES_HERO. Headings are authored in sentence case and uppercased
+   by CSS.
 
    The boundary text on every scope row is the argument of the page: a capability without a stated
    limit is a promise nobody can operate. Eight capabilities, eight boundaries, no exceptions. */
@@ -10,6 +11,17 @@ import { hrefFor } from '../routes';
 export interface Action {
   label: string;
   href: string;
+}
+
+export interface ServiceModel {
+  /** mono register label, e.g. "Model 01 / Take it over" */
+  label: string;
+  /** what the customer brings — the panel's headline */
+  brings: string;
+  /** what we supply in return */
+  supplies: string;
+  /** how somebody in this model describes their own situation, in their words */
+  voices: readonly string[];
 }
 
 /** A hero declaration split so one phrase can carry the orange emphasis. */
@@ -45,23 +57,74 @@ export interface ResponsibilityPanel {
   body: string;
 }
 
+/* The hero is the one block on this page that is not verbatim from the prototype. The mockup line
+   ("The tool is one line item. This is the service.") was also the home page's OPERATE heading, so
+   this page opened on an argument the visitor had already read; both have since been replaced, and
+   the phrase is no longer anywhere on the site. This states the three things the service actually
+   sells — adoption, training, controlled spend — and leaves the boundary argument to the scope
+   register below. */
 export const SERVICES_HERO = {
   folio: 'Services / 01 — Managed scope',
   heading: {
-    first: 'The tool is one line item.',
-    secondPrefix: 'This is the ',
-    emphasis: 'service',
-    secondSuffix: '.',
+    first: 'Buying AI is easy.',
+    secondPrefix: 'Getting it ',
+    emphasis: 'used',
+    secondSuffix: ' is not.',
   } satisfies SplitHeading,
   lead:
-    'Dirtyworks.ai operates a defined AI portfolio across its full lifecycle — from product ' +
-    'choice and user access through training, integration, governance, monitoring, cost review, ' +
-    'renewal, and exit.',
+    'Dirtyworks.ai gets your people genuinely using a defined AI portfolio — role-based training ' +
+    'that fits the actual job, accounts and access somebody owns, and licence spend that gets ' +
+    'reviewed instead of quietly renewed.',
   action: { label: 'Map the managed scope', href: hrefFor('start') } satisfies Action,
 };
 
+/* The two ways an engagement starts, and the first thing a visitor should read after the hero.
+   Everything else on this page describes what the service covers once it is running; nobody gets
+   that far without first recognising themselves, and the three situations we actually hear are not
+   one situation. "We bought AI and nobody can use it" and "we are starting from nothing" want
+   opposite first meetings.
+
+   The voices are quoted because they are close to verbatim — a visitor who has said one of these
+   sentences out loud should find it here. Both models converge on the same managed portfolio, which
+   is what keeps this section from reading as two different companies. */
+export const SERVICE_MODELS = {
+  folio: '02 / Two ways in',
+  heading: 'You bring one thing. We bring the rest.',
+  models: [
+    {
+      label: 'Model 01 / Take it over',
+      brings: 'You bring the AI.',
+      supplies:
+        'The products and licences are already yours. We take over running them — accounts and ' +
+        'access, the training that makes them stick, controls, monitoring, vendor changes, and ' +
+        'the spend nobody has looked at since it was approved.',
+      voices: [
+        'We bought AI and nobody can use it.',
+        'The licences keep renewing and no one owns the bill.',
+      ],
+    },
+    {
+      label: 'Model 02 / Start it up',
+      brings: 'You bring the ideas.',
+      supplies:
+        'You know the work you want to change; you do not know which product does it. We choose ' +
+        'the systems, prepare the knowledge and data behind them, train the people who will use ' +
+        'them, and stand the whole thing up under the same operating model.',
+      voices: [
+        'We know the job. We do not know the tool.',
+        'We are starting from nothing and want it done properly the first time.',
+      ],
+    },
+  ] satisfies readonly ServiceModel[],
+  /** mono caption above each panel's quoted situations */
+  voicesCaption: 'Sounds like',
+  closing:
+    'Neither one ends at a deployment. Both end in the same place — a portfolio with a named ' +
+    'owner, a written boundary, a support path, and a cost line somebody reads every month.',
+};
+
 export const SCOPE_REGISTER = {
-  folio: '02 / Scope register — included and bounded',
+  folio: '03 / Scope register — included and bounded',
   heading: 'Eight operating capabilities. Every one has a boundary.',
   /** mono caption above every boundary cell */
   boundaryCaption: 'Boundary',
@@ -133,7 +196,7 @@ export const SCOPE_REGISTER = {
 };
 
 export const ENGAGEMENT_PATH = {
-  folio: '03 / Engagement path',
+  folio: '04 / Engagement path',
   heading: 'Start with the uncertainty. End with a managed scope.',
   stages: [
     {
@@ -180,7 +243,7 @@ export const ENGAGEMENT_PATH = {
 };
 
 export const RESPONSIBILITY_BOUNDARY = {
-  folio: '04 / Responsibility boundary',
+  folio: '05 / Responsibility boundary',
   heading: 'Managed does not mean unbounded.',
   panels: [
     {
@@ -208,7 +271,7 @@ export const RESPONSIBILITY_BOUNDARY = {
 };
 
 export const SERVICES_CTA = {
-  folio: '05 / Conversion',
+  folio: '06 / Conversion',
   heading: 'What should somebody own by Monday morning?',
   support:
     'Bring the products, the people, and the last thing that had no owner. We will scope from ' +

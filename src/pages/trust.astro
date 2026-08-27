@@ -1,14 +1,17 @@
 ---
-/* /trust. Section order is load-bearing: the hero, then what we do NOT promise, then the twelve
-   controls, then compliance readiness, then the illustrative incident voice, then exit.
-   Limitations before the register is the page's argument — do not reorder them. */
+/* /trust. One question, asked in two halves: where does my data go, and what is the AI allowed to
+   do. Section order is load-bearing — the hero, then how the AI's behaviour is constrained, then
+   the ten controls, then compliance readiness, then exit. §02 comes before the register because the
+   argument has to land before the table of controls that carries it out; do not reorder them.
+
+   The illustrative incident timeline that used to sit between compliance and exit was removed
+   deliberately — see the note at the top of src/copy/pages/trust.ts. */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Band from '../components/layout/Band.astro';
 import Folio from '../components/ui/Folio.astro';
 import ControlRegister from '../components/patterns/ControlRegister.astro';
 import CTABand from '../components/patterns/CTABand.astro';
-import Limitations from '../components/sections/trust/Limitations.astro';
-import IncidentVoice from '../components/sections/trust/IncidentVoice.astro';
+import Behaviour from '../components/sections/trust/Behaviour.astro';
 import Exit from '../components/sections/trust/Exit.astro';
 import { hrefFor } from '../copy/routes';
 import {
@@ -30,7 +33,7 @@ import {
     <p class="trust-hero__lead">{TRUST_HERO.lead}</p>
   </Band>
 
-  <Limitations />
+  <Behaviour />
 
   <Band ground="bone-2" labelledBy="register-heading" class="register-band">
     <Folio text={TRUST_REGISTER.folio} />
@@ -53,8 +56,6 @@ import {
     </div>
   </Band>
 
-  <IncidentVoice />
-
   <Exit />
 
   <CTABand
@@ -73,9 +74,12 @@ import {
     color: var(--orange-press);
   }
 
+  /* The 52px floor every other hero can afford does not survive "boundary" at 320px — the word is
+     the widest unbreakable run on the site and overflowed the band by 21px. 44px clears it and only
+     applies below ~580px, where the fluid step has taken over anyway. */
   .trust-hero__heading {
     font-weight: 900;
-    font-size: clamp(52px, 7.6vw, 140px);
+    font-size: clamp(44px, 7.6vw, 140px);
     line-height: 0.84;
     letter-spacing: -0.035em;
   }

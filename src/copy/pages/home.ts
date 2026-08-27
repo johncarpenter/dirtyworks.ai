@@ -53,10 +53,15 @@ export const PORTFOLIO_ROWS: readonly PortfolioRow[] = [
 export const HERO = {
   folio: 'Dirtyworks.ai / Managed AI operations',
   headingLine1: 'AI is already at work.',
-  headingLine2Before: 'Is anyone ',
+  /* Line 2 asks about return, not about who is running it. It used to read "Is anyone OPERATING
+     it?", which a visitor reads two ways — the operational sense we meant, and "is it functioning",
+     which is the more natural reading for somebody who has not met our vocabulary yet. The site's
+     answer to this question is the operating work, so the question itself should be the one the
+     visitor is actually carrying: everyone has AI, nobody is sure it is returning anything. */
+  headingLine2Before: 'Is it ',
   /** pulled left by -0.06em: the page's first of two grid violations */
-  headingPull: 'operating',
-  headingLine2After: ' it?',
+  headingPull: 'earning',
+  headingLine2After: ' its keep?',
   support:
     'Dirtyworks.ai is the AI MSP for companies that need more than licences. We select and deploy ' +
     'approved AI products, manage users, train teams, support integrations, operate controls, ' +
@@ -117,13 +122,18 @@ export const EVIDENCE_ITEMS: readonly EvidenceItem[] = [
 
 export const PROBLEM = {
   folio: '02 / The unmanaged stack',
-  heading: 'Another licence is not an operating model.',
+  /* This used to read "Another licence is not an operating model." — true, but it asks a first-time
+     visitor to already hold two abstractions, and "operating model" is our vocabulary rather than
+     theirs. The section's job is simpler than that: the software showed up and the benefit did
+     not. The heading now says exactly that, and the closing sentence below lands it. */
+  heading: 'The software arrived. The benefit did not.',
   paragraphs: [
     'AI tools arrive one person, one team, and one expense claim at a time. Soon the company has ' +
       'accounts nobody inventories, data rules nobody can explain, integrations nobody monitors, ' +
       'overlapping subscriptions, and employees asking one another what is safe to use.',
     'The cost appears as abandoned licences, repeated work, support interruptions, uncontrolled ' +
-      'consumption, failed connections, and risk that remains invisible until something happens.',
+      'consumption, failed connections, and risk that remains invisible until something happens. ' +
+      'The invoice is easy to find; the benefit is the part nobody can point at.',
   ],
   railTitle: 'Illustrative events',
 };
@@ -196,16 +206,21 @@ export const OPERATE_ROWS: readonly OperateRow[] = [
   },
 ];
 
+/* This section used to open on "The tool is one line item. This is the service." — an argument
+   about where the money goes, made in our vocabulary, and a sentence the /services hero was also
+   carrying. §02 has just told the visitor the benefit never arrived; the useful next sentence names
+   why, and the reason is people, not procurement. The intro follows the heading down: "manages the
+   operating work around a defined AI portfolio" was the densest line on the home page. */
 export const OPERATE = {
   folio: '03 / What we operate',
-  heading: 'The tool is one line item. This is the service.',
+  heading: 'A licence does not come with people who can use it.',
   intro:
-    'Dirtyworks.ai manages the operating work around a defined AI portfolio. The scope can begin ' +
-    'with one product or one team and expand only when ownership, controls, value, and support ' +
-    'remain clear.',
+    'Dirtyworks.ai does the work that turns a licence into something a team actually uses: ' +
+    'training that fits the job, accounts somebody owns, rules people can follow, and support ' +
+    'when it goes wrong. Scope can start with one product or one team.',
   closing:
-    'You keep the company decisions. We keep the operating work from disappearing between ' +
-    'vendors, employees, IT, and policy.',
+    'You keep the company decisions. We keep the day-to-day work from falling between the vendor, ' +
+    'your employees, your IT provider, and your policy.',
 };
 
 /* ------------------------------------------------------------------ 04 governed catalogue */

@@ -1,12 +1,13 @@
 ---
-/* /services — what the managed service covers, how an engagement runs, and where the boundary is.
-   Section order is the prototype's: hero, scope register, engagement path, responsibility
-   boundary, conversion. */
+/* /services — how an engagement starts, what the managed service covers, how it runs, and where
+   the boundary is. Section order is the prototype's with the two entry models added after the
+   hero: hero, models, scope register, engagement path, responsibility boundary, conversion. */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Band from '../components/layout/Band.astro';
 import Folio from '../components/ui/Folio.astro';
 import Button from '../components/ui/Button.astro';
 import CTABand from '../components/patterns/CTABand.astro';
+import EngagementModels from '../components/sections/services/EngagementModels.astro';
 import ScopeRegister from '../components/sections/services/ScopeRegister.astro';
 import EngagementPath from '../components/sections/services/EngagementPath.astro';
 import ResponsibilityBoundary from '../components/sections/services/ResponsibilityBoundary.astro';
@@ -30,6 +31,7 @@ const { folio, heading, lead, action } = SERVICES_HERO;
     </div>
   </Band>
 
+  <EngagementModels />
   <ScopeRegister />
   <EngagementPath />
   <ResponsibilityBoundary />

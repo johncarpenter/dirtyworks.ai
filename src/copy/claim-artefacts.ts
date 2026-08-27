@@ -56,11 +56,4 @@ export const CLAIM_ARTEFACTS: readonly ClaimArtefact[] = [
     marker: 'Illustrative',
     what: 'Monthly operating record sheet',
   },
-  {
-    id: 'trust-incident-voice',
-    route: 'trust',
-    stamp: 'ILLUSTRATIVE',
-    marker: 'Illustrative incident voice',
-    what: 'Incident timeline — voice and sequence, not a historical event',
-  },
 ];
