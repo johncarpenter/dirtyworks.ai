@@ -1,56 +1,66 @@
 ---
-/* /trust §02 — limitations first. This section renders BEFORE the control register: the page states
-   what it will not do before it states what it controls (mockups/README.md, Trust section order).
-   Numbered ink-2 panels plus the serif countervoice. */
+/* /trust §02 — what governance controls. This section renders BEFORE the control register: the page
+   states how it constrains the AI's behaviour before it tabulates the controls that do it
+   (mockups/README.md, Trust section order — the ordering rule predates the reframe and still
+   holds).
+
+   Each panel is a pair: the failure mode on the left in the reader's own words, the control that
+   holds it on the right. The closing paragraph carries the non-promises, so the section can be
+   positive without becoming a promise. */
 import Band from '../../layout/Band.astro';
 import Folio from '../../ui/Folio.astro';
-import { TRUST_LIMITATIONS } from '../../../copy/pages/trust';
+import { TRUST_BEHAVIOUR } from '../../../copy/pages/trust';
 
-const { folio, heading, pullQuote, items } = TRUST_LIMITATIONS;
+const { folio, heading, pullQuote, pairs, closing } = TRUST_BEHAVIOUR;
 ---
 
-<Band ground="ink" labelledBy="limitations-heading" class="limitations">
+<Band ground="ink" labelledBy="behaviour-heading" class="behaviour">
   <Folio text={folio} tone="dark" />
 
-  <div class="limitations__split">
-    <div class="limitations__voice">
-      <h2 id="limitations-heading">{heading}</h2>
-      <p class="limitations__quote">{pullQuote}</p>
+  <div class="behaviour__split">
+    <div class="behaviour__voice">
+      <h2 id="behaviour-heading">{heading}</h2>
+      <p class="behaviour__quote">{pullQuote}</p>
     </div>
 
-    <ol class="limitations__list">
+    <ol class="behaviour__list">
       {
-        items.map((item, index) => (
-          <li class="limitations__item">
-            <span class="limitations__index">{String(index + 1).padStart(2, '0')}</span>
-            <span class="limitations__text">{item}</span>
+        pairs.map((pair, index) => (
+          <li class="behaviour__item">
+            <span class="behaviour__index">{String(index + 1).padStart(2, '0')}</span>
+            <div class="behaviour__body">
+              <p class="behaviour__failure">{pair.failure}</p>
+              <p class="behaviour__control">{pair.control}</p>
+            </div>
           </li>
         ))
       }
     </ol>
   </div>
+
+  <p class="behaviour__closing">{closing}</p>
 </Band>
 
 <style>
-  .limitations__split {
+  .behaviour__split {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
     gap: clamp(32px, 5vw, 80px);
     align-items: start;
   }
 
-  .limitations__split > * {
+  .behaviour__split > * {
     min-width: 0;
   }
 
-  .limitations h2 {
+  .behaviour h2 {
     font-weight: 900;
     font-size: clamp(34px, 4.4vw, 80px);
     line-height: 0.86;
     letter-spacing: -0.035em;
   }
 
-  .limitations__quote {
+  .behaviour__quote {
     margin: 32px 0 0;
     font-family: var(--font-serif);
     font-style: italic;
@@ -62,7 +72,7 @@ const { folio, heading, pullQuote, items } = TRUST_LIMITATIONS;
   }
 
   /* One hairline grid: the 1px gap is the rule, the panels are the cells. */
-  .limitations__list {
+  .behaviour__list {
     display: grid;
     gap: 1px;
     background: var(--ink-3);
@@ -72,15 +82,15 @@ const { folio, heading, pullQuote, items } = TRUST_LIMITATIONS;
     padding: 0;
   }
 
-  .limitations__item {
+  .behaviour__item {
     background: var(--ink-2);
-    padding: 16px 20px;
+    padding: 20px;
     display: flex;
     gap: 16px;
     align-items: baseline;
   }
 
-  .limitations__index {
+  .behaviour__index {
     flex: none;
     font-family: var(--font-mono);
     font-size: 11px;
@@ -88,15 +98,41 @@ const { folio, heading, pullQuote, items } = TRUST_LIMITATIONS;
     color: var(--signal-orange);
   }
 
-  .limitations__text {
-    font-size: 17.5px;
-    line-height: 1.4;
+  .behaviour__body {
     min-width: 0;
   }
 
+  /* The failure is the reader's worry, in their words — it leads, and the control answers it. */
+  .behaviour__failure {
+    margin: 0;
+    font-size: 17.5px;
+    font-weight: 700;
+    line-height: 1.3;
+  }
+
+  .behaviour__control {
+    margin: 8px 0 0;
+    font-size: 16px;
+    line-height: 1.5;
+    color: var(--bone-2);
+  }
+
+  .behaviour__closing {
+    margin: 40px 0 0 auto;
+    max-width: 58ch;
+    padding-top: 28px;
+    border-top: 1px solid var(--ink-3);
+    font-size: 17px;
+    line-height: 1.6;
+  }
+
   @media (max-width: 900px) {
-    .limitations__split {
+    .behaviour__split {
       grid-template-columns: 1fr;
+    }
+
+    .behaviour__closing {
+      margin-left: 0;
     }
   }
 </style>
