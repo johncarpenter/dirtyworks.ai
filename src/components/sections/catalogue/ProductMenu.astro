@@ -72,10 +72,10 @@ const { folio, categories, primary, secondary, disclaimer } = PRODUCT_MENU;
     const panels = document.querySelectorAll('[data-category-expand]');
     if (!toggle || panels.length === 0) return;
 
-    let expanded = __omp_shell("narrow.matches;")
+    let expanded = !narrow.matches;
 
     const render = () => {
-      toggle.hidden = __omp_shell("narrow.matches;")
+      toggle.hidden = !narrow.matches;
       toggle.setAttribute('aria-expanded', String(expanded));
       toggle.textContent = expanded
         ? 'Hide prerequisites and products'
@@ -86,12 +86,12 @@ const { folio, categories, primary, secondary, disclaimer } = PRODUCT_MENU;
     };
 
     toggle.addEventListener('click', () => {
-      expanded = __omp_shell("expanded;")
+      expanded = !expanded;
       render();
     });
 
     narrow.addEventListener('change', () => {
-      expanded = __omp_shell("narrow.matches;")
+      expanded = !narrow.matches;
       render();
     });
 
