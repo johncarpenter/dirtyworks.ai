@@ -1,0 +1,73 @@
+---
+/* A page hero whose copy sits in a solid bone capsule over a photograph — the design system's
+   photo-led opening, specimened as CORRECT in guidelines/photo-treatment.html.
+
+   Four pages use it, so the arrangement lives here rather than four times over. The page supplies
+   its own lede through the default slot: folio, heading, lead, actions, in whatever markup that
+   page's heading needs. Slotted content is authored in the PAGE's file, so the page's scoped
+   styles still reach it — which is why each page keeps its own type scale rather than inheriting
+   one from here.
+
+   Two things every caller has to know:
+
+   1. THE TYPE COMES DOWN. A capsule is at most 30em wide, so a 126px display line wraps to three
+      words. Every page that adopts this roughly halves its hero clamp. That is the trade for
+      having a photograph in the hero at all, and it is the thing to look at before adopting it.
+
+   2. NO CAPTION. The stamp beside it already says the image is illustrative, and in a hero a line
+      of mono under the fold-defining picture earns nothing. The ILLUSTRATIVE stamp still renders
+      and is still registered per route in src/copy/claim-artefacts.ts, so the release gate still
+      fails if the disclosure disappears.
+
+   Below 900px the capsule leaves the picture and stacks ABOVE it — see EditorialPhoto. A hero
+   whose first screen is a photograph and whose headline is underneath has buried the thing the
+   visitor came for. */
+import Band from '../layout/Band.astro';
+import EditorialPhoto from './EditorialPhoto.astro';
+
+interface Props {
+  image: ImageMetadata;
+  /** Describes the visible work, never the claim. */
+  alt: string;
+  /** object-position, from the photograph's entry in src/copy/photography.ts */
+  focus?: string;
+  /** id of the heading the page puts in the slot */
+  labelledBy?: string;
+  /**
+   * Which side the capsule sits on. Follow the photograph: the capsule belongs over the quiet
+   * field, not over the people.
+   */
+  capsuleSide?: 'left' | 'right';
+  /**
+   * `overlay` lays the capsule on the photograph and needs a quiet field to lay it on. `stack`
+   * puts it above instead — the only honest option for a photograph with no negative space, which
+   * the direction records per image. Check the composition note before choosing.
+   */
+  capsuleLayout?: 'overlay' | 'stack';
+}
+
+const {
+  image,
+  alt,
+  focus,
+  labelledBy,
+  capsuleSide = 'left',
+  capsuleLayout = 'overlay',
+} = Astro.props;
+---
+
+<Band ground="bone" variant="hero" labelledBy={labelledBy}>
+  <EditorialPhoto
+    image={image}
+    alt={alt}
+    focus={focus}
+    capsuleSide={capsuleSide}
+    capsuleLayout={capsuleLayout}
+    capsuleTone="bone"
+    capsuleSize="lede"
+    ratio="16-9"
+    eager
+  >
+    <slot slot="capsule" />
+  </EditorialPhoto>
+</Band>

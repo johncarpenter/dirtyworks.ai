@@ -1,13 +1,25 @@
 ---
 /* 03 / The company. Three paragraphs describing what Dirtyworks.ai is and why it exists.
 
-   There is deliberately no founder band beside them. The prototype put an OPEN GAP annotation
-   panel here listing the sponsor inputs still outstanding; that panel is a production artefact and
-   was never for public release. The inputs are still tracked — FOUNDER_PROFILE in
-   src/copy/placeholders.ts — and when they land the band goes in beside this copy. */
+   There is still deliberately no founder band beside them. The prototype put an OPEN GAP
+   annotation panel here listing the sponsor inputs still outstanding; that panel is a production
+   artefact and was never for public release. The inputs are still tracked — FOUNDER_PROFILE in
+   src/copy/placeholders.ts — and when they land the band goes in beside this copy.
+
+   The photograph below the copy is NOT that band, and the distinction is the whole point. The
+   design system's placement plan gives /about one line: "Commissioned founder photo preferred;
+   operations leader only as a temporary editorial substitute. Never label a generated subject as
+   founder." So the image is a generated editorial illustration of operational work, captioned in
+   public as not the founder and not a customer, carrying an ILLUSTRATIVE stamp. It sits under the
+   company copy rather than beside it, because a portrait set beside "who we are" reads as a
+   portrait OF us no matter what the caption says. When the real founder record lands, this comes
+   out and the founder band goes in. */
 import Band from '../../layout/Band.astro';
 import Folio from '../../ui/Folio.astro';
+import EditorialPhoto from '../../patterns/EditorialPhoto.astro';
 import { COMPANY_FOLIO, COMPANY_PARAGRAPHS } from '../../../copy/pages/about';
+import { OPERATIONS_LEADER } from '../../../copy/photography';
+import operationsLeader from '../../../assets/photography/hero-operations-leader-v1.png';
 
 const [lead, ...body] = COMPANY_PARAGRAPHS;
 ---
@@ -20,6 +32,15 @@ const [lead, ...body] = COMPANY_PARAGRAPHS;
       {body.map((paragraph) => <p>{paragraph}</p>)}
     </div>
   </div>
+
+  <EditorialPhoto
+    space="section"
+    image={operationsLeader}
+    alt={OPERATIONS_LEADER.alt}
+    caption={OPERATIONS_LEADER.caption}
+    focus={OPERATIONS_LEADER.focus}
+    ratio="16-9"
+  />
 </Band>
 
 <style>

@@ -14,6 +14,25 @@ import ClaimStamp from '../../ui/ClaimStamp.astro';
 import { PRODUCT_MENU } from '../../../copy/pages/catalogue';
 
 const { folio, categories, primary, secondary, disclaimer } = PRODUCT_MENU;
+
+/* Grouped by operating tier rather than run as seven undifferentiated rows.
+   The tier was already on every row as a small mono label, repeated four times for Operate; it is
+   a real distinction — how much of the work the service takes on — and stating it once at the head
+   of a block turns seven things to scan into three.
+
+   Derived from the copy, never a second list: the order is the order the tiers first appear in
+   PRODUCT_MENU.categories, and the heading is the row's own `tier` string verbatim. Add a category
+   in a new tier and its block appears; nothing here needs editing. */
+const groups: { tier: string; rows: typeof categories }[] = [];
+for (const category of categories) {
+  const group = groups.find((candidate) => candidate.tier === category.tier);
+  if (group) group.rows.push(category);
+  else groups.push({ tier: category.tier, rows: [category] });
+}
+
+/* The offset stripe alternates across the whole menu, not within each block: restarting it per
+   group would put two grounds of the same shade back to back at a boundary. */
+let stripe = -1;
 ---
 
 <Band ground="bone">
@@ -21,33 +40,41 @@ const { folio, categories, primary, secondary, disclaimer } = PRODUCT_MENU;
 
   <div class="menu">
     {
-      categories.map((category, index) => (
-        <div
-          class:list={[
-            'category',
-            index % 2 === 1 && 'category--offset',
-            index === categories.length - 1 && 'category--last',
-          ]}
-        >
-          <div>
-            <p class="category__word">{category.word}</p>
-            <p class="category__tier">{category.tier}</p>
-          </div>
+      groups.map((group) => (
+        <section class="tier" aria-label={group.tier}>
+          <p class="tier__head">{group.tier}</p>
 
-          <div>
-            <p class="category__job">{category.job}</p>
-            <div class="category__expand" data-category-expand>
-              <p class="category__detail">{category.detail}</p>
-              <p class="category__candidates">{category.candidates}</p>
-            </div>
-          </div>
+          {group.rows.map((category, index) => {
+            stripe += 1;
+            return (
+              <div
+                class:list={[
+                  'category',
+                  stripe % 2 === 1 && 'category--offset',
+                  index === group.rows.length - 1 && 'category--last',
+                ]}
+              >
+                <div>
+                  <p class="category__word">{category.word}</p>
+                </div>
 
-          <div class="category__terms">
-            <ProofLabel status={category.status}>{category.state}</ProofLabel>
-            <p class="category__route">{category.route}</p>
-            <p class="category__emphasis">{category.emphasis}</p>
-          </div>
-        </div>
+                <div>
+                  <p class="category__job">{category.job}</p>
+                  <div class="category__expand" data-category-expand>
+                    <p class="category__detail">{category.detail}</p>
+                    <p class="category__candidates">{category.candidates}</p>
+                  </div>
+                </div>
+
+                <div class="category__terms">
+                  <ProofLabel status={category.status}>{category.state}</ProofLabel>
+                  <p class="category__route">{category.route}</p>
+                  <p class="category__emphasis">{category.emphasis}</p>
+                </div>
+              </div>
+            );
+          })}
+        </section>
       ))
     }
   </div>
@@ -72,10 +99,10 @@ const { folio, categories, primary, secondary, disclaimer } = PRODUCT_MENU;
     const panels = document.querySelectorAll('[data-category-expand]');
     if (!toggle || panels.length === 0) return;
 
-    let expanded = __omp_shell("narrow.matches;")
+    let expanded = !narrow.matches;
 
     const render = () => {
-      toggle.hidden = __omp_shell("narrow.matches;")
+      toggle.hidden = !narrow.matches;
       toggle.setAttribute('aria-expanded', String(expanded));
       toggle.textContent = expanded
         ? 'Hide prerequisites and products'
@@ -86,12 +113,12 @@ const { folio, categories, primary, secondary, disclaimer } = PRODUCT_MENU;
     };
 
     toggle.addEventListener('click', () => {
-      expanded = __omp_shell("expanded;")
+      expanded = !expanded;
       render();
     });
 
     narrow.addEventListener('change', () => {
-      expanded = __omp_shell("narrow.matches;")
+      expanded = !narrow.matches;
       render();
     });
 
@@ -100,10 +127,6 @@ const { folio, categories, primary, secondary, disclaimer } = PRODUCT_MENU;
 </script>
 
 <style>
-  .menu {
-    border-top: 1.5px solid var(--ink);
-  }
-
   .category {
     display: grid;
     grid-template-columns: minmax(120px, 0.5fr) minmax(0, 1.6fr) minmax(0, 1fr);
@@ -135,13 +158,27 @@ const { folio, categories, primary, secondary, disclaimer } = PRODUCT_MENU;
     text-transform: uppercase;
   }
 
-  .category__tier {
-    margin: 8px 0 0;
+  /* The menu carries no top rule of its own any more: each block head draws one, and a rule at the
+     top of the menu would double up above the first block.
+
+     The block head. It carries the tier once, where the row label used to carry it seven times.
+     Ink rule above and mono at label scale: the same grammar as every other register head on the
+     site, so a new level of structure arrives without a new visual device. */
+  .tier__head {
+    margin: 0;
+    padding-bottom: 10px;
+    border-bottom: 1.5px solid var(--ink);
     font-family: var(--font-mono);
-    font-size: 10px;
-    letter-spacing: 0.16em;
+    font-size: 12px;
+    font-weight: var(--weight-label);
+    letter-spacing: var(--track-label-wide);
     text-transform: uppercase;
-    color: var(--steel-2);
+    color: var(--ink);
+  }
+
+  /* Space between blocks, and none above the first — the menu's own rule already sits there. */
+  .tier + .tier {
+    margin-top: clamp(36px, 4vw, 60px);
   }
 
   .category__job {

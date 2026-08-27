@@ -15,13 +15,6 @@ export interface ClaimArtefact {
 
 export const CLAIM_ARTEFACTS: readonly ClaimArtefact[] = [
   {
-    id: 'home-portfolio',
-    route: 'home',
-    stamp: 'ILLUSTRATIVE',
-    marker: 'Illustrative',
-    what: 'Hero AI portfolio register',
-  },
-  {
     id: 'home-evidence-rail',
     route: 'home',
     stamp: 'ILLUSTRATIVE',
@@ -55,5 +48,50 @@ export const CLAIM_ARTEFACTS: readonly ClaimArtefact[] = [
     stamp: 'ILLUSTRATIVE',
     marker: 'Illustrative',
     what: 'Monthly operating record sheet',
+  },
+
+  /* Photography. Every image on the site is a generated original with fictional people, so each
+     one is an illustrative artefact in exactly the sense this registry means: it would read as
+     evidence if nothing said otherwise. EditorialPhoto renders the stamp; these entries are what
+     make the release gate fail if one stops rendering. Captions: src/copy/photography.ts. */
+  {
+    id: 'home-photo-operations-leader',
+    route: 'home',
+    stamp: 'ILLUSTRATIVE',
+    marker: 'Illustrative',
+    /* Replaced the hero AI portfolio register, which was this route's other illustrative
+       artefact. The stamp requirement transfers with the slot. */
+    what: 'Operations-leader photograph in the hero',
+  },
+  {
+    id: 'services-photo-training',
+    route: 'services',
+    stamp: 'ILLUSTRATIVE',
+    marker: 'Illustrative',
+    what: 'Training photograph in the hero',
+  },
+  {
+    id: 'trust-photo-support-incident',
+    route: 'trust',
+    stamp: 'ILLUSTRATIVE',
+    marker: 'Illustrative',
+    what: 'Support and incident photograph in the hero',
+  },
+  {
+    id: 'msps-photo-energy-services',
+    route: 'msps',
+    stamp: 'ILLUSTRATIVE',
+    marker: 'Illustrative',
+    what: 'Energy-services project office photograph in the hero',
+  },
+  {
+    id: 'about-photo-operations-leader',
+    route: 'about',
+    stamp: 'ILLUSTRATIVE',
+    marker: 'Illustrative',
+    /* The one that matters most: /about is where a reader assumes a person shown is the founder.
+       FOUNDER_PROFILE is unresolved and this image is the direction's designated temporary
+       substitute, so the caption denies both readings outright. */
+    what: 'Operations-leader photograph beside the company copy',
   },
 ];

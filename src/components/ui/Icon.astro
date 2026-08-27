@@ -1,0 +1,85 @@
+---
+/* Semantic icon. Names say what the mark MEANS in this brand, not what the vendor called the
+   file — `work-order`, not `assignment_turned_in`. The mapping lives in ./icons.ts, shared with
+   the React island version in ./Icon.tsx.
+
+   Use it sparingly, and only where the design system allows one:
+
+     "The motif layer stays primary — bracketed references, redaction bars, proof labels. An icon
+      is for an affordance or a diagram node, not decoration; if the label already says OWNER,
+      drop the icon."   — design-system/guidelines/iconography.html
+
+   That rule is why the contact register, the folios and the proof chips carry no icons: their
+   labels already say it. Every icon this component draws is either a form affordance or a node
+   in a diagram, and every one of them sits beside text that carries the same meaning — so if the
+   4KB subset fails to load, nothing becomes unreadable.
+
+   The face is cut at a single instance (opsz 24, wght 500, FILL 0, GRAD 0), which the brand
+   fixes; there is no variable axis to set, so `weight` is deliberately not a prop. */
+
+import { GLYPHS, type IconName } from './icons';
+
+interface Props {
+  name: IconName;
+  /** 20-24px per the brand; anything else needs a reason */
+  size?: number;
+  /**
+   * Accessible name. Omit for the common case: the icon sits beside text that already says it,
+   * so naming it again only makes a screen reader say it twice.
+   */
+  label?: string;
+  class?: string;
+}
+const { name, size = 20, label, class: className } = Astro.props;
+---
+
+<span
+  class:list={['icon', className]}
+  style={`--icon-size:${size}px`}
+  role={label ? 'img' : undefined}
+  aria-label={label}
+  aria-hidden={label ? undefined : 'true'}>{GLYPHS[name]}</span
+>
+
+<style>
+  .icon {
+    font-family: var(--font-icon);
+    /* The ligature IS the rendering mechanism here: the element's text content is the literal
+       string "task_alt", and 'liga' is what turns it into a mark. */
+    font-feature-settings: 'liga';
+    font-weight: 500;
+    font-size: var(--icon-size);
+    /* 1.2, matching the face's own line box (hhea ascent 1056 / descent -96 over a 960 em). The
+       glyphs' ink spans 1.095em — from -0.095em to 1.0em — so `line-height: 1` plus the overflow
+       guard below silently shaved about 2px off the bottom of every mark. Measured, not guessed:
+       the ink bounds come from the subset itself. */
+    line-height: 1.2;
+    color: currentColor;
+
+    display: inline-block;
+    flex: none;
+    /* Box the mark to one em and clip. The element's text is the ligature NAME, so if the subset
+       ever fails to arrive the browser falls back to a default face and draws the literal string
+       "assignment_turned_in" across the layout — the same failure that put the word CANCEL beside
+       every field on the intake form. Clipped, the worst case is a stray letter in a 24px box.
+
+       Width only. A fixed height also clips, and the line box of a 24px face is 27px tall, so it
+       trims the glyph itself — a guard against a hypothetical failure must not damage the working
+       case. Horizontally the ink never exceeds the 1em advance, so clipping to `width` is safe. */
+    width: var(--icon-size);
+    overflow: hidden;
+    /* Ligature names contain underscores and would otherwise be offered as break opportunities. */
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+
+    /* Resets, not styling, and both load-bearing. The mark is drawn by a ligature over the literal
+       text "cancel", and a ligature does not form on text that has been case-transformed or
+       letter-spaced. Inherit `text-transform: uppercase` from a mono label — which is most labels
+       on this site — and the icon renders as the word CANCEL. */
+    text-transform: none;
+    letter-spacing: normal;
+    -webkit-font-smoothing: antialiased;
+    user-select: none;
+  }
+</style>

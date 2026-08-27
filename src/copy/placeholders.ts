@@ -52,6 +52,32 @@ export const PLACEHOLDERS: readonly Placeholder[] = [
     ],
   },
   {
+    key: 'EDITORIAL_PHOTOGRAPHY',
+    state: 'OPEN GAP',
+    owner: 'sponsor',
+    severity: 'blocks-launch',
+    /* Blocks no route. The four photographs are honest as published: each is captioned as a
+       generated editorial illustration and each renders an ILLUSTRATIVE stamp, so no page claims
+       them as a real engagement, a customer, an employee or the founder. What is unresolved is
+       the sponsor decision behind them — the design system's working recommendation is generated
+       imagery through the private launch and commissioned Alberta photography before the public
+       one. Resolution means either commissioning the shoot or the sponsor accepting generated
+       imagery in public, and then deleting this entry.
+
+       Captions and alt text: src/copy/photography.ts. Direction and provenance register:
+       design-system/guidelines/photography-direction-and-image-library.md */
+    blocksRoutes: [],
+    note:
+      'Every photograph on the site is a generated original with fictional people. The public ' +
+      'launch needs either a commissioned Alberta shoot for the hero and About, or an explicit ' +
+      'sponsor decision to publish generated imagery. Never caption one as a customer or the founder.',
+    requires: [
+      'Photo-led or type-led home hero',
+      'Which generated candidates survive public-launch review',
+      'Commissioned founder and operations photography, or a decision not to commission',
+    ],
+  },
+  {
     key: 'INTAKE_CONSENT_WORDING',
     state: 'LEGAL REVIEW',
     owner: 'counsel',

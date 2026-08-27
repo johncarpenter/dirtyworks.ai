@@ -1,11 +1,12 @@
 /* Dirtyworks.ai typefaces — self-hosted.
 
-   All three families are SIL Open Font License 1.1, which permits self-hosted web embedding;
-   public/fonts/OFL.txt carries the licence text.
+   The three text families are SIL Open Font License 1.1, which permits self-hosted web embedding;
+   public/fonts/*-OFL.txt carries each licence text.
 
    Two Google Fonts @import lines were removed: they were the only external URLs in the whole CSS
-   surface, and an @import inside a Vite-inlined stylesheet is also an ordering hazard.
-   Material Symbols Sharp was dropped entirely — this build uses no icons.
+   surface, and an @import inside a Vite-inlined stylesheet is also an ordering hazard. That rule
+   still holds — which is why the icon font below is served from public/fonts/ rather than linked
+   from the Google Fonts CDN the way the design system's own specimen pages do.
 
    Archivo ships a variable font only as .ttf (658KB), so the six static woff2 weights the site
    actually uses are served instead. IBM Plex Mono uses its variable roman build (one file covers
@@ -36,9 +37,31 @@
              src: url("/fonts/InstrumentSerif-Italic.woff2") format("woff2");
              font-weight: 400; font-style: italic; font-display: swap; }
 
+/* Material Symbols Sharp — the substituted icon set, subsetted to the twenty semantic marks in
+   design-system/assets/icons/registry.json (4KB, regenerate with scripts/fetch-icon-font.sh).
+   Square corners are the reason it was chosen: the 0-3px radius system rules out Lucide, Feather
+   and Heroicons.
+
+   `font-display: block`, NOT swap. An icon is drawn by typing its ligature name as text, so a
+   swap period would render the literal string "task_alt" until the font arrives. Block renders
+   nothing for that moment instead. The file is 4KB from the same origin, so the moment is short.
+
+   Cut at a single instance — opsz 24, wght 500, FILL 0, GRAD 0. That is not a default but the
+   only setting the brand permits, so this face is static and `font-variation-settings` is inert
+   on it; Icon.astro documents that. */
+@font-face { font-family: "Material Symbols Sharp";
+             src: url("/fonts/MaterialSymbolsSharp-Subset.woff2") format("woff2");
+             font-weight: 500; font-style: normal; font-display: block; }
+
 :root {
   --font-display: "Archivo", "Arial Black", "Helvetica Neue", sans-serif;
   --font-sans: "Archivo", "Helvetica Neue", Helvetica, sans-serif;
   --font-serif: "Instrument Serif", "Times New Roman", Georgia, serif;
   --font-mono: "IBM Plex Mono", "SFMono-Regular", Menlo, Consolas, monospace;
+  /* No fallback family, because no other font draws an icon for the literal text "task_alt".
+     That does NOT mean a failed load renders nothing: the browser falls back to its default face
+     and draws the ligature name as words. Icon.astro clips its box to one em so that failure
+     stays a stray letter rather than a sentence, and every icon on this site sits beside a label
+     that already carries the meaning. */
+  --font-icon: "Material Symbols Sharp";
 }

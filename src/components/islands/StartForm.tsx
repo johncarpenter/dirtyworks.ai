@@ -1,5 +1,6 @@
 import { useMemo, useRef, useState } from 'react';
 import { actions, isInputError } from 'astro:actions';
+import { Icon } from '../ui/Icon';
 
 /**
  * The site's only stateful surface.
@@ -269,6 +270,10 @@ export default function StartForm() {
         )}
         {invalid ? (
           <span className="field__error" id={`${field.name}-error`}>
+            {/* Decorative on purpose — no `label`. The mark makes a failed field findable while
+                scanning a long form; the text beside it is what actually says what went wrong,
+                and a screen reader should not hear "cancel" before hearing that. */}
+            <Icon name="gap" size={16} />
             {errors[0]}
           </span>
         ) : null}

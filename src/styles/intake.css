@@ -62,7 +62,13 @@
   color: var(--ink);
 }
 
+/* The mark and the message share a baseline-ish row. `align-items: center` rather than baseline:
+   the icon is a 16px square box, and baseline-aligning a box against 11px uppercase mono drops it
+   below the text. */
 .field__error {
+  display: flex;
+  align-items: center;
+  gap: 7px;
   font-family: var(--font-mono);
   font-size: 11px;
   letter-spacing: 0.08em;

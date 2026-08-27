@@ -1,0 +1,35 @@
+{
+  "$schema": "internal — Dirtyworks.ai icon registry",
+  "source": "IconScout",
+  "downloaded": "2026-08-27",
+  "style": "Line",
+  "mode": "glyph",
+  "modeNote": "Set ICON_MODE = 'svg' in components/core/Icon.jsx once the SVG files below are present in this folder. Until then Icon renders the Material Symbols Sharp fallback glyph and nothing breaks.",
+  "base": "assets/icons/",
+  "packs": [
+    { "id": 24236, "name": "Tasks", "contributor": "Kiran Shastry", "role": "evidence set", "license": "subscription (two items free-for-commercial)" },
+    { "id": 251977, "name": "Operations Management", "contributor": "Webtechops Llp", "role": "workflow set", "license": "subscription" }
+  ],
+  "icons": [
+    { "name": "verified", "file": "verified.svg", "glyph": "task_alt", "means": "Checked and signed off", "iconscout": "checking-document", "pack": 24236 },
+    { "name": "work-order", "file": "work-order.svg", "glyph": "assignment_turned_in", "means": "A scoped, owned unit of work", "iconscout": "checklist-clipboard", "pack": 24236 },
+    { "name": "register", "file": "register.svg", "glyph": "list_alt", "means": "Control register, standing list", "iconscout": "list-document", "pack": 24236 },
+    { "name": "diagnostic", "file": "diagnostic.svg", "glyph": "plagiarism", "means": "Diagnostic / investigation", "iconscout": "search-document", "pack": 24236 },
+    { "name": "controlled", "file": "controlled.svg", "glyph": "lock", "means": "Access-controlled, confidential", "iconscout": "lock-document", "pack": 24236 },
+    { "name": "sla-clock", "file": "sla-clock.svg", "glyph": "schedule", "means": "Response time, SLA", "iconscout": "clock-document", "pack": 24236 },
+    { "name": "gap", "file": "gap.svg", "glyph": "cancel", "means": "Open gap, unmet control", "iconscout": "close-document", "pack": 24236 },
+    { "name": "annotate", "file": "annotate.svg", "glyph": "edit_document", "means": "Marked up by a human", "iconscout": "edit-document", "pack": 24236 },
+    { "name": "owner", "file": "owner.svg", "glyph": "assignment_ind", "means": "Named accountable owner", "iconscout": "man-user-tasks", "pack": 24236 },
+    { "name": "measured", "file": "measured.svg", "glyph": "monitoring", "means": "Measured result, not a claim", "iconscout": "analysis-document", "pack": 24236 },
+    { "name": "verified-date", "file": "verified-date.svg", "glyph": "event_available", "means": "Confirmed date, committed milestone", "iconscout": "event", "pack": 24236 },
+    { "name": "handoff", "file": "handoff.svg", "glyph": "share", "means": "Handoff between owners or systems", "iconscout": "share-document", "pack": 24236 },
+    { "name": "process", "file": "process.svg", "glyph": "account_tree", "means": "A defined process", "iconscout": "workflow", "pack": 251977 },
+    { "name": "improvement", "file": "improvement.svg", "glyph": "published_with_changes", "means": "Process improvement loop", "iconscout": "process-improvement", "pack": 251977 },
+    { "name": "quality-control", "file": "quality-control.svg", "glyph": "verified", "means": "Quality control step", "iconscout": "quality-control", "pack": 251977 },
+    { "name": "monitoring", "file": "monitoring.svg", "glyph": "visibility", "means": "Watched, under observation", "iconscout": "over-seeing", "pack": 251977 },
+    { "name": "decision", "file": "decision.svg", "glyph": "alt_route", "means": "Decision point, fit / non-fit", "iconscout": "decision-making", "pack": 251977 },
+    { "name": "operations", "file": "operations.svg", "glyph": "manage_accounts", "means": "Managed operations", "iconscout": "operations-manager", "pack": 251977 },
+    { "name": "requirements", "file": "requirements.svg", "glyph": "rule", "means": "Requirements, preconditions", "iconscout": "requirements", "pack": 251977 },
+    { "name": "calendar", "file": "calendar.svg", "glyph": "calendar_month", "means": "Cadence, recurring review", "iconscout": "schedule", "pack": 251977 }
+  ]
+}

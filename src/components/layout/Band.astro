@@ -2,7 +2,15 @@
 /* One page band. Ground, separators and padding are the only variables; every Home section and
    every other page's sections are this component plus content. */
 type Ground = 'bone' | 'bone-2' | 'ink';
-type Variant = 'default' | 'hero' | 'manifesto';
+/* `photo` is a band whose whole content is one photograph. It takes tighter vertical padding than
+   a section, because such a band is an interruption in the argument around it rather than a
+   section of its own — see .band--photo in src/styles/site.css.
+
+   Padding has to be a variant rather than a class the caller passes in: this component's root
+   carries its own Astro scope id, so a `.my-band { padding: ... }` rule written in the caller
+   compiles to `.my-band[data-astro-cid-CALLER]` and silently matches nothing. Band grounds and
+   variants therefore all live in site.css, unscoped. */
+type Variant = 'default' | 'hero' | 'manifesto' | 'photo';
 
 interface Props {
   ground?: Ground;
@@ -23,6 +31,7 @@ const { ground = 'bone', variant = 'default', id, labelledBy, class: className }
     `band--${ground}`,
     variant === 'hero' && 'band--hero',
     variant === 'manifesto' && 'band--manifesto',
+    variant === 'photo' && 'band--photo',
     className,
   ]}
 >

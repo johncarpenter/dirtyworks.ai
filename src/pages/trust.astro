@@ -11,9 +11,12 @@ import Band from '../components/layout/Band.astro';
 import Folio from '../components/ui/Folio.astro';
 import ControlRegister from '../components/patterns/ControlRegister.astro';
 import CTABand from '../components/patterns/CTABand.astro';
+import PhotoHero from '../components/patterns/PhotoHero.astro';
 import Behaviour from '../components/sections/trust/Behaviour.astro';
 import Exit from '../components/sections/trust/Exit.astro';
 import { hrefFor } from '../copy/routes';
+import { SUPPORT_INCIDENT } from '../copy/photography';
+import supportIncident from '../assets/photography/support-incident-operations-v1.png';
 import {
   TRUST_HERO,
   TRUST_REGISTER,
@@ -23,15 +26,25 @@ import {
 ---
 
 <BaseLayout route="trust">
-  <Band variant="hero" labelledBy="trust-hero-heading" class="trust-hero">
-    <Folio text={TRUST_HERO.folio} />
-    <h1 class="trust-hero__heading" id="trust-hero-heading">
-      {TRUST_HERO.headingLead}<span class="accent">{TRUST_HERO.headingAccent}</span>{
-        TRUST_HERO.headingTail
-      }
-    </h1>
-    <p class="trust-hero__lead">{TRUST_HERO.lead}</p>
-  </Band>
+  {/* Capsule right: "people centre-left with a dark quiet field at right". On the left it sat
+      over the man on the support call. */}
+  <PhotoHero
+    image={supportIncident}
+    alt={SUPPORT_INCIDENT.alt}
+    focus={SUPPORT_INCIDENT.focus}
+    capsuleSide="right"
+    labelledBy="trust-hero-heading"
+  >
+    <div class="hero__lede">
+      <Folio text={TRUST_HERO.folio} />
+      <h1 class="trust-hero__heading" id="trust-hero-heading">
+        {TRUST_HERO.headingLead}<span class="accent">{TRUST_HERO.headingAccent}</span>{
+          TRUST_HERO.headingTail
+        }
+      </h1>
+      <p class="trust-hero__lead">{TRUST_HERO.lead}</p>
+    </div>
+  </PhotoHero>
 
   <Behaviour />
 
@@ -74,21 +87,25 @@ import {
     color: var(--orange-press);
   }
 
-  /* The 52px floor every other hero can afford does not survive "boundary" at 320px — the word is
-     the widest unbreakable run on the site and overflowed the band by 21px. 44px clears it and only
-     applies below ~580px, where the fluid step has taken over anyway. */
+  /* clamp(38px,4.4vw,76px) is the shared capsule-hero scale — the same on /, /services, /trust and
+     /msps, so the four openings read as one system. Roughly half the old display size, which is
+     the trade for putting the copy in a capsule (see PhotoHero).
+
+     The 4.4vw step is not free choice: tests/e2e/fidelity.spec.ts holds heroes to at least 60px at
+     its 1440px desktop viewport, and that guard exists because two pages once shipped at 34px from
+     a silent scoped-CSS failure. 4vw lands at 57.6px and trips it. Do not lower this. */
   .trust-hero__heading {
     font-weight: 900;
-    font-size: clamp(44px, 7.6vw, 140px);
+    font-size: clamp(38px, 4.4vw, 76px);
     line-height: 0.84;
     letter-spacing: -0.035em;
   }
 
   .trust-hero__lead {
-    margin: 40px 0 0;
-    font-size: clamp(19px, 1.5vw, 28px);
-    line-height: 1.34;
-    max-width: 54ch;
+    margin: clamp(18px, 2vw, 28px) 0 0;
+    font-size: clamp(16px, 1.15vw, 21px);
+    line-height: 1.4;
+    max-width: 46ch;
   }
 
   .register-band__heading {

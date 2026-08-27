@@ -5,9 +5,9 @@
    The header action on this route is the partner action ("Design a partner pilot"); it comes from
    routes.ts via BaseLayout and is never hand-rolled here. */
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Band from '../components/layout/Band.astro';
 import Folio from '../components/ui/Folio.astro';
 import Button from '../components/ui/Button.astro';
+import PhotoHero from '../components/patterns/PhotoHero.astro';
 import CTABand from '../components/patterns/CTABand.astro';
 import PracticeAdds from '../components/sections/msps/PracticeAdds.astro';
 import Models from '../components/sections/msps/Models.astro';
@@ -15,27 +15,42 @@ import SeamMatrix from '../components/sections/msps/SeamMatrix.astro';
 import Pilot from '../components/sections/msps/Pilot.astro';
 import { CTA, HERO } from '../copy/pages/msps';
 import { hrefFor } from '../copy/routes';
+import { ENERGY_SERVICES } from '../copy/photography';
+import energyServices from '../assets/photography/energy-services-project-office-v1.png';
 ---
 
 <BaseLayout route="msps">
-  <Band ground="bone" variant="hero" labelledBy="msps-hero-heading">
-    <Folio text={HERO.folio} />
+  {/* The energy-services project office. The placement plan lists it for "energy-services fit
+      section, industry landing page, or integration/knowledge section"; this is the closest thing
+      the site has to an industry landing page, and the picture is two organisations comparing
+      requirements and closeout documents across a table — which is what a partner seam is.
+      The capsule sits LEFT because the people are left/centre... so it goes right instead. */}
+  <PhotoHero
+    image={energyServices}
+    alt={ENERGY_SERVICES.alt}
+    focus={ENERGY_SERVICES.focus}
+    capsuleSide="right"
+    labelledBy="msps-hero-heading"
+  >
+    <div class="hero__lede">
+      <Folio text={HERO.folio} />
 
-    <h1 class="hero__heading" id="msps-hero-heading">
-      {HERO.lineOne}<br /><span class="hero__pull"
-        >{HERO.lineTwoBefore}<span class="hero__accent">{HERO.lineTwoAccent}</span>{
-          HERO.lineTwoAfter
-        }</span
-      >
-    </h1>
+      <h1 class="hero__heading" id="msps-hero-heading">
+        {HERO.lineOne}<br /><span class="hero__pull"
+          >{HERO.lineTwoBefore}<span class="hero__accent">{HERO.lineTwoAccent}</span>{
+            HERO.lineTwoAfter
+          }</span
+        >
+      </h1>
 
-    <div class="hero__foot">
-      <p class="hero__lead">{HERO.lead}</p>
-      <div>
-        <Button href={hrefFor('start')} size="lg">{HERO.action}</Button>
+      <div class="hero__foot">
+        <p class="hero__lead">{HERO.lead}</p>
+        <div>
+          <Button href={hrefFor('start')} size="lg">{HERO.action}</Button>
+        </div>
       </div>
     </div>
-  </Band>
+  </PhotoHero>
 
   <PracticeAdds />
   <Models />
@@ -52,10 +67,17 @@ import { hrefFor } from '../copy/routes';
 </BaseLayout>
 
 <style>
+  /* clamp(38px,4.4vw,76px) is the shared capsule-hero scale — the same on /, /services, /trust and
+     /msps, so the four openings read as one system. Roughly half the old display size, which is
+     the trade for putting the copy in a capsule (see PhotoHero).
+
+     The 4.4vw step is not free choice: tests/e2e/fidelity.spec.ts holds heroes to at least 60px at
+     its 1440px desktop viewport, and that guard exists because two pages once shipped at 34px from
+     a silent scoped-CSS failure. 4vw lands at 57.6px and trips it. Do not lower this. */
   .hero__heading {
     margin: 0;
     font-weight: var(--weight-display-max);
-    font-size: clamp(48px, 7vw, 126px);
+    font-size: clamp(38px, 4.4vw, 76px);
     line-height: 0.84;
     letter-spacing: -0.035em;
   }
@@ -71,12 +93,12 @@ import { hrefFor } from '../copy/routes';
     color: var(--orange-press);
   }
 
+  /* One column inside the capsule: a 1.3fr/1fr split of 30em leaves the action too narrow. */
   .hero__foot {
     display: grid;
-    grid-template-columns: minmax(0, 1.3fr) minmax(280px, 1fr);
-    gap: clamp(32px, 5vw, 72px);
-    align-items: end;
-    margin-top: 40px;
+    gap: clamp(20px, 2.4vw, 32px);
+    justify-items: start;
+    margin-top: clamp(18px, 2vw, 28px);
   }
 
   .hero__foot > * {
@@ -85,16 +107,8 @@ import { hrefFor } from '../copy/routes';
 
   .hero__lead {
     margin: 0;
-    font-size: clamp(19px, 1.5vw, 28px);
-    line-height: 1.34;
-    max-width: 54ch;
-  }
-
-  @media (max-width: 900px) {
-    .hero__foot {
-      grid-template-columns: 1fr;
-      gap: 32px;
-      align-items: start;
-    }
+    font-size: clamp(16px, 1.15vw, 21px);
+    line-height: 1.4;
+    max-width: 46ch;
   }
 </style>
