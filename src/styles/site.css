@@ -114,6 +114,13 @@ p {
   border-bottom: 6px solid var(--ink);
 }
 
+/* A band that is one photograph. Tighter than a section: it interrupts the argument around it
+   rather than making one of its own. */
+.band--photo {
+  padding-top: clamp(32px, 4vw, 64px);
+  padding-bottom: clamp(32px, 4vw, 64px);
+}
+
 .band--manifesto {
   padding: clamp(56px, 8vw, 144px) clamp(20px, 4vw, 80px);
   border-top: 6px solid var(--ink);

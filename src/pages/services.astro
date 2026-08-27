@@ -3,33 +3,47 @@
    the boundary is. Section order is the prototype's with the two entry models added after the
    hero: hero, models, scope register, engagement path, responsibility boundary, conversion. */
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Band from '../components/layout/Band.astro';
 import Folio from '../components/ui/Folio.astro';
 import Button from '../components/ui/Button.astro';
+import PhotoHero from '../components/patterns/PhotoHero.astro';
 import CTABand from '../components/patterns/CTABand.astro';
 import EngagementModels from '../components/sections/services/EngagementModels.astro';
 import ScopeRegister from '../components/sections/services/ScopeRegister.astro';
 import EngagementPath from '../components/sections/services/EngagementPath.astro';
 import ResponsibilityBoundary from '../components/sections/services/ResponsibilityBoundary.astro';
 import { SERVICES_HERO, SERVICES_CTA } from '../copy/pages/services';
+import { TRAINING_ONBOARDING } from '../copy/photography';
+import trainingOnboarding from '../assets/photography/training-onboarding-v1.png';
 
 const { folio, heading, lead, action } = SERVICES_HERO;
 ---
 
 <BaseLayout route="services">
-  <Band ground="bone" variant="hero" labelledBy="services-hero-heading">
-    <Folio text={folio} />
-    <h1 class="hero__heading" id="services-hero-heading">
-      {heading.first}<br /><span class="hero__pull"
-        >{heading.secondPrefix}<span class="hero__emphasis">{heading.emphasis}</span
-        >{heading.secondSuffix}</span
-      >
-    </h1>
-    <div class="hero__foot">
-      <p class="hero__lead">{lead}</p>
-      <div><Button href={action.href} size="lg">{action.label}</Button></div>
+  {/* Stacked, not overlaid. The direction's note on this photograph is explicit — "no significant
+      empty area for headline copy; use a nearby caption or proof label" — and it is the truth of
+      the picture: a dense working table with people across the whole frame. A capsule laid on it
+      covers a face rather than negative space, so the copy sits in its own bone panel above. */}
+  <PhotoHero
+    image={trainingOnboarding}
+    alt={TRAINING_ONBOARDING.alt}
+    focus={TRAINING_ONBOARDING.focus}
+    capsuleLayout="stack"
+    labelledBy="services-hero-heading"
+  >
+    <div class="hero__lede">
+      <Folio text={folio} />
+      <h1 class="hero__heading" id="services-hero-heading">
+        {heading.first}<br /><span class="hero__pull"
+          >{heading.secondPrefix}<span class="hero__emphasis">{heading.emphasis}</span
+          >{heading.secondSuffix}</span
+        >
+      </h1>
+      <div class="hero__foot">
+        <p class="hero__lead">{lead}</p>
+        <div><Button href={action.href} size="lg">{action.label}</Button></div>
+      </div>
     </div>
-  </Band>
+  </PhotoHero>
 
   <EngagementModels />
   <ScopeRegister />
@@ -46,9 +60,16 @@ const { folio, heading, lead, action } = SERVICES_HERO;
 </BaseLayout>
 
 <style>
+  /* clamp(38px,4.4vw,76px) is the shared capsule-hero scale — the same on /, /services, /trust and
+     /msps, so the four openings read as one system. Roughly half the old display size, which is
+     the trade for putting the copy in a capsule (see PhotoHero).
+
+     The 4.4vw step is not free choice: tests/e2e/fidelity.spec.ts holds heroes to at least 60px at
+     its 1440px desktop viewport, and that guard exists because two pages once shipped at 34px from
+     a silent scoped-CSS failure. 4vw lands at 57.6px and trips it. Do not lower this. */
   .hero__heading {
     font-weight: 900;
-    font-size: clamp(48px, 7vw, 124px);
+    font-size: clamp(38px, 4.4vw, 76px);
     line-height: 0.84;
     letter-spacing: -0.035em;
   }
@@ -63,12 +84,13 @@ const { folio, heading, lead, action } = SERVICES_HERO;
     color: var(--orange-press);
   }
 
+  /* One column inside the capsule: a 1.3fr/1fr split of 30em leaves the action too narrow for
+     its label. */
   .hero__foot {
     display: grid;
-    grid-template-columns: minmax(0, 1.3fr) minmax(min(280px, 100%), 1fr);
-    gap: clamp(32px, 5vw, 72px);
-    align-items: end;
-    margin-top: 40px;
+    gap: clamp(20px, 2.4vw, 32px);
+    justify-items: start;
+    margin-top: clamp(18px, 2vw, 28px);
   }
 
   .hero__foot > * {
@@ -77,15 +99,8 @@ const { folio, heading, lead, action } = SERVICES_HERO;
 
   .hero__lead {
     margin: 0;
-    font-size: clamp(19px, 1.5vw, 28px);
-    line-height: 1.34;
-    max-width: 52ch;
-  }
-
-  @media (max-width: 900px) {
-    .hero__foot {
-      grid-template-columns: 1fr;
-      align-items: start;
-    }
+    font-size: clamp(16px, 1.15vw, 21px);
+    line-height: 1.4;
+    max-width: 46ch;
   }
 </style>

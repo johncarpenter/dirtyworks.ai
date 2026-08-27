@@ -48,9 +48,24 @@ test.describe('home', () => {
     await expect(page.getByText(/Verify at quote/i).first()).toBeVisible();
   });
 
+  /* This asserted `main img` count 0, which was a proxy for the actual rule — a vendor's product
+     is named in text, never shown as its logo — and only held while the page happened to have no
+     images at all. The rule is asserted directly instead, so it keeps working whether the home
+     page carries photography or not: any image present must be a captioned editorial photograph,
+     which a logo cannot be. Zero images passes; a logo does not. */
   test('names candidate products as text and never as a logo', async ({ page }) => {
     await page.goto('/');
-    await expect(page.locator('main img')).toHaveCount(0);
+    const images = page.locator('main img');
+    const count = await images.count();
+
+    for (let index = 0; index < count; index += 1) {
+      const image = images.nth(index);
+      // Inside the editorial photo pattern, which stamps and captions whatever it renders.
+      await expect(image.locator('xpath=ancestor::figure[contains(@class,"photo")]')).toHaveCount(1);
+      // Describes visible work; a logo would carry a bare brand name here, or no alt at all.
+      const alt = (await image.getAttribute('alt')) ?? '';
+      expect(alt.trim().split(/\s+/).length).toBeGreaterThanOrEqual(6);
+    }
   });
 
   test('carries no price and no purchase control', async ({ page }) => {

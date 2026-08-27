@@ -1,0 +1,501 @@
+---
+/* A photograph, framed the way the brand allows one to be framed.
+   Direction: design-system/guidelines/photo-rules.html, photo-treatment.html, photo-sourcing.html.
+
+   Three rules from that direction are enforced here rather than left to each call site, because
+   each of them is easy to violate by accident and invisible once shipped:
+
+   1. TEXT SITS ON A SOLID CAPSULE, NEVER A SCRIM. "Copy over a photo must sit in a solid bone or
+      ink rectangle with square corners." The banned alternative is the reflex one — a dark
+      gradient under the headline. There is no `scrim` prop, and no gradient anywhere in this
+      file; tests/unit/discipline.test.ts would fail the build if one appeared.
+
+   2. THE PHOTOGRAPH IS NOT PROOF. Every one of these images is a generated original with
+      fictional people. So `stamp` defaults to ILLUSTRATIVE and renders in the caption row, and
+      every use is registered in src/copy/claim-artefacts.ts, which is what makes the release gate
+      fail if the marker stops appearing in the built HTML. Captioning one of these as a customer,
+      an employee, a partner or the founder is the one thing the direction forbids outright.
+
+   3. ALT TEXT DESCRIBES THE VISIBLE WORK, NOT THE CLAIM. "An operations manager compares an
+      annotated procedure with a laptop at a wooden desk" — not "we own your Monday morning".
+      `alt` is required, and a caller that wants a decorative image wants a different component.
+
+   Focal content has to survive 16:9, 4:3 and mobile 4:5, so the frame crops by aspect-ratio and
+   lets `object-position` move the subject rather than letterboxing.
+
+   `fallbackFormat` is JPEG rather than the source PNG. Picture falls back to the source format by
+   default, and re-encoding these photographs as PNG produces files LARGER than the ~2MB originals
+   — 3.5MB in one case — because PNG is lossless and a photograph is not line art. The same crop
+   as JPEG is 157KB, and nothing that gets past avif and webp is a browser worth sending 3.5MB
+   to. */
+import { Picture } from 'astro:assets';
+import ClaimStamp from '../ui/ClaimStamp.astro';
+import ProofLabel from '../ui/ProofLabel.astro';
+import type { ClaimStamp as ClaimStampState } from '../../types/claims';
+import type { ProofStatus } from '../../types/proof';
+
+interface Props {
+  image: ImageMetadata;
+  /** Describes the visible work. Required — see rule 3 above. */
+  alt: string;
+  /** Desktop crop. Mobile always narrows to 4:5. `3-4` is portrait, for a narrow column. */
+  ratio?: '16-9' | '3-2' | '4-3' | '3-4';
+  /** Keeps the subject in frame as the crop tightens, e.g. "70% 50%" for a subject on the right */
+  focus?: string;
+  /**
+   * Solid copy capsule laid over the image's quiet field. For a display line and a proof label —
+   * the shape guidelines/photo-treatment.html specimens. For anything richer (a hero lede with
+   * its folio, support copy and actions), leave this unset and fill the `capsule` SLOT instead.
+   */
+  capsule?: { heading: string; label?: string };
+  capsuleSide?: 'left' | 'right';
+  capsuleTone?: 'bone' | 'ink';
+  /**
+   * How much of the frame the capsule may take. `label` is the specimen's proportion — a display
+   * line over a proof label. `lede` widens it for a full copy block (folio, heading, support,
+   * actions), which needs room the specimen's 52% cannot give without setting the type tiny.
+   */
+  capsuleSize?: 'label' | 'lede';
+  /**
+   * Whether the capsule sits ON the photograph or beside it in the flow.
+   *
+   * `overlay` is the specimen and needs a quiet field to sit on. `stack` is for the photographs
+   * that do not have one — the direction says of the training scene, in as many words, "no
+   * significant empty area for headline copy; use a nearby caption or proof label". Overlaying a
+   * capsule there does not cover negative space, it covers people.
+   */
+  capsuleLayout?: 'overlay' | 'stack';
+  /** Editorial caption under the frame, beside the stamp */
+  caption?: string;
+  /**
+   * Proof chips in the caption row. The direction's answer for an image with no quiet field to
+   * put a capsule on: "no significant empty area for headline copy; use a nearby caption or proof
+   * label." Outside the frame, never over the photograph.
+   */
+  labels?: { status: ProofStatus; text: string; value?: string }[];
+  stamp?: ClaimStampState | null;
+  /**
+   * Ground the photograph sits on. On ink, the frame rule and the caption have to invert or they
+   * disappear — --steel is 4.5:1 on bone but near-invisible on ink, where --steel-2 is the tone
+   * that reads (see the note in src/styles/site.css).
+   */
+  tone?: 'light' | 'dark';
+  /**
+   * Vertical rhythm. `section` is the gap every in-band photograph uses to separate itself from
+   * the copy or register around it.
+   *
+   * This is a prop rather than a class the caller passes in, because a class the caller passes in
+   * DOES NOT WORK. Astro scopes a style to the component that declares it, and the figure below
+   * carries this component's scope id — not the caller's. `<EditorialPhoto class="x" />` with a
+   * matching `.x { margin: ... }` in the caller compiles to `.x[data-astro-cid-CALLER]` and
+   * silently matches nothing. Spacing therefore lives here, where the scope is.
+   */
+  space?: 'flush' | 'section';
+  /** Above the fold: skip lazy loading */
+  eager?: boolean;
+  class?: string;
+}
+
+const hasCapsuleSlot = Astro.slots.has('capsule');
+
+const {
+  image,
+  alt,
+  ratio = '16-9',
+  focus = '50% 50%',
+  capsule,
+  capsuleSide = 'left',
+  capsuleTone = 'bone',
+  capsuleSize = 'label',
+  capsuleLayout = 'overlay',
+  caption,
+  labels,
+  stamp = 'ILLUSTRATIVE',
+  tone = 'light',
+  space = 'flush',
+  eager = false,
+  class: className,
+} = Astro.props;
+---
+
+<figure
+  class:list={[
+    'photo',
+    `photo--${ratio}`,
+    tone === 'dark' && 'photo--dark',
+    space === 'section' && 'photo--section',
+    capsuleSize === 'lede' && 'photo--capsule-lede',
+    capsuleLayout === 'stack' && 'photo--capsule-stack',
+    className,
+  ]}
+>
+  <div class="photo__frame">
+    <Picture
+      src={image}
+      alt={alt}
+      formats={['avif', 'webp']}
+      fallbackFormat="jpeg"
+      widths={[640, 960, 1280, 1672]}
+      sizes="(max-width: 900px) 100vw, min(1440px, 100vw)"
+      loading={eager ? 'eager' : 'lazy'}
+      fetchpriority={eager ? 'high' : undefined}
+      decoding={eager ? 'sync' : 'async'}
+      style={`object-position:${focus}`}
+    />
+  </div>
+
+  {
+    /* A SIBLING of the frame, not a child of it. The frame is an aspect-ratio box with
+       `overflow: hidden` to keep the crop honest, so a capsule inside it is clipped the moment it
+       stops being absolutely positioned — which is exactly what happens at the mobile breakpoint,
+       where the capsule drops below the image. Nested, the headline silently disappeared on every
+       phone. Out here it overlays on desktop and stacks on mobile. */
+    capsule || hasCapsuleSlot ? (
+      <div
+        class:list={[
+          'photo__capsule',
+          `photo__capsule--${capsuleSide}`,
+          `photo__capsule--${capsuleTone}`,
+          `photo__capsule--${capsuleSize}`,
+        ]}
+      >
+        {hasCapsuleSlot ? (
+          <slot name="capsule" />
+        ) : (
+          <>
+            <p class="photo__capsule-heading">{capsule!.heading}</p>
+            {capsule!.label ? <p class="photo__capsule-label">{capsule!.label}</p> : null}
+          </>
+        )}
+      </div>
+    ) : null
+  }
+
+  {
+    caption || stamp || labels?.length ? (
+      <figcaption class="photo__caption">
+        {labels?.length ? (
+          <span class="photo__labels">
+            {labels.map((chip) => (
+              <ProofLabel status={chip.status} value={chip.value} size="sm">
+                {chip.text}
+              </ProofLabel>
+            ))}
+          </span>
+        ) : null}
+        {caption ? <span class="photo__caption-text">{caption}</span> : null}
+        {stamp ? <ClaimStamp state={stamp} label="Illustrative" tone={tone} /> : null}
+      </figcaption>
+    ) : null
+  }
+</figure>
+
+<style>
+  .photo {
+    margin: 0;
+    /* Containing block for the capsule, which is a sibling of the frame rather than a child. */
+    position: relative;
+  }
+
+  .photo--section {
+    margin: clamp(40px, 5vw, 72px) 0;
+  }
+
+  .photo__frame {
+    position: relative;
+    border: 1.5px solid var(--ink);
+    /* The image is the only thing inside a hard rectangle; overflow keeps the crop honest. */
+    overflow: hidden;
+  }
+
+  .photo--dark .photo__frame {
+    border-color: var(--bone);
+  }
+
+  .photo__frame :global(img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .photo--16-9 .photo__frame {
+    aspect-ratio: 16 / 9;
+  }
+
+  .photo--3-2 .photo__frame {
+    aspect-ratio: 3 / 2;
+  }
+
+  .photo--4-3 .photo__frame {
+    aspect-ratio: 4 / 3;
+  }
+
+  /* Portrait. A landscape original survives this only when the subject is a person and `focus`
+     holds them in frame — check the crop, do not assume it. */
+  .photo--3-4 .photo__frame {
+    aspect-ratio: 3 / 4;
+  }
+
+  /* A solid field. Square corners, no transparency, no blur — the whole point is that the copy
+     is legible because it is not on the photograph at all. */
+  .photo__capsule {
+    position: absolute;
+    /* An absolute length, not a percentage: the containing block is now .photo, whose height
+       includes the caption row, so a percentage would drift with the caption's length. */
+    top: clamp(16px, 3vw, 40px);
+    padding: clamp(14px, 1.6vw, 22px) clamp(16px, 1.8vw, 26px);
+    border-radius: 0;
+  }
+
+  .photo__capsule--label {
+    max-width: min(52%, 44ch);
+  }
+
+  /* A lede capsule is NOT absolutely positioned. It shares one grid cell with the frame, so the
+     row is sized to whichever is taller and the capsule can never spill out of the picture.
+
+     Absolute positioning looked fine at 1440 and broke between 700px and 850px: below about
+     900px the declaration hits its clamp floor and stops shrinking, while a 16:9 frame keeps
+     shrinking with the viewport. The capsule overflowed the frame by up to 151px — copy sitting
+     on the band's ground below the photograph, with no border and no ground of its own.
+
+     With the frame at default `stretch`, aspect-ratio now acts as a MINIMUM height: the picture
+     grows to meet the copy instead of the copy escaping the picture. */
+  .photo--capsule-lede {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .photo--capsule-lede .photo__frame,
+  .photo--capsule-lede .photo__capsule {
+    grid-row: 1;
+    grid-column: 1;
+  }
+
+  .photo--capsule-lede .photo__caption {
+    grid-row: 2;
+    grid-column: 1;
+  }
+
+  .photo__capsule--lede {
+    /* `relative`, not `static`, and not for offsetting anything: .photo__frame is a positioned
+       element, so it paints above any STATIC sibling sharing its grid cell. Left static, the
+       capsule renders underneath the photograph and simply is not there. */
+    position: relative;
+    z-index: 1;
+    /* The base rule sets `top` for the absolutely-positioned label capsule. On a relatively
+       positioned box `top` is an OFFSET, not a position — inherited, it pushed the capsule 40px
+       down and out through the bottom of the picture, over the caption. */
+    top: auto;
+    align-self: center;
+    justify-self: start;
+    max-width: min(62%, 30em);
+    padding: clamp(20px, 2.4vw, 40px) clamp(22px, 2.6vw, 44px);
+  }
+
+  .photo__capsule--lede.photo__capsule--right {
+    justify-self: end;
+  }
+
+  .photo__capsule--left {
+    left: 0;
+  }
+
+  .photo__capsule--right {
+    right: 0;
+  }
+
+  .photo__capsule--bone {
+    background: var(--bone);
+    color: var(--ink);
+  }
+
+  .photo__capsule--ink {
+    background: var(--ink);
+    color: var(--bone);
+  }
+
+  .photo__capsule-heading {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: var(--weight-display-max);
+    font-size: clamp(20px, 2.4vw, 40px);
+    line-height: 0.9;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+  }
+
+  .photo__capsule-label {
+    margin: 10px 0 0;
+    font-family: var(--font-mono);
+    font-size: var(--type-label-sm);
+    font-weight: var(--weight-label);
+    letter-spacing: var(--track-label-wide);
+    text-transform: uppercase;
+  }
+
+  .photo__capsule--bone .photo__capsule-label {
+    color: var(--steel);
+  }
+
+  .photo__capsule--ink .photo__capsule-label {
+    color: var(--steel-2);
+  }
+
+  .photo__caption {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 10px 18px;
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid var(--rule);
+  }
+
+  .photo__labels {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .photo__caption-text {
+    font-family: var(--font-mono);
+    font-size: var(--type-label-sm);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--steel);
+    line-height: 1.7;
+  }
+
+  .photo--dark .photo__caption {
+    border-top-color: var(--ink-3);
+  }
+
+  .photo--dark .photo__caption-text {
+    color: var(--steel-2);
+  }
+
+  /* Mobile narrows every crop to 4:5. The direction requires focal content to survive it, which
+     is why `focus` exists — the subject moves, the frame does not letterbox. */
+  /* The stacked form, in one place. It is reached two ways: a photograph with no quiet field
+     asks for it outright (capsuleLayout="stack"), and every overlay falls back to it below 900px.
+     Both selectors carry the same declarations deliberately — the alternative is a third class
+     that exists only to be shared, and this stays readable. */
+  .photo--capsule-stack {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .photo--capsule-stack .photo__capsule {
+    position: static;
+    top: auto;
+    max-width: none;
+    transform: none;
+    align-self: stretch;
+    /* The copy leads and the photograph follows it. */
+    order: -1;
+    border: 1.5px solid var(--ink);
+    border-bottom: none;
+  }
+
+  .photo--capsule-stack.photo--dark .photo__capsule {
+    border-color: var(--bone);
+    border-bottom: none;
+  }
+
+  /* Stacked well before the capsule could crowd the picture. 900px, not the 700px the crops use:
+     between those widths a lede capsule is most of the frame's width and the photograph behind it
+     is reduced to a sliver. The crop breakpoint stays at 700px — a 4:5 frame on an 880px tablet
+     would be absurd. */
+  @media (max-width: 900px) {
+    .photo,
+    .photo--capsule-lede {
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Below the frame rather than over it: at this width a capsule covers the subject. */
+    .photo__capsule {
+      position: static;
+      max-width: none;
+      transform: none;
+      border: 1.5px solid var(--ink);
+      border-top: none;
+    }
+
+    /* A lede capsule carries the page's opening message, so it comes BEFORE the photograph — a
+       hero whose first screen is an image and whose headline is below it has buried the thing the
+       visitor came to read. A label-sized capsule keeps caption order and stays put. */
+    .photo--capsule-lede .photo__capsule {
+      order: -1;
+      max-width: none;
+      top: auto;
+      /* Reset the overlay's centring. `align-self: center` centres on the cross axis, which is
+         the ROW in a grid and the COLUMN in a flex stack — left as-is it shrink-wraps the capsule
+         to its content and floats it away from the picture's edges. */
+      align-self: stretch;
+      border: 1.5px solid var(--ink);
+      border-bottom: none;
+    }
+
+    .photo--dark .photo__capsule {
+      border-color: var(--bone);
+      border-top: none;
+    }
+  }
+
+  /* Mobile narrows every crop to 4:5. The direction requires focal content to survive it, which
+     is why `focus` exists — the subject moves, the frame does not letterbox. */
+  /* Stacked well before the capsule could crowd the picture. 900px, not the 700px the crops use:
+     between those widths a lede capsule is most of the frame's width and the photograph behind it
+     is reduced to a sliver. The crop breakpoint stays at 700px — a 4:5 frame on an 880px tablet
+     would be absurd. */
+  @media (max-width: 900px) {
+    .photo,
+    .photo--capsule-lede {
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Below the frame rather than over it: at this width a capsule covers the subject. */
+    .photo__capsule {
+      position: static;
+      max-width: none;
+      transform: none;
+      border: 1.5px solid var(--ink);
+      border-top: none;
+    }
+
+    /* A lede capsule carries the page's opening message, so it comes BEFORE the photograph — a
+       hero whose first screen is an image and whose headline is below it has buried the thing the
+       visitor came to read. A label-sized capsule keeps caption order and stays put. */
+    .photo--capsule-lede .photo__capsule {
+      order: -1;
+      max-width: none;
+      /* Reset the overlay's centring. `align-self: center` centres on the cross axis, which is
+         the ROW in a grid and the COLUMN in a flex stack — left as-is it shrink-wraps the capsule
+         to its content and floats it away from the picture's edges. */
+      align-self: stretch;
+      border: 1.5px solid var(--ink);
+      border-bottom: none;
+    }
+
+    .photo--dark .photo__capsule {
+      border-color: var(--bone);
+      border-top: none;
+    }
+  }
+
+  /* Mobile narrows every crop to 4:5. The direction requires focal content to survive it, which
+     is why `focus` exists — the subject moves, the frame does not letterbox. */
+  @media (max-width: 700px) {
+    .photo--16-9 .photo__frame,
+    .photo--3-2 .photo__frame,
+    .photo--4-3 .photo__frame,
+    .photo--3-4 .photo__frame {
+      aspect-ratio: 4 / 5;
+    }
+  }
+
+</style>
