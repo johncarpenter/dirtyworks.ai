@@ -1,0 +1,19 @@
+<!-- @dsCard group="Brand" viewport="900x620" name="Iconography — the 20" subtitle="IconScout line set. Semantic names, no fill, no colour." -->
+<!DOCTYPE html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../styles.css"><script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script><script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script><script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script><script src="../_ds_bundle.js"></script><style>body{background:var(--bone);padding:18px;font-family:var(--font-sans);margin:0}.cap{font-family:var(--font-mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--steel)}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5px;background:transparent;border:1.5px solid var(--ink)}.cell{background:var(--bone);padding:10px 11px;display:grid;gap:7px;outline:1.5px solid var(--ink)}.nm{font-family:var(--font-mono);font-size:9.5px;letter-spacing:.09em;text-transform:uppercase;font-weight:600;color:var(--ink)}.ms{font-size:10.5px;line-height:1.3;color:var(--steel)}h4{font-family:var(--font-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;margin:0 0 8px;font-weight:600}</style></head><body><div id="root"></div>
+<script type="text/babel">
+window.DS_ICON_BASE = '../assets/icons/';
+const { Icon } = window.DirtyworksAiDesignSystem_9135ac;
+const EVIDENCE = [['verified','Checked and signed off'],['work-order','Scoped, owned unit of work'],['register','Control register, standing list'],['diagnostic','Diagnostic / investigation'],['controlled','Access-controlled, confidential'],['sla-clock','Response time, SLA'],['gap','Open gap, unmet control'],['annotate','Marked up by a human'],['owner','Named accountable owner'],['measured','Measured result, not a claim'],['verified-date','Confirmed date, milestone'],['handoff','Handoff between owners']];
+const WORKFLOW = [['process','A defined process'],['improvement','Process improvement loop'],['quality-control','Quality control step'],['monitoring','Watched, under observation'],['decision','Decision point, fit / non-fit'],['operations','Managed operations'],['requirements','Requirements, preconditions'],['calendar','Cadence, recurring review']];
+const Cell = ([n,m]) => <div className="cell" key={n}><Icon name={n} size={22}/><div className="nm">{n}</div><div className="ms">{m}</div></div>;
+const App = () => <>
+  <h4>Evidence set — Tasks, Kiran Shastry</h4><div className="grid">{EVIDENCE.map(Cell)}</div>
+  <h4 style={{marginTop:18}}>Workflow set — Operations Management, Webtechops Llp</h4><div className="grid">{WORKFLOW.map(Cell)}</div>
+  <div className="cap" style={{marginTop:16,borderTop:'1.5px solid var(--ink)',paddingTop:10,display:'grid',gap:5}}>
+    <div>Line only. 20–24px, currentColor, weight matched to the type. Never filled, never rounded, never two sets in one view, never emoji.</div>
+    <div>The motif layer stays primary — bracketed references, redaction bars, proof labels. An icon is for an affordance or a diagram node, not decoration; if the label already says OWNER, drop the icon.</div>
+    <div>Licensed via IconScout under subscription; two evidence marks are free-for-commercial. Provenance per mark: assets/icons/registry.json.</div>
+  </div>
+</>;
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script></body></html>
