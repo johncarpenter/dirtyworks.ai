@@ -1,7 +1,8 @@
 /* Catalogue page content.
 
-   Copy is verbatim from mockups/design_files/Catalogue.dc.html and mockups/README.md §3. Headings
-   are authored in sentence case and uppercased by CSS.
+   Copy is verbatim from mockups/design_files/Catalogue.dc.html and mockups/README.md §3, except
+   §02 — see the note on TEAM_MIX, which is later than the prototype. Headings are authored in
+   sentence case and uppercased by CSS.
 
    Three standing rules for this page, all of them load-bearing:
    1. Candidate product names are TEXT. No logo, no mark, no image.
@@ -31,6 +32,17 @@ export interface ApprovalQuestion {
   /** second half of the chip, e.g. "Defined" */
   state: string;
   question: string;
+}
+
+export interface TeamMix {
+  /** the team, named the way a company names it */
+  team: string;
+  /** the products that team actually uses, as text — never a logo */
+  tools: string;
+  /** the work those products do for that team */
+  job: string;
+  /** the operating work the service runs around them */
+  managed: string;
 }
 
 export interface ProductCategory {
@@ -82,8 +94,67 @@ export const CATALOGUE_HERO = {
   action: { label: 'Compose a product mix', href: hrefFor('start') } satisfies Action,
 };
 
+/* The argument of this section is vendor plurality, and it is the first thing a visitor should
+   read after the hero: a real company does not standardise on one AI vendor, and a catalogue that
+   implies otherwise loses the room in the first meeting. Four teams, four vendors, four renewal
+   dates — and the chip on every row says the same word, because the service is the thing that makes
+   that mix behave like one operating model.
+
+   Rule 1 at the top of this file applies here more than anywhere: these are the most recognisable
+   names on the site and they are TEXT. Naming a product is a statement of what we operate, never a
+   claim of resale authority or vendor endorsement — §05 draws that line explicitly. */
+export const TEAM_MIX = {
+  folio: '02 / The mix in practice',
+  heading: 'Finance and engineering will never pick the same tool.',
+  intro:
+    'A working portfolio is four or five vendors chosen by the teams that use them, not one vendor ' +
+    'chosen by procurement. Tools that arrived before we did are registered on the same terms — ' +
+    'given an owner and a cost line, then operated or retired.',
+  /** the second half of every row chip; the whole argument in one word */
+  managedLabel: 'Managed',
+  rows: [
+    {
+      team: 'Finance',
+      tools: 'ChatGPT Business',
+      job:
+        'Variance commentary, vendor contract review, and the policy questions that used to wait ' +
+        'for the controller.',
+      managed:
+        'Named seats, a written rule on what never goes into a prompt, retention set, spend ' +
+        'reconciled monthly.',
+    },
+    {
+      team: 'Administration',
+      tools: 'Microsoft 365 Copilot',
+      job:
+        'Mail, documents, and meeting follow-up inside the tenant the company already pays for.',
+      managed:
+        'Licence fit against the existing Microsoft seats, admin roles, joiner and leaver ' +
+        'process, overlap checked before renewal.',
+    },
+    {
+      team: 'Engineering',
+      tools: 'Claude Team and Claude Code',
+      job:
+        'Code review, refactors, and the long-context work a general assistant handles badly.',
+      managed:
+        'Repository scope, key custody, budget ceilings, an evaluation set, and a monthly usage ' +
+        'read.',
+    },
+    {
+      team: 'Marketing',
+      tools: 'Midjourney and Apollo.io',
+      job: 'Campaign imagery, and the outbound list a sales conversation starts from.',
+      managed:
+        'Brand and consent guidance, contact-data ownership, and named accounts instead of ' +
+        'personal logins.',
+    },
+  ] satisfies readonly TeamMix[],
+  closing: 'Four vendors, four renewal dates, one operating model.',
+};
+
 export const APPROVAL_QUESTIONS = {
-  folio: '02 / What the catalogue is',
+  folio: '03 / What the catalogue is',
   heading: 'A governed shortlist. Not an open app store.',
   intro: 'Nothing enters the catalogue until five questions have answers a customer can inspect.',
   questions: [
@@ -113,7 +184,7 @@ export const APPROVAL_QUESTIONS = {
 };
 
 export const PRODUCT_MENU = {
-  folio: '03 / Product menu — seven jobs',
+  folio: '04 / Product menu — seven jobs',
   categories: [
     {
       word: 'Work',
@@ -216,7 +287,7 @@ export const PRODUCT_MENU = {
 };
 
 export const COMMERCIAL_ROUTE = {
-  folio: '04 / Commercial route',
+  folio: '05 / Commercial route',
   heading: 'Who sends the software invoice does not define the service.',
   panels: [
     {
@@ -250,7 +321,7 @@ export const COMMERCIAL_ROUTE = {
 };
 
 export const QUOTE_SHEET = {
-  folio: '05 / What a quote contains',
+  folio: '06 / What a quote contains',
   heading: 'Every line has an owner and a validity date.',
   intro:
     'The composer output below is a structure, not an offer. Vendor prices and internal fees are ' +
@@ -302,7 +373,7 @@ export const QUOTE_SHEET = {
 };
 
 export const CATALOGUE_CTA = {
-  folio: '06 / Conversion',
+  folio: '07 / Conversion',
   heading: 'Bring the products you already have. Add only what the work requires.',
   support:
     'We start from the current stack — including the licences that should be cancelled.',

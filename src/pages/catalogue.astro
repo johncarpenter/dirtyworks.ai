@@ -1,11 +1,13 @@
 ---
-/* /catalogue — the governed product menu. Section order is the prototype's: hero, approval
-   questions, product menu, commercial route, quote sheet, conversion. */
+/* /catalogue — the governed product menu. Section order is the prototype's, with the team mix
+   added after the hero: hero, team mix, approval questions, product menu, commercial route, quote
+   sheet, conversion. */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Band from '../components/layout/Band.astro';
 import Folio from '../components/ui/Folio.astro';
 import Button from '../components/ui/Button.astro';
 import CTABand from '../components/patterns/CTABand.astro';
+import TeamMix from '../components/sections/catalogue/TeamMix.astro';
 import ApprovalQuestions from '../components/sections/catalogue/ApprovalQuestions.astro';
 import ProductMenu from '../components/sections/catalogue/ProductMenu.astro';
 import CommercialRoute from '../components/sections/catalogue/CommercialRoute.astro';
@@ -30,6 +32,7 @@ const { folio, heading, lead, action } = CATALOGUE_HERO;
     </div>
   </Band>
 
+  <TeamMix />
   <ApprovalQuestions />
   <ProductMenu />
   <CommercialRoute />

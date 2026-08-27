@@ -1,0 +1,150 @@
+---
+/* Catalogue §02, ink band. The concrete answer to "so which tool do we buy?" — four teams, four
+   vendors, and the same chip on every row.
+
+   The row chip is the section's whole argument: it reads "FINANCE / MANAGED", "MARKETING /
+   MANAGED", and so on, so the state is text on every row and never colour alone (constitution
+   Principle IV). Product names are plain text here, as everywhere on this page — no logo, no mark,
+   no image. */
+import Band from '../../layout/Band.astro';
+import Folio from '../../ui/Folio.astro';
+import ProofLabel from '../../ui/ProofLabel.astro';
+import { TEAM_MIX } from '../../../copy/pages/catalogue';
+
+const { folio, heading, intro, managedLabel, rows, closing } = TEAM_MIX;
+const headingId = 'team-mix-heading';
+---
+
+<Band ground="ink" labelledBy={headingId}>
+  <Folio text={folio} tone="dark" />
+
+  <div class="mix__head">
+    <h2 class="mix__heading" id={headingId}>{heading}</h2>
+    <p class="mix__intro">{intro}</p>
+  </div>
+
+  <div class="mix__rows">
+    {
+      rows.map((row, index) => (
+        <div class:list={['team', index === rows.length - 1 && 'team--last']}>
+          <div class="team__id">
+            <ProofLabel status="operated" value={managedLabel} size="sm">
+              {row.team}
+            </ProofLabel>
+            <p class="team__tools">{row.tools}</p>
+          </div>
+          <p class="team__job">{row.job}</p>
+          <p class="team__managed">{row.managed}</p>
+        </div>
+      ))
+    }
+  </div>
+
+  <p class="mix__closing">{closing}</p>
+</Band>
+
+<style>
+  .mix__head {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    gap: clamp(32px, 5vw, 72px);
+    align-items: end;
+    margin-bottom: 48px;
+  }
+
+  .mix__head > * {
+    min-width: 0;
+  }
+
+  .mix__heading {
+    margin: 0;
+    font-weight: 900;
+    font-size: clamp(30px, 3.6vw, 64px);
+    line-height: 0.9;
+    letter-spacing: -0.03em;
+    max-width: 22ch;
+  }
+
+  .mix__intro {
+    margin: 0;
+    font-size: 17px;
+    line-height: 1.55;
+    max-width: 46ch;
+  }
+
+  .mix__rows {
+    border-top: 1.5px solid var(--ink-3);
+    margin-bottom: 40px;
+  }
+
+  .team {
+    display: grid;
+    grid-template-columns: minmax(200px, 0.7fr) minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(16px, 3vw, 40px);
+    padding: 26px 0;
+    border-bottom: 1px solid var(--ink-3);
+    align-items: start;
+  }
+
+  .team > * {
+    min-width: 0;
+  }
+
+  .team--last {
+    border-bottom: 1.5px solid var(--ink-3);
+  }
+
+  .team__id {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  /* The recognisable name is the loudest thing in the row — it is why the section exists. */
+  .team__tools {
+    margin: 0;
+    font-weight: 800;
+    font-size: clamp(19px, 1.7vw, 26px);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+
+  .team__job {
+    margin: 0;
+    font-size: 16.5px;
+    line-height: 1.5;
+  }
+
+  .team__managed {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    line-height: 1.62;
+    letter-spacing: 0.01em;
+    color: var(--signal-orange);
+  }
+
+  .mix__closing {
+    margin: 0;
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: clamp(22px, 2.2vw, 34px);
+    line-height: 1.15;
+    max-width: 40ch;
+    border-left: 3px solid var(--signal-orange);
+    padding-left: 24px;
+  }
+
+  @media (max-width: 900px) {
+    .mix__head {
+      grid-template-columns: 1fr;
+      align-items: start;
+    }
+
+    .team {
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+  }
+</style>
