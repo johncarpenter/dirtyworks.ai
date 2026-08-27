@@ -18,8 +18,8 @@ test.describe('home', () => {
     const body = await page.locator('main').innerText();
 
     // 1. what is this  2. what does it manage  3. can it be trusted  4. what do I do next
-    expect(body).toContain('IS ANYONE OPERATING IT?');
-    expect(body).toContain('THIS IS THE SERVICE');
+    expect(body).toContain('IS IT EARNING ITS KEEP?');
+    expect(body).toContain('A LICENCE DOES NOT COME WITH PEOPLE WHO CAN USE IT.');
     expect(body).toContain('COMPLIANCE IS NOT A STICKER');
     expect(body).toContain('SHOW US WHAT IS ALREADY IN THE STACK');
   });
