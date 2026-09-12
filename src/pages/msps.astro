@@ -1,20 +1,21 @@
 ---
-/* /msps — the partner page. Five bands and the conversion block, in prototype order:
-   hero, what the practice adds, three models, responsibility seam, one-customer pilot, CTA.
+/* /msps — the partner page. Six bands and the conversion block: hero, the workspace as a delivery
+   option, what the practice adds, three models, responsibility seam, one-customer pilot, CTA.
 
-   The header action on this route is the partner action ("Design a partner pilot"); it comes from
+   The header action on this route is the partner action ("Discuss an MSP pilot"); it comes from
    routes.ts via BaseLayout and is never hand-rolled here. */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Folio from '../components/ui/Folio.astro';
 import Button from '../components/ui/Button.astro';
 import PhotoHero from '../components/patterns/PhotoHero.astro';
 import CTABand from '../components/patterns/CTABand.astro';
+import WorkspaceOption from '../components/sections/msps/WorkspaceOption.astro';
 import PracticeAdds from '../components/sections/msps/PracticeAdds.astro';
 import Models from '../components/sections/msps/Models.astro';
 import SeamMatrix from '../components/sections/msps/SeamMatrix.astro';
 import Pilot from '../components/sections/msps/Pilot.astro';
 import { CTA, HERO } from '../copy/pages/msps';
-import { hrefFor } from '../copy/routes';
+import { hrefFor, inquiryHref } from '../copy/routes';
 import { ENERGY_SERVICES } from '../copy/photography';
 import energyServices from '../assets/photography/energy-services-project-office-v1.png';
 ---
@@ -46,12 +47,13 @@ import energyServices from '../assets/photography/energy-services-project-office
       <div class="hero__foot">
         <p class="hero__lead">{HERO.lead}</p>
         <div>
-          <Button href={hrefFor('start')} size="lg">{HERO.action}</Button>
+          <Button href={inquiryHref('msp-partner')} size="lg">{HERO.action}</Button>
         </div>
       </div>
     </div>
   </PhotoHero>
 
+  <WorkspaceOption />
   <PracticeAdds />
   <Models />
   <SeamMatrix />
@@ -61,7 +63,7 @@ import energyServices from '../assets/photography/energy-services-project-office
     folio={CTA.folio}
     heading={CTA.heading}
     support={CTA.support}
-    primary={{ label: CTA.primaryLabel, href: hrefFor('start') }}
+    primary={{ label: CTA.primaryLabel, href: inquiryHref('msp-partner') }}
     secondary={{ label: CTA.secondaryLabel, href: hrefFor('trust') }}
   />
 </BaseLayout>

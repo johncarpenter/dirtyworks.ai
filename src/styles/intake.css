@@ -88,9 +88,16 @@
   color: var(--steel);
 }
 
-/* --------------------------------------------------------------- needs */
+/* Helper text under a label. Contextual on the message field: it changes with the interest. */
+.field__help {
+  font-size: 15px;
+  line-height: 1.45;
+  color: var(--ink-3);
+}
 
-.needs {
+/* --------------------------------------------------------------- interest */
+
+.interest {
   border: 0;
   padding: 0;
   margin: 0;
@@ -98,7 +105,7 @@
   gap: 12px;
 }
 
-.needs__legend {
+.interest__legend {
   padding: 0;
   font-family: var(--font-mono);
   font-size: var(--type-label-sm);
@@ -108,14 +115,14 @@
   color: var(--ink-3);
 }
 
-.needs__options {
+.interest__options {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
 }
 
-/* Real checkboxes with a 44px target, not the prototype's static spans. */
-.needs__option {
+/* Real radio buttons with a 44px target. One is always selected; the neutral one by default. */
+.interest__option {
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -132,16 +139,16 @@
   cursor: pointer;
 }
 
-.needs__option:hover {
+.interest__option:hover {
   background: var(--bone-2);
 }
 
-/* Selection is carried by the checkbox state and the checkmark, not by colour alone. */
-.needs__option[data-checked='true'] {
+/* Selection is carried by the radio state, not by colour alone. */
+.interest__option[data-checked='true'] {
   background: var(--verified-acid);
 }
 
-.needs__option input {
+.interest__option input {
   width: 16px;
   height: 16px;
   min-height: 0;
@@ -183,15 +190,6 @@
   margin: 0;
   font-size: 16px;
   line-height: 1.5;
-}
-
-.consent__stamp {
-  margin: 10px 0 0;
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--steel-2);
 }
 
 /* --------------------------------------------------------------- actions and alerts */

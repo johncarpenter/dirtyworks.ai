@@ -3,6 +3,7 @@ import { measureOverflow, waitForHeaderHydration } from './support';
 
 const ROUTES = [
   '/',
+  '/workspace',
   '/services',
   '/catalogue',
   '/method',

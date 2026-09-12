@@ -1,0 +1,123 @@
+---
+/* Home §02. Three example pilot use cases, each labelled as exactly that in text. None is a
+   completed customer deployment and none promises a specific external integration; the endnote
+   says examples are selected and validated per pilot. */
+import Band from '../../layout/Band.astro';
+import Folio from '../../ui/Folio.astro';
+import ProofLabel from '../../ui/ProofLabel.astro';
+import Declaration from '../../patterns/Declaration.astro';
+import { TEAM_CAN_DO } from '../../../copy/pilot';
+
+const { folio, heading, intro, exampleLabel, examples, endnote } = TEAM_CAN_DO;
+---
+
+<Band ground="bone-2" labelledBy="team-can-do-heading">
+  <Folio text={folio} />
+
+  <div class="can-do__head">
+    <Declaration
+      id="team-can-do-heading"
+      size="clamp(32px,4vw,70px)"
+      leading="0.88"
+      tracking="-0.035em"
+      weight={900}
+    >
+      {heading}
+    </Declaration>
+    <p class="can-do__intro">{intro}</p>
+  </div>
+
+  <ul class="can-do__examples">
+    {
+      examples.map((example) => (
+        <li class="example">
+          <ProofLabel status="neutral" size="sm">{exampleLabel}</ProofLabel>
+          <h3 class="example__name">{example.name}</h3>
+          <p class="example__body">{example.body}</p>
+        </li>
+      ))
+    }
+  </ul>
+
+  <p class="can-do__endnote">{endnote}</p>
+</Band>
+
+<style>
+  .can-do__head {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    gap: clamp(32px, 5vw, 80px);
+    align-items: end;
+    margin-bottom: clamp(40px, 5vw, 64px);
+  }
+
+  .can-do__head > * {
+    min-width: 0;
+  }
+
+  .can-do__intro {
+    margin: 0;
+    font-size: 18px;
+    line-height: 1.52;
+    max-width: 44ch;
+  }
+
+  .can-do__examples {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+    gap: clamp(24px, 3vw, 40px);
+  }
+
+  .can-do__examples > * {
+    min-width: 0;
+  }
+
+  .example {
+    display: grid;
+    gap: 16px;
+    align-content: start;
+    border-top: 6px solid var(--ink);
+    padding-top: 20px;
+  }
+
+  .example :global(.chip) {
+    justify-self: start;
+  }
+
+  .example__name {
+    margin: 0;
+    font-weight: var(--weight-display);
+    font-size: clamp(24px, 2.2vw, 36px);
+    line-height: 1;
+    letter-spacing: -0.025em;
+  }
+
+  .example__body {
+    margin: 0;
+    font-size: 17px;
+    line-height: 1.5;
+    max-width: 40ch;
+  }
+
+  .can-do__endnote {
+    margin: clamp(32px, 4vw, 48px) 0 0;
+    padding-top: 18px;
+    border-top: 1px solid var(--rule);
+    font-family: var(--font-mono);
+    font-size: var(--type-label-sm);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--steel);
+    line-height: 1.8;
+  }
+
+  @media (max-width: 900px) {
+    .can-do__head {
+      grid-template-columns: minmax(0, 1fr);
+      align-items: start;
+    }
+  }
+</style>

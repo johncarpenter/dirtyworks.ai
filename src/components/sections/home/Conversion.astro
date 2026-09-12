@@ -1,18 +1,17 @@
 ---
-/* Home §12. The CTA band, and immediately below it inside the same ink region the sensitive-data
-   note. The 1px rule sits ABOVE the paragraph, as a border-top on the paragraph itself — the
-   prototype, not the README, is the authority for that detail (research.md D-07 #6). */
+/* Home §08. The CTA band, and immediately below it inside the same ink region the sensitive-data
+   note. The 1px rule sits ABOVE the paragraph, as a border-top on the paragraph itself. One
+   dominant action: the pilot inquiry. */
 import CTABand from '../../patterns/CTABand.astro';
-import { CONVERSION } from '../../../copy/pages/home';
+import { PILOT_CONVERSION } from '../../../copy/pilot';
 import { SENSITIVE_DATA_NOTE } from '../../../copy/site';
 ---
 
 <CTABand
-  folio={CONVERSION.folio}
-  heading={CONVERSION.heading}
-  support={CONVERSION.support}
-  primary={CONVERSION.primary}
-  secondary={CONVERSION.secondary}
+  folio={PILOT_CONVERSION.folio}
+  heading={PILOT_CONVERSION.heading}
+  support={PILOT_CONVERSION.support}
+  primary={PILOT_CONVERSION.primary}
 >
   <div class="conversion__note">
     <p>{SENSITIVE_DATA_NOTE}</p>

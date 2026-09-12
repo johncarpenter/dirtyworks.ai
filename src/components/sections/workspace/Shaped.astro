@@ -1,0 +1,60 @@
+---
+/* /workspace §02. Configured for the team's work; customization is part of scoping, not
+   unlimited development. */
+import Band from '../../layout/Band.astro';
+import Folio from '../../ui/Folio.astro';
+import Declaration from '../../patterns/Declaration.astro';
+import { SHAPED } from '../../../copy/pages/workspace';
+
+const { folio, heading, paragraphs } = SHAPED;
+---
+
+<Band ground="bone-2" labelledBy="shaped-heading">
+  <Folio text={folio} />
+
+  <div class="shaped__grid">
+    <Declaration
+      id="shaped-heading"
+      size="clamp(32px,4vw,70px)"
+      leading="0.88"
+      tracking="-0.035em"
+      weight={900}
+    >
+      {heading}
+    </Declaration>
+
+    <div>
+      {paragraphs.map((text) => <p class="shaped__text">{text}</p>)}
+    </div>
+  </div>
+</Band>
+
+<style>
+  .shaped__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+    gap: clamp(32px, 5vw, 80px);
+    align-items: start;
+  }
+
+  .shaped__grid > * {
+    min-width: 0;
+  }
+
+  .shaped__text {
+    margin: 0;
+    font-size: 18px;
+    line-height: 1.52;
+    max-width: 56ch;
+  }
+
+  .shaped__text + .shaped__text {
+    margin-top: 20px;
+  }
+
+  @media (max-width: 900px) {
+    .shaped__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>

@@ -1,0 +1,93 @@
+---
+/* /msps 02 — the managed workspace as a concrete delivery option. One client, one defined pilot,
+   and the boundary stated at equal weight: partnering with Dirtyworks.ai is a relationship with
+   Dirtyworks.ai, not a transfer of its platform relationships to the partner. */
+import Band from '../../layout/Band.astro';
+import Folio from '../../ui/Folio.astro';
+import Button from '../../ui/Button.astro';
+import { WORKSPACE_OPTION } from '../../../copy/pages/msps';
+import { inquiryHref } from '../../../copy/routes';
+
+const { folio, heading, body, boundary, action } = WORKSPACE_OPTION;
+---
+
+<Band ground="bone-2" labelledBy="workspace-option-heading">
+  <Folio text={folio} />
+
+  <div class="option">
+    <div>
+      <h2 class="option__heading" id="workspace-option-heading">{heading}</h2>
+      <div class="option__action">
+        <Button href={inquiryHref('msp-partner')} size="lg">{action}</Button>
+      </div>
+    </div>
+
+    <div>
+      <p class="option__body">{body}</p>
+      <p class="option__boundary">
+        <span class="option__boundary-label">Boundary</span>
+        {boundary}
+      </p>
+    </div>
+  </div>
+</Band>
+
+<style>
+  .option {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+    gap: clamp(32px, 5vw, 80px);
+    align-items: start;
+  }
+
+  .option > * {
+    min-width: 0;
+  }
+
+  .option__heading {
+    font-weight: var(--weight-display-max);
+    font-size: clamp(32px, 3.8vw, 68px);
+    line-height: 0.87;
+    letter-spacing: -0.035em;
+    max-width: 16ch;
+  }
+
+  .option__action {
+    margin-top: 32px;
+  }
+
+  .option__body {
+    margin: 0;
+    font-size: 18px;
+    line-height: 1.52;
+    max-width: 54ch;
+  }
+
+  /* The boundary at the same weight as the offer, not a footnote. */
+  .option__boundary {
+    margin: 28px 0 0;
+    padding: 20px 22px;
+    background: var(--bone-3);
+    border: 1.5px solid var(--ink);
+    font-size: 16.5px;
+    line-height: 1.5;
+    max-width: 54ch;
+  }
+
+  .option__boundary-label {
+    display: block;
+    margin-bottom: 8px;
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    font-weight: var(--weight-label);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--steel);
+  }
+
+  @media (max-width: 900px) {
+    .option {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>

@@ -1,4 +1,8 @@
-/* /method content. Copy is verbatim from mockups/design_files/Method.dc.html. */
+/* /method content. Copy started verbatim from mockups/design_files/Method.dc.html; the
+   workspace-pilot refresh added the work people want to improve and the tools they want to create
+   to the discovery inputs, made workspace customization and the supported pilot cohort explicit,
+   and kept continue / change / stop as the review outcomes. It does not copy the MSP page's 90-day
+   duration into the direct offer: no duration is published for a workspace pilot. */
 
 /** Gate chip role. The chip's meaning is always in its label; the colour only reinforces it. */
 export type GateTone = 'review' | 'stop' | 'release' | 'outlined';
@@ -37,8 +41,9 @@ export const METHOD_HERO = {
   headingAccent: 'login',
   headingTail: '.',
   lead:
-    'Product choice matters. So do account ownership, source quality, access, training, ' +
-    'integrations, support, tests, cost controls, incidents, and exit. We make those decisions ' +
+    'Product choice matters. So do account control, source quality, access, training, ' +
+    'integrations, support, tests, cost review, incidents, and exit. Whether the work starts in ' +
+    'a managed workspace pilot or across the tools you already have, we make those decisions ' +
     'visible before production and keep them current afterward.',
 };
 
@@ -50,9 +55,9 @@ export const METHOD_LIFECYCLE = {
       name: 'Map',
       step: 'Step 01',
       inputs:
-        'Current products, accounts, people, information, integrations, spend, and recent ' +
-        'failure events.',
-      work: 'Inventory, interviews, permission spot checks, cost pull, problem framing.',
+        'The work you want to improve, the tools people want to create, current products, ' +
+        'accounts, people, information, integrations, and spend.',
+      work: 'Inventory, interviews, permission spot checks, cost pull, and framing the first scope.',
       decision: 'Confirm scope of the map and who can be interviewed.',
       output: 'Current-state record.',
       gate: 'Gate / Scope agreed',
@@ -63,9 +68,10 @@ export const METHOD_LIFECYCLE = {
       step: 'Step 02',
       inputs: 'Current-state record, business priorities, existing systems.',
       work:
-        'Smallest viable product mix, overlap and prerequisite analysis, owner and control ' +
-        'design, commercial route.',
-      decision: 'Choose the mix, or choose to consolidate instead.',
+        'Smallest viable scope — a workspace pilot, existing products, or both — with the ' +
+        'customization it needs, overlap and prerequisite analysis, owner and control design, ' +
+        'and commercial route.',
+      decision: 'Choose the scope, or choose to consolidate instead.',
       output: 'Scope, route, and owner map.',
       gate: 'Gate / Design review',
       gateTone: 'review',
@@ -85,9 +91,9 @@ export const METHOD_LIFECYCLE = {
       step: 'Step 04',
       inputs: 'Approved scope, identity environment, approved sources.',
       work:
-        'Customer-owned accounts, roles and settings, approved connections, tests, ' +
-        'documentation, training.',
-      decision: 'Approve access grants and the pilot cohort.',
+        'Accounts under agreed control, the configured and customized workspace where one is in ' +
+        'scope, roles and settings, approved connections, tests, documentation, training.',
+      decision: 'Approve access grants and the supported pilot cohort.',
       output: 'Runbook and training record.',
       gate: 'Gate / Test pass',
       gateTone: 'review',
@@ -95,9 +101,11 @@ export const METHOD_LIFECYCLE = {
     {
       name: 'Stabilize',
       step: 'Step 05',
-      inputs: 'Deployed configuration, bounded cohort, support channel.',
-      work: 'Resolve access and quality problems, confirm cost signals, tune guidance.',
-      decision: 'Accept, extend the pilot, or stop.',
+      inputs: 'Deployed configuration, supported pilot cohort, support channel.',
+      work:
+        'Resolve access and reported output problems, confirm cost signals, tune guidance, ' +
+        'review what the team has built.',
+      decision: 'Continue, change the scope, or stop.',
       output: 'Acceptance record.',
       gate: 'Release gate',
       gateTone: 'release',
@@ -172,7 +180,7 @@ export const METHOD_RECORD = {
     },
     {
       label: 'Evaluated failures / open gaps',
-      value: '2 answer classes failed evaluation. Both now refuse rather than guess.',
+      value: '2 question types failed the setup tests. Both now refuse rather than guess.',
     },
     {
       label: 'Access / control changes',
@@ -200,9 +208,10 @@ export const METHOD_RECORD = {
 
 export const METHOD_CTA = {
   folio: '05 / Conversion',
-  heading: 'Start with the last thing that failed, cost too much, or had no owner.',
+  heading: 'Start with the work you want to improve.',
   support:
-    'A scoped review ends in a decision — including the decision not to deploy anything.',
-  primaryLabel: 'Start with a scoped review',
-  secondaryLabel: 'Read the trust model',
+    'A scoped review ends in a decision — continue, change the scope, or stop — including the ' +
+    'decision not to deploy anything.',
+  primaryLabel: 'Discuss a workspace pilot',
+  secondaryLabel: 'Read the trust approach',
 };

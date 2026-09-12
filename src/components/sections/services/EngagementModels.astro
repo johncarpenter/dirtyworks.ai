@@ -7,6 +7,7 @@
    that is what they are — the customer's sentence, not ours. */
 import Band from '../../layout/Band.astro';
 import Folio from '../../ui/Folio.astro';
+import Button from '../../ui/Button.astro';
 import { SERVICE_MODELS } from '../../../copy/pages/services';
 
 const { folio, heading, models, voicesCaption, closing } = SERVICE_MODELS;
@@ -31,6 +32,10 @@ const headingId = 'service-models-heading';
               <li class="model__voice">{voice}</li>
             ))}
           </ul>
+
+          <div class="model__action">
+            <Button href={model.action.href} variant="secondary">{model.action.label}</Button>
+          </div>
         </div>
       ))
     }
@@ -114,6 +119,10 @@ const headingId = 'service-models-heading';
     line-height: 1.24;
     border-left: 3px solid var(--signal-orange);
     padding-left: 18px;
+  }
+
+  .model__action {
+    margin-top: 28px;
   }
 
   /* The rule spans the full band; only the text is held to a readable measure. Putting both on

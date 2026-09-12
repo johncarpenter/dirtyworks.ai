@@ -14,6 +14,12 @@ interface Props {
   weight?: 700 | 800 | 900;
   /** optional measure, e.g. "24ch" */
   measure?: string;
+  /**
+   * Ceiling below 400px, replacing the default 13vw. For a heading whose longest unbreakable word
+   * is wider than the default allows — "Dirtyworks.ai" set in Archivo Black needs about 8.5em, so
+   * a 375px phone needs the type at or under 10vw before that word fits the measure.
+   */
+  narrowCap?: string;
   id?: string;
   class?: string;
 }
@@ -25,6 +31,7 @@ const {
   tracking,
   weight = 900,
   measure,
+  narrowCap,
   id,
   class: className,
 } = Astro.props as Props;
@@ -38,6 +45,7 @@ const declared = [
   `--decl-tracking:${tracking}`,
   `--decl-weight:${weight}`,
   measure ? `--decl-measure:${measure}` : null,
+  narrowCap ? `--decl-narrow-cap:${narrowCap}` : null,
 ]
   .filter(Boolean)
   .join(';');
@@ -62,7 +70,7 @@ const declared = [
      leaves every heading that already fits untouched. */
   @media (max-width: 400px) {
     .declaration {
-      font-size: min(var(--decl-size), 13vw);
+      font-size: min(var(--decl-size), var(--decl-narrow-cap, 13vw));
     }
   }
 </style>

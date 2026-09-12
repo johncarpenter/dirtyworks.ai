@@ -4,6 +4,7 @@ import Band from '../components/layout/Band.astro';
 import Folio from '../components/ui/Folio.astro';
 import Button from '../components/ui/Button.astro';
 import { headerNav } from '../copy/navigation';
+import { HEADER_ACTIONS } from '../copy/routes';
 ---
 
 <BaseLayout route="home" title="Page not found | Dirtyworks.ai" description={null}>
@@ -19,7 +20,7 @@ import { headerNav } from '../copy/navigation';
     </ul>
     <div class="notfound__actions">
       <Button href="/" variant="secondary" size="lg">Back to the start</Button>
-      <Button href="/start" size="lg">Map your AI stack</Button>
+      <Button href={HEADER_ACTIONS.buyer.href ?? '/start'} size="lg">{HEADER_ACTIONS.buyer.label}</Button>
     </div>
   </Band>
 </BaseLayout>

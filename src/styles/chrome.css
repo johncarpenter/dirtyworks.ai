@@ -249,7 +249,7 @@
   display: grid;
   /* The 280px minimum is load-bearing: the wordmark clamp overflows narrower tracks and collides
      with the next column. Never switch to auto-fit. */
-  grid-template-columns: minmax(280px, 1.3fr) repeat(3, minmax(140px, 1fr));
+  grid-template-columns: minmax(280px, 1.3fr) repeat(2, minmax(160px, 1fr));
   gap: 48px;
   padding-bottom: 56px;
   border-bottom: 1px solid var(--ink-3);
@@ -297,10 +297,6 @@
   letter-spacing: 0.18em;
   color: var(--steel-2);
   margin-bottom: 4px;
-}
-
-.site-footer__inert {
-  color: var(--steel-2);
 }
 
 .site-footer__bottom {

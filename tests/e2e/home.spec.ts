@@ -5,100 +5,147 @@ test.describe('home', () => {
   test('publishes the specified title and description', async ({ page }) => {
     await page.goto('/');
     await expect(page).toHaveTitle(
-      'Dirtyworks.ai | Managed AI operations for Alberta businesses',
+      'Managed AI Workspace Pilot for Alberta Businesses | Dirtyworks.ai',
     );
     await expect(page.locator('meta[name="description"]')).toHaveAttribute(
       'content',
-      /An AI MSP for product selection, account and user management/,
+      /Start a managed AI workspace pilot with Dirtyworks\.ai/,
     );
   });
 
-  test('answers the four qualifying questions in order', async ({ page }) => {
+  /* Acceptance: the offer, the pilot status, the Cloudflare foundation and the next step are all
+     readable from the first screen's content — the hero band, not a tooltip. */
+  test('states the offer, pilot status, foundation and next step in the hero', async ({ page }) => {
     await page.goto('/');
+    const hero = page.locator('main section').first();
+    await expect(hero.locator('h1')).toContainText(/YOUR COMPANY'S AI WORKSPACE/i);
+    await expect(hero.getByText('Pilot offering')).toBeVisible();
+    await expect(
+      hero.getByText('Scope, connections, support, and costs are agreed before work begins.'),
+    ).toBeVisible();
+    await expect(hero.getByText(/Built on Cloudflare OS/i)).toBeVisible();
+    await expect(hero.getByRole('link', { name: /discuss a workspace pilot/i })).toHaveAttribute(
+      'href',
+      '/start?interest=workspace-pilot',
+    );
+    await expect(hero.getByRole('link', { name: /explore the workspace/i })).toHaveAttribute(
+      'href',
+      '/workspace',
+    );
+  });
+
+  test('renders eight sections in the specified order', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.locator('main section')).toHaveCount(8);
     const body = await page.locator('main').innerText();
-
-    // 1. what is this  2. what does it manage  3. can it be trusted  4. what do I do next
-    expect(body).toContain('IS IT EARNING ITS KEEP?');
-    expect(body).toContain('A LICENCE DOES NOT COME WITH PEOPLE WHO CAN USE IT.');
-    expect(body).toContain('COMPLIANCE IS NOT A STICKER');
-    expect(body).toContain('SHOW US WHAT IS ALREADY IN THE STACK');
-  });
-
-  test('renders twelve sections', async ({ page }) => {
-    await page.goto('/');
-    await expect(page.locator('main section')).toHaveCount(12);
-  });
-
-  test('keeps every illustrative artefact stamped', async ({ page }) => {
-    await page.goto('/');
-    const stamps = page.locator('[data-claim-state="ILLUSTRATIVE"]');
-    await expect(stamps.first()).toBeVisible();
-    expect(await stamps.count()).toBeGreaterThan(0);
-
-    const evidence = page.locator('[data-evidence-item]');
-    const count = await evidence.count();
-    expect(count).toBe(7);
-    for (let index = 0; index < count; index += 1) {
-      await expect(evidence.nth(index)).toContainText(/illustrative/i);
+    const order = [
+      'WORK WITH AI. BUILD WHAT THE WORK NEEDS.',
+      'YOUR TEAM BUILDS. YOU SET THE BOUNDARIES. WE KEEP IT RUNNING.',
+      'START WITH ONE TEAM AND WORK WORTH IMPROVING.',
+      'KNOW WHO CAN USE IT, WHAT IT CAN REACH, AND WHO SUPPORTS IT.',
+      'ALREADY HAVE AI TOOLS? WE CAN WORK WITH THOSE TOO.',
+      'BRING A MANAGED AI WORKSPACE TO YOUR CLIENTS.',
+      'WHAT WOULD YOUR TEAM BUILD FIRST?',
+    ];
+    let cursor = -1;
+    for (const heading of order) {
+      const index = body.indexOf(heading);
+      expect(index, heading).toBeGreaterThan(cursor);
+      cursor = index;
     }
   });
 
-  test('publishes the catalogue boundary rather than a promise', async ({ page }) => {
+  test('labels the workflow as illustrative and never as a product interface', async ({ page }) => {
     await page.goto('/');
-    await expect(page.getByText(/Verify at quote/i).first()).toBeVisible();
+    const stamp = page.locator('[data-claim-state="ILLUSTRATIVE"]');
+    await expect(stamp.first()).toBeVisible();
+    await expect(stamp.first()).toContainText(/illustrative workflow/i);
+    await expect(page.getByText(/Not a screenshot of a deployed client environment/i)).toBeVisible();
+    // No invented controls: the sheet carries no buttons and no inputs.
+    await expect(page.locator('.workflow button, .workflow input, .workflow textarea')).toHaveCount(
+      0,
+    );
   });
 
-  /* This asserted `main img` count 0, which was a proxy for the actual rule — a vendor's product
-     is named in text, never shown as its logo — and only held while the page happened to have no
-     images at all. The rule is asserted directly instead, so it keeps working whether the home
-     page carries photography or not: any image present must be a captioned editorial photograph,
-     which a logo cannot be. Zero images passes; a logo does not. */
-  test('names candidate products as text and never as a logo', async ({ page }) => {
+  test('labels every example as an example pilot use case', async ({ page }) => {
     await page.goto('/');
-    const images = page.locator('main img');
-    const count = await images.count();
-
-    for (let index = 0; index < count; index += 1) {
-      const image = images.nth(index);
-      // Inside the editorial photo pattern, which stamps and captions whatever it renders.
-      await expect(image.locator('xpath=ancestor::figure[contains(@class,"photo")]')).toHaveCount(1);
-      // Describes visible work; a logo would carry a bare brand name here, or no alt at all.
-      const alt = (await image.getAttribute('alt')) ?? '';
-      expect(alt.trim().split(/\s+/).length).toBeGreaterThanOrEqual(6);
-    }
+    await expect(page.getByText('Example pilot use case')).toHaveCount(3);
+    await expect(page.getByText('Examples are selected and validated for each pilot.')).toBeVisible();
   });
 
-  test('carries no price and no purchase control', async ({ page }) => {
+  test('names the three parties in text on the responsibility rows', async ({ page }) => {
+    await page.goto('/');
+    const rows = page.locator('.roles__row');
+    await expect(rows).toHaveCount(3);
+    await expect(rows.nth(0)).toContainText('Your team');
+    await expect(rows.nth(1)).toContainText('Your business');
+    await expect(rows.nth(2)).toContainText('Dirtyworks.ai');
+  });
+
+  test('describes Cloudflare OS as the foundation without a partner badge', async ({ page }) => {
+    await page.goto('/');
+    const text = await page.locator('main').innerText();
+    expect(text).toMatch(/Cloudflare OS provides the open-source workspace foundation/);
+    expect(text).toMatch(/early access/i);
+    expect(text).not.toMatch(/certified partner|partner badge|official partner/i);
+    await expect(page.locator('main img')).toHaveCount(0);
+  });
+
+  test('carries no price, duration, cohort size or purchase control', async ({ page }) => {
     await page.goto('/');
     const text = await page.locator('main').innerText();
     expect(text).not.toMatch(/\$\s?\d/);
     expect(text).not.toMatch(/per seat|per user\/month/i);
+    expect(text).not.toMatch(/\b\d+[- ]day\b/i);
+    expect(text).not.toMatch(/\b\d+[- ]week\b/i);
     await expect(page.getByRole('button', { name: /buy|add to cart|purchase/i })).toHaveCount(0);
   });
 
-  test('routes the conversion band to the intake and the partner lane', async ({ page }) => {
+  test('routes the two secondary lanes to their pages and the MSP lane to its interest', async ({
+    page,
+  }) => {
     await page.goto('/');
-    const cta = page.locator('section').last();
-    await expect(cta.getByRole('link', { name: /map your ai stack/i })).toHaveAttribute(
+    await expect(page.getByRole('link', { name: /explore managed services/i })).toHaveAttribute(
       'href',
-      '/start',
+      '/services',
     );
-    await expect(cta.getByRole('link', { name: /msp pilot/i })).toHaveAttribute('href', '/msps');
+    await expect(page.getByRole('link', { name: /discuss an msp pilot/i })).toHaveAttribute(
+      'href',
+      '/start?interest=msp-partner',
+    );
+    await expect(page.getByRole('link', { name: /read the partner models/i })).toHaveAttribute(
+      'href',
+      '/msps',
+    );
+    await expect(page.getByRole('link', { name: /see the pilot deliverables/i })).toHaveAttribute(
+      'href',
+      '/workspace#pilot-scope',
+    );
+  });
+
+  test('routes the conversion band to the pilot inquiry', async ({ page }) => {
+    await page.goto('/');
+    const cta = page.locator('main section').last();
+    await expect(cta.getByRole('link', { name: /discuss a workspace pilot/i })).toHaveAttribute(
+      'href',
+      '/start?interest=workspace-pilot',
+    );
   });
 
   test('warns against sending sensitive data through the form', async ({ page }) => {
     await page.goto('/');
-    await expect(page.getByText(/Do not send customer records, credentials/i)).toBeVisible();
+    await expect(page.getByText(/Please do not include credentials, private documents/i)).toBeVisible();
   });
 
-  test('reaches the intake from the header', async ({ page }) => {
+  test('reaches the pilot inquiry from the header', async ({ page }) => {
     await page.goto('/');
     await openNavIfCollapsed(page);
     await page
       .locator('header')
-      .getByRole('link', { name: /map your ai stack/i })
+      .getByRole('link', { name: /discuss a workspace pilot/i })
       .first()
       .click();
-    await expect(page).toHaveURL(/\/start$/);
+    await expect(page).toHaveURL(/\/start\?interest=workspace-pilot$/);
+    await expect(page.locator('input[name="interest"][value="workspace-pilot"]')).toBeChecked();
   });
 });

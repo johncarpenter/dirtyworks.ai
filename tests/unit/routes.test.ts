@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
-import { ROUTES, routeById, HEADER_ACTIONS } from '../../src/copy/routes';
+import { ROUTES, routeById, HEADER_ACTIONS, inquiryHref } from '../../src/copy/routes';
 import { headerNav, footerColumns } from '../../src/copy/navigation';
 
 const PAGES = join(process.cwd(), 'src', 'pages');
@@ -11,7 +11,7 @@ const navIds = [
 ];
 
 describe('route model', () => {
-  it('declares the nine specified routes and nothing else', () => {
+  it('declares the ten routes and nothing else', () => {
     expect(ROUTES.map((r) => r.path).sort()).toEqual([
       '/',
       '/about',
@@ -22,6 +22,7 @@ describe('route model', () => {
       '/services',
       '/start',
       '/trust',
+      '/workspace',
     ]);
   });
 
@@ -62,26 +63,42 @@ describe('route model', () => {
     expect(ROUTES.filter((r) => r.headerAction === 'current').map((r) => r.id)).toEqual(['start']);
   });
 
-  it('gives the current-page action no destination', () => {
+  it('preselects the matching inquiry interest from each header action', () => {
     expect(HEADER_ACTIONS.current.href).toBeNull();
-    expect(HEADER_ACTIONS.buyer.href).toBe('/start');
-    expect(HEADER_ACTIONS.partner.href).toBe('/start');
+    expect(HEADER_ACTIONS.buyer).toEqual({
+      label: 'Discuss a workspace pilot',
+      href: '/start?interest=workspace-pilot',
+    });
+    expect(HEADER_ACTIONS.partner).toEqual({
+      label: 'Discuss an MSP pilot',
+      href: '/start?interest=msp-partner',
+    });
   });
 
-  it('puts the six primary items in the header, in order', () => {
+  it('builds interest links against the shared inquiry route', () => {
+    expect(inquiryHref('workspace-pilot')).toBe('/start?interest=workspace-pilot');
+    expect(inquiryHref('existing-ai')).toBe('/start?interest=existing-ai');
+    expect(inquiryHref('msp-partner')).toBe('/start?interest=msp-partner');
+  });
+
+  it('leads the header with the pilot and keeps the five items in order', () => {
     expect(headerNav.map((i) => i.label)).toEqual([
-      'Services',
-      'Catalogue',
-      'Method',
+      'Workspace pilot',
+      'Managed services',
+      'How it works',
       'Trust',
       'For MSPs',
-      'About & contact',
     ]);
   });
 
-  /* The reason /about was published: the address was reachable only through the footer. */
-  it('keeps the contact route in the header navigation', () => {
-    expect(headerNav.map((i) => i.id)).toContain('about');
+  /* Moved to the footer by the refresh, routes and inbound links preserved. */
+  it('keeps the catalogue and the contact page reachable from the footer', () => {
+    const service = footerColumns.find((c) => c.title === 'Service');
+    const company = footerColumns.find((c) => c.title === 'Company');
+    expect(service?.items.map((i) => i.id)).toContain('catalogue');
+    expect(company?.items.map((i) => i.id)).toContain('about');
+    expect(headerNav.map((i) => i.id)).not.toContain('catalogue');
+    expect(headerNav.map((i) => i.id)).not.toContain('about');
   });
 
   /* RULE-3 of the release gate bans "Contact us" as a call to action; a navigation label that
@@ -93,14 +110,26 @@ describe('route model', () => {
     }
   });
 
-  it('keeps legal footer items as inert text, never links', () => {
-    const legal = footerColumns.find((c) => c.title === 'Legal');
-    expect(legal?.items).toEqual([]);
-    expect(legal?.inert).toEqual(['Privacy', 'Terms', 'Accessibility']);
+  /* No inert labels and no empty links: the footer carries no legal column until approved copy
+     exists (LEGAL_PAGES in src/copy/placeholders.ts). */
+  it('publishes no legal column while the legal copy does not exist', () => {
+    expect(footerColumns.map((c) => c.title)).toEqual(['Service', 'Company']);
+    for (const column of footerColumns) {
+      for (const item of column.items) expect(item.href.startsWith('/')).toBe(true);
+    }
   });
 
-  it('keeps the conversion action in the footer company column', () => {
+  it('keeps the neutral inquiry route in the footer company column', () => {
     const company = footerColumns.find((c) => c.title === 'Company');
-    expect(company?.items.map((i) => i.label)).toContain('Map your AI stack');
+    expect(company?.items.find((i) => i.id === 'start')?.href).toBe('/start');
+  });
+
+  it('gives the home and workspace pages the pilot titles and descriptions', () => {
+    expect(routeById('home').title).toBe(
+      'Managed AI Workspace Pilot for Alberta Businesses | Dirtyworks.ai',
+    );
+    expect(routeById('home').description).toMatch(/managed AI workspace pilot/);
+    expect(routeById('workspace').title).toBe('Managed AI Workspace Pilot | Dirtyworks.ai');
+    expect(routeById('workspace').description).toMatch(/Cloudflare OS workspace pilot/);
   });
 });

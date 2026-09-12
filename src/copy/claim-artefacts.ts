@@ -14,19 +14,22 @@ export interface ClaimArtefact {
 }
 
 export const CLAIM_ARTEFACTS: readonly ClaimArtefact[] = [
+  /* The workspace pilot's visual. No real workspace asset exists, so the hero shows a worked
+     example of the onboarding-checklist use case as a numbered record, labelled "Illustrative
+     workflow" — never rendered as a functioning product interface. Home and /workspace share it. */
   {
-    id: 'home-evidence-rail',
+    id: 'home-illustrative-workflow',
     route: 'home',
     stamp: 'ILLUSTRATIVE',
-    marker: 'Illustrative',
-    what: 'Problem section evidence rail, all 7 events',
+    marker: 'Illustrative workflow',
+    what: 'Onboarding-checklist example workflow in the hero',
   },
   {
-    id: 'home-catalogue-disclaimer',
-    route: 'home',
-    stamp: 'VERIFY AT QUOTE',
-    marker: 'Verify at quote',
-    what: 'Governed catalogue product disclaimer',
+    id: 'workspace-illustrative-workflow',
+    route: 'workspace',
+    stamp: 'ILLUSTRATIVE',
+    marker: 'Illustrative workflow',
+    what: 'Onboarding-checklist example workflow in the hero',
   },
   {
     id: 'catalogue-disclaimer',
@@ -40,7 +43,7 @@ export const CLAIM_ARTEFACTS: readonly ClaimArtefact[] = [
     route: 'catalogue',
     stamp: 'ILLUSTRATIVE',
     marker: 'Illustrative',
-    what: 'Composer output quote sheet',
+    what: 'Quote structure sheet',
   },
   {
     id: 'method-monthly-record',
@@ -53,16 +56,10 @@ export const CLAIM_ARTEFACTS: readonly ClaimArtefact[] = [
   /* Photography. Every image on the site is a generated original with fictional people, so each
      one is an illustrative artefact in exactly the sense this registry means: it would read as
      evidence if nothing said otherwise. EditorialPhoto renders the stamp; these entries are what
-     make the release gate fail if one stops rendering. Captions: src/copy/photography.ts. */
-  {
-    id: 'home-photo-operations-leader',
-    route: 'home',
-    stamp: 'ILLUSTRATIVE',
-    marker: 'Illustrative',
-    /* Replaced the hero AI portfolio register, which was this route's other illustrative
-       artefact. The stamp requirement transfers with the slot. */
-    what: 'Operations-leader photograph in the hero',
-  },
+     make the release gate fail if one stops rendering. Captions: src/copy/photography.ts.
+
+     The home page carries no photograph since the workspace-pilot refresh: its hero is text and
+     the illustrative workflow, and the brief asked for fewer dense rows above the fold. */
   {
     id: 'services-photo-training',
     route: 'services',

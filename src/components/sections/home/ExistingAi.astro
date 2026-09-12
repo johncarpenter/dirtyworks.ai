@@ -1,0 +1,65 @@
+---
+/* Home §06. The second route in, compact. This replaced the seven-category vendor menu the home
+   page used to carry; the full catalogue is still on its own page. */
+import Band from '../../layout/Band.astro';
+import Folio from '../../ui/Folio.astro';
+import Button from '../../ui/Button.astro';
+import Declaration from '../../patterns/Declaration.astro';
+import { EXISTING_AI } from '../../../copy/pilot';
+
+const { folio, heading, body, action } = EXISTING_AI;
+---
+
+<Band ground="bone" labelledBy="existing-ai-heading">
+  <Folio text={folio} />
+
+  <div class="existing__grid">
+    <Declaration
+      id="existing-ai-heading"
+      size="clamp(32px,3.8vw,66px)"
+      leading="0.9"
+      tracking="-0.03em"
+      weight={800}
+    >
+      {heading}
+    </Declaration>
+
+    <div>
+      <p class="existing__text">{body}</p>
+      <div class="existing__action">
+        <Button href={action.href}>{action.label}</Button>
+      </div>
+    </div>
+  </div>
+</Band>
+
+<style>
+  .existing__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    gap: clamp(32px, 5vw, 80px);
+    align-items: end;
+  }
+
+  .existing__grid > * {
+    min-width: 0;
+  }
+
+  .existing__text {
+    margin: 0;
+    font-size: 18px;
+    line-height: 1.52;
+    max-width: 48ch;
+  }
+
+  .existing__action {
+    margin-top: 28px;
+  }
+
+  @media (max-width: 900px) {
+    .existing__grid {
+      grid-template-columns: minmax(0, 1fr);
+      align-items: start;
+    }
+  }
+</style>

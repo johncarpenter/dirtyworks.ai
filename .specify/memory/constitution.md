@@ -34,6 +34,16 @@ Amendment 1.0.1 → 1.0.2 (PATCH, 2026-08-26)
 - Change: the two references to `src/content/` in Principle III and the Development Workflow now
   read `src/copy/`. The registry and the navigation model are unchanged in substance.
 - Classification: PATCH — a path correction. No rule added, removed, or weakened.
+
+Amendment 1.0.2 → 1.0.3 (PATCH, 2026-09-12)
+- Trigger: the workspace-pilot website refresh (dirtyworks-company MKT-001) added `/workspace` as
+  the primary offer page and a prerendered `sitemap.xml`.
+- Change: Principle I's route list now names ten routes. The route is prerendered like every
+  other; the one on-demand surface is unchanged (the inquiry action behind `/start`, renamed from
+  the operating-gap intake). The evidence-rail island was retired with the old home page, so two
+  islands remain.
+- Classification: PATCH — a factual update to an enumerated list. No principle added, removed,
+  or redefined.
 -->
 
 # Dirtyworks.ai Marketing Website Constitution
@@ -46,7 +56,7 @@ Every route MUST prerender to HTML at build time. The build MUST use `output: 's
 Cloudflare adapter so that a new page is prerendered automatically and server rendering is an
 explicit, reviewed opt-out — never an accident.
 
-- The nine routes (`/`, `/services`, `/catalogue`, `/method`, `/trust`, `/msps`, `/about`,
+- The ten routes (`/`, `/workspace`, `/services`, `/catalogue`, `/method`, `/trust`, `/msps`, `/about`,
   `/notes`, `/start`) MUST serve as static assets with zero Worker invocations.
 - Exactly one on-demand surface is permitted: the diagnostic intake action behind `/start`.
   Adding a second dynamic path REQUIRES an amendment recording why static delivery cannot serve it.
@@ -253,4 +263,4 @@ MUST be corrected.
   Where content and visual authority disagree, `mockups/README.md` governs words, structure, and
   calls to action; `design-system/readme.md` governs tokens, components, and interaction patterns.
 
-**Version**: 1.0.2 | **Ratified**: 2026-08-25 | **Last Amended**: 2026-08-26
+**Version**: 1.0.3 | **Ratified**: 2026-08-25 | **Last Amended**: 2026-09-12

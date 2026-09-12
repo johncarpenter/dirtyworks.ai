@@ -21,10 +21,6 @@ import { SITE_VERSION, SITE_BUILD_DATE, CONTACT_EMAIL, BRAND_PROMISE, LOCATION, 
           <nav class="site-footer__col" aria-label={column.title}>
             <span class="site-footer__col-title">{column.title}</span>
             {column.items.map((item) => <a href={item.href}>{item.label}</a>)}
-            {
-              /* Inert until the copy exists — never a link to a placeholder page (FR-008). */
-              column.inert?.map((label) => <span class="site-footer__inert">{label}</span>)
-            }
           </nav>
         ))
       }

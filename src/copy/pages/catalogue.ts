@@ -9,8 +9,12 @@
    2. There is no price, no currency, no per-seat figure and no buy button. Every commercial value
       resolves to "Verify at quote" or "Scoped at review".
    3. The quote sheet is a structure, not an offer, and renders its ILLUSTRATIVE stamp — see
-      src/copy/claim-artefacts.ts, which the release gate reads. */
-import { hrefFor } from '../routes';
+      src/copy/claim-artefacts.ts, which the release gate reads.
+   4. Since the workspace-pilot refresh: every product here is a SEPARATE VENDOR PRODUCT. Which of
+      them, if any, connect inside a workspace pilot is confirmed during pilot scoping, and the
+      page says so rather than implying the catalogue is the pilot's integration list. There are
+      no composer or configurator affordances — every action is an honest inquiry link. */
+import { hrefFor, inquiryHref } from '../routes';
 import type { ProofStatus } from '../../types/proof';
 
 export interface Action {
@@ -91,7 +95,21 @@ export const CATALOGUE_HERO = {
     'into a separate operating problem. Products are organized by the job they perform, then ' +
     'assessed for fit, ownership, commercial path, controls, deployment work, and recurring ' +
     'support.',
-  action: { label: 'Compose a product mix', href: hrefFor('start') } satisfies Action,
+  action: { label: 'Discuss your existing tools', href: inquiryHref('existing-ai') } satisfies Action,
+};
+
+/* The featured pilot, above the catalogue. The workspace pilot is the featured offer and the
+   catalogue is the supporting page; a visitor who lands here first should find the pilot in one
+   move, and should read the distinction between a vendor product and a pilot connection before
+   reading a single product name. */
+export const FEATURED_PILOT = {
+  label: 'Featured / Managed AI workspace pilot',
+  heading: 'One workspace, configured for one team, managed by Dirtyworks.ai.',
+  body:
+    'The products below are separate vendor products. A workspace pilot is a different thing: a ' +
+    'Cloudflare OS environment customized for your team, where the connections available inside ' +
+    'it are confirmed during scoping rather than listed here.',
+  action: { label: 'Explore the workspace', href: hrefFor('workspace') } satisfies Action,
 };
 
 /* The argument of this section is vendor plurality, and it is the first thing a visitor should
@@ -107,9 +125,9 @@ export const TEAM_MIX = {
   folio: '02 / The mix in practice',
   heading: 'Finance and engineering will never pick the same tool.',
   intro:
-    'A working portfolio is four or five vendors chosen by the teams that use them, not one vendor ' +
-    'chosen by procurement. Tools that arrived before we did are registered on the same terms — ' +
-    'given an owner and a cost line, then operated or retired.',
+    'The right mix depends on the work. It may include a managed workspace, specialist products, ' +
+    'and tools you already use. Tools that arrived before we did are registered on the same ' +
+    'terms — given an owner and a cost line, then operated or retired.',
   /** the second half of every row chip; the whole argument in one word */
   managedLabel: 'Managed',
   rows: [
@@ -280,10 +298,14 @@ export const PRODUCT_MENU = {
       emphasis: 'Telemetry, tests, alerts, incidents, cost review',
     },
   ] satisfies readonly ProductCategory[],
-  primary: { label: 'Add to draft portfolio', href: hrefFor('start') } satisfies Action,
-  secondary: { label: 'Ask about this category', href: hrefFor('start') } satisfies Action,
+  primary: { label: 'Discuss your existing tools', href: inquiryHref('existing-ai') } satisfies Action,
+  secondary: { label: 'Discuss a workspace pilot', href: inquiryHref('workspace-pilot') } satisfies Action,
   /** Registered as the catalogue's VERIFY AT QUOTE artefact in src/copy/claim-artefacts.ts. */
-  disclaimer: 'No prices and no buy button. The configurator is not a live application yet.',
+  disclaimer: 'No prices and no buy button. Product fit and commercial route are confirmed at quote.',
+  /** The vendor-product / pilot-connection distinction, stated beside the menu. */
+  pilotNote:
+    'Vendor products, not workspace connections. Which products connect inside a workspace pilot ' +
+    'is confirmed during pilot scoping.',
 };
 
 export const COMMERCIAL_ROUTE = {
@@ -324,9 +346,9 @@ export const QUOTE_SHEET = {
   folio: '06 / What a quote contains',
   heading: 'Every line has an owner and a validity date.',
   intro:
-    'The composer output below is a structure, not an offer. Vendor prices and internal fees are ' +
+    'The quote structure below is illustrative, not an offer. Vendor prices and internal fees are ' +
     'confirmed at quote.',
-  sheetLabel: 'Draft portfolio / composer output',
+  sheetLabel: 'Draft portfolio / quote structure',
   lines: [
     {
       label: 'Selected product / plan',
@@ -377,6 +399,6 @@ export const CATALOGUE_CTA = {
   heading: 'Bring the products you already have. Add only what the work requires.',
   support:
     'We start from the current stack — including the licences that should be cancelled.',
-  primary: { label: 'Compose a product mix', href: hrefFor('start') } satisfies Action,
-  secondary: { label: 'See what we manage', href: hrefFor('services') } satisfies Action,
+  primary: { label: 'Discuss your existing tools', href: inquiryHref('existing-ai') } satisfies Action,
+  secondary: { label: 'Explore managed services', href: hrefFor('services') } satisfies Action,
 };

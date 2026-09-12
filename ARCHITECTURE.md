@@ -11,7 +11,7 @@ Outstanding non-engineering work: [`specs/001-build-marketing-website/launch-blo
 
 ## 1. The shape of the problem
 
-A nine-page marketing site with one transactional capability: turning a form submission into an
+A ten-page marketing site with one transactional capability: turning a form submission into an
 email. Everything else is content.
 
 That asymmetry drives every decision below. Content should cost nothing to serve and never break;
@@ -22,7 +22,7 @@ database — is the wrong trade at this size.
 ```mermaid
 graph TD
   V[Visitor] -->|GET /any-page| A[Cloudflare static assets]
-  V -->|POST /_actions/logOperatingGap| W[Worker: Astro Actions]
+  V -->|POST /_actions/sendInquiry| W[Worker: Astro Actions]
   W --> G[Guards: decoy, timing floor, hashed-IP rate limit]
   G --> E[Cloudflare Email Service]
   E --> I[hello@dirtyworks.ai]
@@ -101,24 +101,26 @@ Pages still prerender individually, so the guarantee holds — but the adapter's
 `staticOutput: 'unsupported'` is a red herring that never fires, and no warning is emitted either
 way. Worth knowing before you spend an afternoon on it.
 
-**Result:** 9 HTML files, 20–70 KB each. Zero Worker invocations for content.
+**Result:** 10 HTML files plus a prerendered `sitemap.xml`, 20–70 KB each. Zero Worker
+invocations for content.
 
 ## 4. Islands: what gets JavaScript, and what does not
 
-Three components, each with behaviour HTML cannot express:
+Two components, each with behaviour HTML cannot express:
 
 | Island | Directive | Why hydrated | Shipped |
 |---|---|---|---|
 | `HeaderNav` | `client:load` | Mobile disclosure, Escape to dismiss, focus containment. `client:load` because a keyboard user must never reach a dead control. | 1.9 KB |
-| `StartForm` | `client:load` | Action call, per-field errors, in-flight state, failure states, multi-select chips. Above the fold on `/start`. | 15 KB |
-| `EvidenceRail` | `client:visible` | The one scroll-triggered animation. Below the fold on Home only. | 0.6 KB |
+| `StartForm` | `client:load` | Action call, per-field errors, in-flight state, failure states, and the `?interest=` preselection — the page is prerendered, so the query string is only readable after mount. Above the fold on `/start`. | ~15 KB |
 
-Everything else — 60 `.astro` components — ships no JavaScript.
+Everything else — the `.astro` components — ships no JavaScript. (The scroll-animated evidence
+rail that used to be the third island left with the home page's twelve-section argument in the
+workspace-pilot refresh; nothing on the site animates on scroll now.)
 
 **The rule that makes this work:** an island's server-rendered output must be useful before
 hydration. `HeaderNav` keeps every destination in the DOM at all times and toggles a `data-open`
-attribute; `EvidenceRail` renders in its *finished, aligned* state so the animation is purely
-additive.
+attribute; `StartForm` renders with the neutral interest selected, so a visitor without scripting
+sees an honest default rather than a guess.
 
 **The subtlety that nearly broke it.** Collapsible chrome cannot be the default, because a visitor
 without JavaScript can never expand it. So the panel is visible until an inline script proves
@@ -334,10 +336,11 @@ Rule precision matters too. Matching `OPEN GAP` as a substring flagged the legit
 | Layer | Tool | Scope |
 |---|---|---|
 | Unit | Vitest via `getViteConfig()` | Input schema, abuse guards, notification payload and HTML escaping, log redaction, route/navigation consistency, token and surface discipline, and one fixture per release-gate rule |
-| E2E | Playwright, two projects (1440×900, 320×720) | Routes and metadata, header action variants, twelve Home sections, claim stamps, the intake's success and every failure state, keyboard operation, focus rings, responsive overflow at six widths, no-JavaScript rendering, heading outline, AA contrast, display fidelity |
+| E2E | Playwright, two projects (1440×900, 320×720) | Routes and metadata, header action variants, eight Home sections, the workspace page, claim stamps, the inquiry form (query preselection, success and every failure state), keyboard operation, focus rings, responsive overflow at six widths, no-JavaScript rendering, heading outline, AA contrast, display fidelity |
 
-Current: **52 unit tests, 252 declared E2E cases** (242 executing, 10 project-scoped skips — the
-display-scale suite does not run in the mobile project).
+Current: **68 unit tests**; the E2E suite covers ten routes at two viewports (the display-scale
+suite does not run in the mobile project). Counts move with the test files; `npm run test:unit`
+and `npm run test:e2e` are the authority.
 
 Configuration details that cost time:
 
@@ -457,7 +460,7 @@ instead (`git config core.hooksPath .githooks`). Full setup: [`DEPLOYMENT.md`](D
 
 Honest limits of the design, so you know when to change it:
 
-- **Content volume.** Hand-authored `.astro` sections with typed copy modules are right for nine
+- **Content volume.** Hand-authored `.astro` sections with typed copy modules are right for ten
   pages. Past roughly twenty, move to Astro content collections with typed frontmatter.
 - **Submission volume.** Email-as-a-database works at single-digit submissions per day. Once anyone
   wants to search, segment, or report on submissions, add D1 or a CRM and treat the email as a

@@ -6,7 +6,7 @@
 
    The boundary text on every scope row is the argument of the page: a capability without a stated
    limit is a promise nobody can operate. Eight capabilities, eight boundaries, no exceptions. */
-import { hrefFor } from '../routes';
+import { inquiryHref } from '../routes';
 
 export interface Action {
   label: string;
@@ -22,6 +22,8 @@ export interface ServiceModel {
   supplies: string;
   /** how somebody in this model describes their own situation, in their words */
   voices: readonly string[];
+  /** the inquiry route for this model, with its interest preselected */
+  action: Action;
 }
 
 /** A hero declaration split so one phrase can carry the orange emphasis. */
@@ -57,14 +59,11 @@ export interface ResponsibilityPanel {
   body: string;
 }
 
-/* The hero is the one block on this page that is not verbatim from the prototype. The mockup line
-   ("The tool is one line item. This is the service.") was also the home page's OPERATE heading, so
-   this page opened on an argument the visitor had already read; both have since been replaced, and
-   the phrase is no longer anywhere on the site. This states the three things the service actually
-   sells — adoption, training, controlled spend — and leaves the boundary argument to the scope
-   register below. */
+/* The hero states what the managed service is for — getting AI genuinely used — and names the two
+   delivery routes the page then explains: a managed workspace pilot, or management of the tools a
+   team already has. The boundary argument is left to the scope register below. */
 export const SERVICES_HERO = {
-  folio: 'Services / 01 — Managed scope',
+  folio: 'Managed services / 01 — Two delivery routes',
   heading: {
     first: 'Buying AI is easy.',
     secondPrefix: 'Getting it ',
@@ -72,54 +71,58 @@ export const SERVICES_HERO = {
     secondSuffix: ' is not.',
   } satisfies SplitHeading,
   lead:
-    'Dirtyworks.ai gets your people genuinely using a defined AI portfolio — role-based training ' +
-    'that fits the actual job, accounts and access somebody owns, and licence spend that gets ' +
-    'reviewed instead of quietly renewed.',
-  action: { label: 'Map the managed scope', href: hrefFor('start') } satisfies Action,
+    'Dirtyworks.ai gets your people genuinely using AI — in a managed workspace pilot configured ' +
+    'for one team, or across the tools you already have. Either way: training that fits the job, ' +
+    'accounts and access somebody owns, and spend that gets reviewed instead of quietly renewed.',
+  action: { label: 'Discuss a workspace pilot', href: inquiryHref('workspace-pilot') } satisfies Action,
 };
 
-/* The two ways an engagement starts, and the first thing a visitor should read after the hero.
-   Everything else on this page describes what the service covers once it is running; nobody gets
-   that far without first recognising themselves, and the three situations we actually hear are not
-   one situation. "We bought AI and nobody can use it" and "we are starting from nothing" want
-   opposite first meetings.
+/* The two delivery routes, and the first thing a visitor should read after the hero. The
+   workspace pilot leads — it is the featured offer — and managing the tools a team already has
+   follows. Everything else on this page describes what the service covers once it is running;
+   nobody gets that far without first recognising themselves.
 
    The voices are quoted because they are close to verbatim — a visitor who has said one of these
-   sentences out loud should find it here. Both models converge on the same managed portfolio, which
-   is what keeps this section from reading as two different companies. */
+   sentences out loud should find it here. Both routes converge on the same managed scope, which
+   is what keeps this section from reading as two different companies. Each route links to the
+   shared inquiry form with its interest preselected. */
 export const SERVICE_MODELS = {
-  folio: '02 / Two ways in',
-  heading: 'You bring one thing. We bring the rest.',
+  folio: '02 / Two delivery routes',
+  heading: 'Start a pilot, or start with what you have.',
   models: [
     {
-      label: 'Model 01 / Take it over',
-      brings: 'You bring the AI.',
+      label: 'Route 01 / Start a managed workspace pilot',
+      brings: 'You bring one team and one piece of work.',
+      supplies:
+        'We configure a Cloudflare OS workspace around that team — customized for your business ' +
+        'as part of scoping — onboard the people who will use it, support the agreed scope, and ' +
+        'review changes and costs. Your team works with AI and builds tools inside the agreed ' +
+        'boundaries; we keep the environment running and review what happens in use.',
+      voices: [
+        'We want a place where the team can actually work with AI.',
+        'We have a process we keep redoing by hand and nobody has time to build the tool.',
+      ],
+      action: { label: 'Discuss a workspace pilot', href: inquiryHref('workspace-pilot') },
+    },
+    {
+      label: 'Route 02 / Manage your existing AI tools',
+      brings: 'You bring the AI you already have.',
       supplies:
         'The products and licences are already yours. We take over running them — accounts and ' +
-        'access, the training that makes them stick, controls, monitoring, vendor changes, and ' +
-        'the spend nobody has looked at since it was approved.',
+        'access, the training that makes them stick, integrations, support, controls, vendor ' +
+        'changes, and the spend nobody has looked at since it was approved. We will also say ' +
+        'whether a workspace pilot, the existing tools, or a combination fits the job.',
       voices: [
         'We bought AI and nobody can use it.',
         'The licences keep renewing and no one owns the bill.',
       ],
-    },
-    {
-      label: 'Model 02 / Start it up',
-      brings: 'You bring the ideas.',
-      supplies:
-        'You know the work you want to change; you do not know which product does it. We choose ' +
-        'the systems, prepare the knowledge and data behind them, train the people who will use ' +
-        'them, and stand the whole thing up under the same operating model.',
-      voices: [
-        'We know the job. We do not know the tool.',
-        'We are starting from nothing and want it done properly the first time.',
-      ],
+      action: { label: 'Discuss your existing tools', href: inquiryHref('existing-ai') },
     },
   ] satisfies readonly ServiceModel[],
   /** mono caption above each panel's quoted situations */
   voicesCaption: 'Sounds like',
   closing:
-    'Neither one ends at a deployment. Both end in the same place — a portfolio with a named ' +
+    'Neither route ends at a deployment. Both end in the same place — a scope with a named ' +
     'owner, a written boundary, a support path, and a cost line somebody reads every month.',
 };
 
@@ -152,7 +155,7 @@ export const SCOPE_REGISTER = {
       included:
         'Role-based onboarding, acceptable-use guidance, office hours and materials, ' +
         'supported-use triage, adoption blockers.',
-      boundary: 'Not unlimited training or general IT support.',
+      boundary: 'Not unlimited training, unlimited development, or general IT support.',
     },
     {
       label: 'Knowledge / Owned',
@@ -182,9 +185,11 @@ export const SCOPE_REGISTER = {
       label: 'Service / Watched',
       service: 'Monitoring, incident, and change operations',
       included:
-        'Supported health, quality and cost signals, triage, containment, notification, ' +
-        'vendor-change review, regression work.',
-      boundary: 'Third-party uptime and events outside the managed scope are excluded.',
+        'Supported health and cost signals, triage, containment, notification, vendor-change ' +
+        'review, regression work, and investigation of reported output problems.',
+      boundary:
+        'Third-party uptime and events outside the managed scope are excluded. Continuous review ' +
+        'of every AI answer is not included.',
     },
     {
       label: 'Cost / Controlled',
@@ -209,8 +214,8 @@ export const ENGAGEMENT_PATH = {
     {
       name: 'Deploy',
       description:
-        'Configure the selected customer-owned products, access, controls, integrations, tests, ' +
-        'documentation, and training.',
+        'Configure the selected products or the pilot workspace, access, controls, integrations, ' +
+        'tests, documentation, and training. Account control and handover are agreed first.',
       commercial: 'Fixed project or milestone scope',
     },
     {
@@ -274,8 +279,8 @@ export const SERVICES_CTA = {
   folio: '06 / Conversion',
   heading: 'What should somebody own by Monday morning?',
   support:
-    'Bring the products, the people, and the last thing that had no owner. We will scope from ' +
-    'there.',
-  primary: { label: 'Map the managed scope', href: hrefFor('start') } satisfies Action,
-  secondary: { label: 'Read the operating method', href: hrefFor('method') } satisfies Action,
+    'Bring one team and the work you want to improve, or the products and people you already ' +
+    'have. We will scope from there.',
+  primary: { label: 'Discuss a workspace pilot', href: inquiryHref('workspace-pilot') } satisfies Action,
+  secondary: { label: 'Discuss your existing tools', href: inquiryHref('existing-ai') } satisfies Action,
 };

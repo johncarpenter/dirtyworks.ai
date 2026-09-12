@@ -1,10 +1,36 @@
-/* /msps content. Copy is verbatim from mockups/design_files/ForMSPs.dc.html; headings are authored
-   in sentence case and uppercased by CSS (scripts/check-content.ts RULE-7).
+/* /msps content. Copy started verbatim from mockups/design_files/ForMSPs.dc.html; headings are
+   authored in sentence case and uppercased by CSS (scripts/check-content.ts RULE-7).
+
+   The workspace-pilot refresh added the managed workspace as a concrete delivery option
+   (WORKSPACE_OPTION), one client at a time. Two things it deliberately does NOT say: that
+   partnering with Dirtyworks.ai extends Dirtyworks.ai's own Cloudflare relationship to the
+   partner, or that white-label deployment is instant. The 90-day review in the pilot steps is the
+   existing partner pilot's; it is not copied to the direct workspace offer.
 
    The seam matrix is the load-bearing structure on this page: ten responsibility lines, three
    parties, and thirty cells that each carry a word. `lead` marks the party that carries the line —
    it selects that party's colour and the 600 weight, but the meaning is always in the text, never
    in the colour (constitution Principle IV, FR-047). */
+
+/** 02 / The workspace as a delivery option. One client, one defined pilot. */
+export const WORKSPACE_OPTION = {
+  folio: '02 / A concrete delivery option',
+  heading: 'Bring a managed AI workspace to your clients.',
+  body:
+    'Start with one client and a defined pilot: a Cloudflare OS workspace customized for one of ' +
+    'their teams, with Dirtyworks.ai configuring, onboarding, and supporting the agreed scope. We ' +
+    'agree how your team and Dirtyworks.ai share onboarding, access, support, and the customer ' +
+    'relationship before anything is deployed. Managing the AI tools a client already has ' +
+    'remains available on the same terms.',
+  /* The boundary. A partner program's existence is not proof of enrolment, entitlement, or
+     trademark permission, and a partnership with us does not transfer whatever relationship we
+     hold to the partner. */
+  boundary:
+    'Partnering with Dirtyworks.ai is a relationship with Dirtyworks.ai. It does not extend our ' +
+    'platform relationships to your practice, promise instant white-label deployment, or grant ' +
+    'access to every Cloudflare product. Each pilot is delivered one client at a time.',
+  action: 'Discuss an MSP pilot',
+} as const;
 
 export interface PracticeItem {
   /** two-digit index, authored rather than derived so the register reads as a record */
@@ -12,11 +38,11 @@ export interface PracticeItem {
   text: string;
 }
 
-/** 02 / What the practice adds — eight things a partner does not have to build twice. */
+/** 03 / What the practice adds — eight things a partner does not have to build twice. */
 export const PRACTICE_HEADING = 'Eight things you do not have to build twice.';
 
 export const PRACTICE_ITEMS: readonly PracticeItem[] = [
-  { index: '01', text: 'Governed AI product selection and commercial-route review.' },
+  { index: '01', text: 'A managed workspace pilot, or governed product selection for existing tools.' },
   { index: '02', text: 'Client AI account and user administration.' },
   { index: '03', text: 'Role-based onboarding, training, and supported-use triage.' },
   { index: '04', text: 'Company knowledge, source, and evaluation operations.' },
@@ -35,7 +61,7 @@ export interface PartnerModel {
   seam: string;
 }
 
-/** 03 / Three models. Each model states the same three things, so they can be compared. */
+/** 04 / Three models. Each model states the same three things, so they can be compared. */
 export const PARTNER_MODELS: readonly PartnerModel[] = [
   {
     name: 'Referral',
@@ -90,7 +116,7 @@ export interface SeamRow {
   emphasis?: boolean;
 }
 
-/** 04 / Responsibility seam. Column headers, in party order. */
+/** 05 / Responsibility seam. Column headers, in party order. */
 export const SEAM_COLUMNS = {
   line: 'Responsibility line',
   msp: 'MSP',
@@ -169,7 +195,7 @@ export interface PilotStep {
   text: string;
 }
 
-/** 05 / One-customer pilot. Seven steps, and the seventh admits stopping is an outcome. */
+/** 06 / One-customer pilot. Seven steps, and the seventh admits stopping is an outcome. */
 export const PILOT_HEADING = 'Prove the seam with one customer.';
 
 export const PILOT_STEPS: readonly PilotStep[] = [
@@ -185,7 +211,12 @@ export const PILOT_STEPS: readonly PilotStep[] = [
       'economics.',
   },
   { index: '04', text: 'Complete a paid review.' },
-  { index: '05', text: 'Deploy a bounded managed scope.' },
+  {
+    index: '05',
+    text:
+      'Deploy a bounded scope: a managed workspace pilot for one of their teams, or management ' +
+      'of the tools they already use.',
+  },
   { index: '06', text: 'Run a 90-day operating and partner review.' },
   { index: '07', text: 'Repeat, revise, or stop.' },
 ];
@@ -198,19 +229,20 @@ export const HERO = {
   lineTwoAccent: 'AI practice',
   lineTwoAfter: '.',
   lead:
-    'Dirtyworks.ai supplies the product-catalogue, review, enablement, knowledge, integration, ' +
-    'governance, evaluation, and operating method behind a managed AI service. The partner model ' +
-    'can be referral, co-managed, or white-label when the responsibilities and economics work.',
-  action: 'Design a partner pilot',
+    'Dirtyworks.ai supplies the managed workspace pilot, the product review, enablement, ' +
+    'knowledge, integration, governance, evaluation, and operating method behind a managed AI ' +
+    'service. The partner model can be referral, co-managed, or white-label when the ' +
+    'responsibilities and economics work.',
+  action: 'Discuss an MSP pilot',
 } as const;
 
-/** 06 / Conversion. */
+/** 07 / Conversion. */
 export const CTA = {
-  folio: '06 / Conversion',
+  folio: '07 / Conversion',
   heading: 'Bring one client. Write down who owns what.',
   support:
-    'A partner pilot starts with one account, one problem, and a responsibility schedule both ' +
-    'sides can sign.',
-  primaryLabel: 'Design a partner pilot',
-  secondaryLabel: 'Read the trust model',
+    'A partner pilot starts with one account, one defined scope, and a responsibility schedule ' +
+    'both sides can sign.',
+  primaryLabel: 'Discuss an MSP pilot',
+  secondaryLabel: 'Read the trust approach',
 } as const;

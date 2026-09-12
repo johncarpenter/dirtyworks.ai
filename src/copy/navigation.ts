@@ -12,7 +12,7 @@ const published = (r: RouteEntry) => r.published;
 
 const toItem = (r: RouteEntry): NavItem => ({ id: r.id, label: r.navLabel, href: r.path });
 
-/** Services · Catalogue · Method · Trust · For MSPs */
+/** Workspace pilot · Managed services · How it works · Trust · For MSPs */
 export const headerNav: readonly NavItem[] = ROUTES.filter((r) => published(r) && r.inHeaderNav).map(
   toItem,
 );
@@ -20,10 +20,12 @@ export const headerNav: readonly NavItem[] = ROUTES.filter((r) => published(r) &
 export interface FooterColumn {
   title: string;
   items: readonly NavItem[];
-  /** inert text, pending copy — never rendered as links */
-  inert?: readonly string[];
 }
 
+/* No Legal column. Privacy, terms and accessibility copy does not exist yet, and the refresh
+   brief is explicit: publish real approved pages or omit the labels — never inert text that
+   implies completed content and never a link to an empty page. LEGAL_PAGES in
+   src/copy/placeholders.ts records the dependency. */
 export const footerColumns: readonly FooterColumn[] = [
   {
     title: 'Service',
@@ -32,11 +34,6 @@ export const footerColumns: readonly FooterColumn[] = [
   {
     title: 'Company',
     items: ROUTES.filter((r) => published(r) && r.footerColumn === 'company').map(toItem),
-  },
-  {
-    title: 'Legal',
-    items: [],
-    inert: ['Privacy', 'Terms', 'Accessibility'],
   },
 ];
 

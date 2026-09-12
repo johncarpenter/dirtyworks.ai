@@ -1,4 +1,8 @@
 ---
+/* /start — the shared inquiry form. One destination for the workspace pilot, the existing-AI
+   route, and the MSP route; the interest arrives in the query string and is parsed by the island
+   after mount (the page is prerendered). A bare /start assumes nothing: not a failure to report,
+   not a pilot. */
 import '../styles/intake.css';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Band from '../components/layout/Band.astro';
@@ -6,27 +10,27 @@ import Folio from '../components/ui/Folio.astro';
 import Button from '../components/ui/Button.astro';
 import StartForm from '../components/islands/StartForm';
 import { CONTACT_EMAIL, INTAKE_MAILTO_SUBJECT } from '../copy/site';
-import { hrefFor } from '../copy/routes';
+import { hrefFor, inquiryHref } from '../copy/routes';
 
 const mailto = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(INTAKE_MAILTO_SUBJECT)}`;
 
+/* No response-time commitment is stated here, because none has been agreed. */
 const nextSteps = [
-  'We read the event and reply with what we would look at first.',
-  'If a paid review makes sense, you get a fixed scope before any work starts.',
-  'If it does not, we say so. Stop is a valid outcome.',
+  'We review the work and discuss whether the service fits.',
+  'If it does, we prepare a proposed scope and costs.',
+  'No pilot begins from submitting this form alone.',
 ];
 ---
 
 <BaseLayout route="start">
   <Band ground="bone" variant="hero">
-    <Folio text="Start / 01 — Map the current state" />
+    <Folio text="Start / 01 — Inquiry" />
     <h1 class="start__heading">
-      Show us what is already in the <span class="start__emphasis">stack</span>.
+      Let's scope a useful place to <span class="start__emphasis">start</span>.
     </h1>
     <p class="start__support">
-      One recent event is enough: missing access, an unmanaged account, abandoned licences, an
-      integration failure, unexpected spend, unclear policy, an unsupported team, or an answer
-      nobody could verify.
+      Tell us about your team and the work you want to improve. We will use this to discuss fit
+      and what a first scope could include.
     </p>
   </Band>
 
@@ -39,18 +43,20 @@ const nextSteps = [
           <div class="intake-noscript">
             <h2>Send the same details by email</h2>
             <p>
-              The intake form needs JavaScript to validate and send. Email
+              The inquiry form needs JavaScript to validate and send. Email
               <a href={mailto}>{CONTACT_EMAIL}</a> instead and include:
             </p>
             <ul>
-              <li>Name, company, role, and a work email we can reply to</li>
-              <li>What somebody was trying to do</li>
-              <li>What happened</li>
-              <li>The product or system involved, and who owns it today</li>
+              <li>Name, company, and a work email we can reply to</li>
+              <li>
+                Your interest: a workspace pilot, managing existing AI tools, an MSP partnership,
+                or not sure yet
+              </li>
+              <li>What you would like your team to do, build, or improve</li>
             </ul>
             <p>
-              Do not include passwords, API keys, customer or employee records, private documents,
-              health or financial information, or other sensitive data.
+              Please do not include credentials, private documents, or customer or employee
+              records.
             </p>
           </div>
         </noscript>
@@ -71,12 +77,24 @@ const nextSteps = [
           </ol>
         </div>
 
-        <div class="start__partner">
-          <p class="start__panel-title start__panel-title--light">Partner enquiry instead?</p>
-          <p class="start__partner-body">
-            MSPs bring one client, one problem, and the seam they want written down.
+        <div class="start__routes">
+          <p class="start__panel-title start__panel-title--light">Prefer a specific route?</p>
+          <p class="start__routes-body">
+            Each link opens this form with the interest already selected. You can change it.
           </p>
-          <Button href={hrefFor('msps')} variant="ghost">Design a partner pilot</Button>
+          <ul class="start__route-list">
+            <li><a href={inquiryHref('workspace-pilot')}>Workspace pilot</a></li>
+            <li><a href={inquiryHref('existing-ai')}>Existing AI management</a></li>
+            <li><a href={inquiryHref('msp-partner')}>MSP partnership</a></li>
+          </ul>
+        </div>
+
+        <div class="start__partner">
+          <p class="start__panel-title start__panel-title--light">Running an MSP?</p>
+          <p class="start__partner-body">
+            Read how referral, co-managed, and white-label pilots share the work before you write.
+          </p>
+          <Button href={hrefFor('msps')} variant="ghost">Read the partner models</Button>
         </div>
       </div>
     </div>
@@ -164,16 +182,42 @@ const nextSteps = [
     color: var(--signal-orange);
   }
 
+  .start__routes,
   .start__partner {
     background: var(--bone-3);
     border: 1.5px solid var(--ink);
     padding: 22px 20px;
   }
 
+  .start__routes-body,
   .start__partner-body {
     margin: 0 0 16px;
     font-size: 16.5px;
     line-height: 1.45;
+  }
+
+  .start__route-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 4px;
+  }
+
+  .start__route-list a {
+    display: flex;
+    align-items: center;
+    min-height: var(--target-min);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: var(--weight-label);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .start__route-list li:last-child a {
+    border-bottom: 0;
   }
 
   @media (max-width: 900px) {

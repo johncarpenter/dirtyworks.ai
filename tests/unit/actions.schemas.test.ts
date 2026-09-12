@@ -1,73 +1,88 @@
 import { describe, expect, it } from 'vitest';
-import { MIN_ELAPSED_MS, operatingGapSchema } from '../../src/actions/schemas';
+import { MIN_ELAPSED_MS, inquirySchema } from '../../src/actions/schemas';
 
 const valid = {
   name: 'Dana Okonkwo',
   company: 'Northline Engineering',
-  role: 'Operations lead',
   email: 'dana@northline.ca',
-  intent: 'Get a new hire access to the assistant the team already uses.',
-  event: 'Two weeks in, nobody could say who owns the account.',
-  system: 'Workforce assistant',
-  owner: 'Nobody',
-  needs: ['user administration', 'governance'],
+  interest: 'workspace-pilot',
+  message: 'Turn our new-hire setup process into a checklist the team can keep current.',
   decoy: '',
   elapsedMs: MIN_ELAPSED_MS + 500,
 };
 
-describe('operating gap schema', () => {
+describe('inquiry schema', () => {
   it('accepts a complete submission', () => {
-    const result = operatingGapSchema.safeParse(valid);
+    const result = inquirySchema.safeParse(valid);
     expect(result.success).toBe(true);
   });
 
-  it('treats every required field as required', () => {
-    for (const field of ['name', 'company', 'role', 'email', 'intent', 'event', 'system', 'owner']) {
-      const result = operatingGapSchema.safeParse({ ...valid, [field]: '' });
+  it('requires exactly the five required fields', () => {
+    for (const field of ['name', 'company', 'email', 'message']) {
+      const result = inquirySchema.safeParse({ ...valid, [field]: '' });
       expect(result.success, field).toBe(false);
+    }
+    const { interest, ...withoutInterest } = valid;
+    expect(inquirySchema.safeParse(withoutInterest).success).toBe(false);
+  });
+
+  /* Nobody has to report an incident to express interest. */
+  it('does not require a task, an event, a system, or an owner', () => {
+    const result = inquirySchema.safeParse(valid);
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.data).not.toHaveProperty('event');
+      expect(result.data).not.toHaveProperty('system');
     }
   });
 
-  it('rejects an unusable email address', () => {
-    expect(operatingGapSchema.safeParse({ ...valid, email: 'dana@' }).success).toBe(false);
-    expect(operatingGapSchema.safeParse({ ...valid, email: 'dana' }).success).toBe(false);
+  it('accepts every interest, including the neutral one', () => {
+    for (const interest of ['workspace-pilot', 'existing-ai', 'msp-partner', 'not-sure']) {
+      expect(inquirySchema.safeParse({ ...valid, interest }).success, interest).toBe(true);
+    }
   });
 
-  it('rejects an over-long field instead of silently truncating it', () => {
-    const result = operatingGapSchema.safeParse({ ...valid, event: 'x'.repeat(1001) });
-    expect(result.success).toBe(false);
+  it('rejects an interest outside the closed set', () => {
+    expect(inquirySchema.safeParse({ ...valid, interest: 'incident' }).success).toBe(false);
+  });
+
+  it('rejects an unusable email address', () => {
+    expect(inquirySchema.safeParse({ ...valid, email: 'dana@' }).success).toBe(false);
+    expect(inquirySchema.safeParse({ ...valid, email: 'dana' }).success).toBe(false);
+  });
+
+  it('holds the message to 1,000 characters instead of silently truncating it', () => {
+    expect(inquirySchema.safeParse({ ...valid, message: 'x'.repeat(1000) }).success).toBe(true);
+    expect(inquirySchema.safeParse({ ...valid, message: 'x'.repeat(1001) }).success).toBe(false);
   });
 
   it('rejects unknown keys', () => {
-    const result = operatingGapSchema.safeParse({ ...valid, budget: '50000' });
+    const result = inquirySchema.safeParse({ ...valid, budget: '50000' });
     expect(result.success).toBe(false);
   });
 
-  it('rejects a need outside the closed set', () => {
-    const result = operatingGapSchema.safeParse({ ...valid, needs: ['world domination'] });
-    expect(result.success).toBe(false);
-  });
+  it('accepts the optional context and normalises empty values to undefined', () => {
+    const full = inquirySchema.safeParse({
+      ...valid,
+      role: 'Operations lead',
+      teamSize: '12',
+      aiProducts: 'Microsoft 365 Copilot',
+      mspRelationship: 'Foothills IT',
+    });
+    expect(full.success).toBe(true);
 
-  it('defaults an absent need selection to empty rather than failing', () => {
-    const { needs, ...withoutNeeds } = valid;
-    const result = operatingGapSchema.safeParse(withoutNeeds);
-    expect(result.success).toBe(true);
-    if (result.success) expect(result.data.needs).toEqual([]);
-  });
-
-  it('normalises empty optional context to undefined', () => {
-    const result = operatingGapSchema.safeParse({ ...valid, companySize: '' });
-    expect(result.success).toBe(true);
-    if (result.success) expect(result.data.companySize).toBeUndefined();
+    const blank = inquirySchema.safeParse({ ...valid, teamSize: '' });
+    expect(blank.success).toBe(true);
+    if (blank.success) expect(blank.data.teamSize).toBeUndefined();
   });
 
   it('refuses a filled decoy field', () => {
-    const result = operatingGapSchema.safeParse({ ...valid, decoy: 'https://spam.example' });
+    const result = inquirySchema.safeParse({ ...valid, decoy: 'https://spam.example' });
     expect(result.success).toBe(false);
   });
 
   it('trims surrounding whitespace', () => {
-    const result = operatingGapSchema.safeParse({ ...valid, name: '  Dana Okonkwo  ' });
+    const result = inquirySchema.safeParse({ ...valid, name: '  Dana Okonkwo  ' });
     expect(result.success).toBe(true);
     if (result.success) expect(result.data.name).toBe('Dana Okonkwo');
   });

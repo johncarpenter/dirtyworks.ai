@@ -12,7 +12,7 @@
    intake form on /start, the partner route on /msps. No phone number, no street address and no
    response-time promise are invented to fill the register. */
 import { CONTACT_EMAIL, LOCATION } from '../site';
-import { hrefFor } from '../routes';
+import { hrefFor, inquiryHref } from '../routes';
 
 export const HERO = {
   folio: 'About / 01 — Operator-led',
@@ -22,8 +22,8 @@ export const HERO = {
   lineTwoEmphasis: 'after the demo',
   lineTwoAfter: '.',
   support:
-    'Who we are, and the three ways to reach us: email, the operating-gap intake, or a partner ' +
-    'enquiry.',
+    'Who we are, and the ways to reach us: email, a workspace pilot inquiry, a conversation ' +
+    'about the AI tools you already have, or a partner enquiry.',
 } as const;
 
 /* ------------------------------------------------------------------ 02 / Contact */
@@ -42,10 +42,11 @@ export interface ContactRow {
 
 export const CONTACT = {
   folio: '02 / How to reach us',
-  heading: 'Three ways in.',
+  heading: 'Four ways in.',
   support:
-    'Email for anything general. The intake form when there is a specific operating event to ' +
-    'look at. The partner route if you run an MSP and want a seam written down.',
+    'Email for anything general. The pilot inquiry when there is a team and a piece of work you ' +
+    'want to improve. The existing-tools route when the AI is already in the building. The ' +
+    'partner route if you run an MSP and want a seam written down.',
 } as const;
 
 export const CONTACT_ROWS: readonly ContactRow[] = [
@@ -57,20 +58,28 @@ export const CONTACT_ROWS: readonly ContactRow[] = [
     detail: 'Direct / general',
   },
   {
-    label: 'Operating gap',
-    value: 'Map your AI stack',
-    href: hrefFor('start'),
+    label: 'Workspace pilot',
+    value: 'Discuss a workspace pilot',
+    href: inquiryHref('workspace-pilot'),
     body:
-      'One recent event is enough: missing access, an unmanaged account, abandoned licences, an ' +
-      'integration failure, unexpected spend, or an answer nobody could verify. We read it and ' +
-      'reply with what we would look at first.',
-    detail: 'Structured intake',
+      'Bring one team, one recurring task, or one tool you wish existed. We will discuss fit and ' +
+      'what a first scope could include.',
+    detail: 'Pilot inquiry',
+  },
+  {
+    label: 'Existing AI tools',
+    value: 'Discuss your existing tools',
+    href: inquiryHref('existing-ai'),
+    body:
+      'If your team already uses AI products, we can help manage accounts, onboarding, ' +
+      'integrations, support, and costs. A recent problem is welcome, not required.',
+    detail: 'Managed services',
   },
   {
     label: 'MSP partners',
-    value: 'Design a partner pilot',
+    value: 'Read the partner models',
     href: hrefFor('msps'),
-    body: 'MSPs bring one client, one problem, and the seam they want written down.',
+    body: 'MSPs bring one client, one defined pilot, and the seam they want written down.',
     detail: 'Partner route',
   },
   {
@@ -95,7 +104,9 @@ export const COMPANY_PARAGRAPHS: readonly string[] = [
     'recommendation. They need somebody accountable for deployment, administration, training, ' +
     'integration, controls, support, monitoring, cost, and change.',
   'Dirtyworks.ai is being built as that operating partner — directly for Alberta businesses and ' +
-    'alongside traditional MSPs.',
+    'alongside traditional MSPs. Its featured offer is a managed AI workspace pilot: a Cloudflare ' +
+    'OS environment customized for one team, with onboarding and support from Dirtyworks.ai, ' +
+    'alongside management of the AI tools a business already has.',
 ];
 
 /* ------------------------------------------------------------------ 04 / Operating beliefs */
@@ -110,7 +121,7 @@ export const BELIEFS_FOLIO = '04 / Operating beliefs';
 
 export const BELIEFS: readonly Belief[] = [
   { index: '01', text: 'A licence is not an operating model.' },
-  { index: '02', text: 'Customer ownership is the default.' },
+  { index: '02', text: 'Account control and handover are agreed before deployment.' },
   { index: '03', text: 'Experienced employees are not bottlenecks to remove.' },
   { index: '04', text: 'Unsupported answers should fail visibly.' },
   { index: '05', text: 'Compliance claims require evidence and accountable specialists.' },
@@ -122,9 +133,8 @@ export const BELIEFS: readonly Belief[] = [
 
 export const CTA = {
   folio: '05 / Conversion',
-  heading: 'Bring us the operating problem. Not the AI pitch.',
-  support:
-    'We are more useful when the conversation starts with what broke than with what is possible.',
-  primaryLabel: 'Map your AI stack',
-  secondaryLabel: 'Read the operating method',
+  heading: 'Bring the work you want to improve.',
+  support: 'We will help define a practical place to start.',
+  primaryLabel: 'Discuss a workspace pilot',
+  secondaryLabel: 'Read how it works',
 } as const;

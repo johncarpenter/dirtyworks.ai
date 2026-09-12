@@ -1,0 +1,76 @@
+---
+/* Catalogue §02 — the featured pilot, above the catalogue. A compact band: a mono label, one
+   heading, the vendor-product / pilot-connection distinction in a sentence, and one action to
+   /workspace. It draws the line the rest of the page depends on before the first product name. */
+import Band from '../../layout/Band.astro';
+import Button from '../../ui/Button.astro';
+import { FEATURED_PILOT } from '../../../copy/pages/catalogue';
+
+const { label, heading, body, action } = FEATURED_PILOT;
+---
+
+<Band ground="bone-2" labelledBy="featured-pilot-heading">
+  <div class="featured">
+    <div>
+      <p class="featured__label">{label}</p>
+      <h2 class="featured__heading" id="featured-pilot-heading">{heading}</h2>
+    </div>
+    <div>
+      <p class="featured__body">{body}</p>
+      <div class="featured__action">
+        <Button href={action.href}>{action.label}</Button>
+      </div>
+    </div>
+  </div>
+</Band>
+
+<style>
+  .featured {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    gap: clamp(28px, 4vw, 64px);
+    align-items: end;
+    border-left: 6px solid var(--signal-orange);
+    padding-left: clamp(18px, 2.4vw, 32px);
+  }
+
+  .featured > * {
+    min-width: 0;
+  }
+
+  .featured__label {
+    margin: 0 0 16px;
+    font-family: var(--font-mono);
+    font-size: var(--type-label-sm);
+    font-weight: var(--weight-label);
+    letter-spacing: var(--track-label-wide);
+    text-transform: uppercase;
+    color: var(--steel);
+  }
+
+  .featured__heading {
+    font-weight: 900;
+    font-size: clamp(28px, 3.2vw, 56px);
+    line-height: 0.92;
+    letter-spacing: -0.03em;
+    max-width: 22ch;
+  }
+
+  .featured__body {
+    margin: 0;
+    font-size: 17px;
+    line-height: 1.52;
+    max-width: 48ch;
+  }
+
+  .featured__action {
+    margin-top: 22px;
+  }
+
+  @media (max-width: 900px) {
+    .featured {
+      grid-template-columns: minmax(0, 1fr);
+      align-items: start;
+    }
+  }
+</style>

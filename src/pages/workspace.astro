@@ -1,0 +1,38 @@
+---
+/* /workspace — the primary offer page. The same hero and pilot status as the home page, then:
+   a workspace shaped around the business, the worked example, the pilot scope (#pilot-scope, the
+   anchor the home page links to), who does what, fit, costs, questions, and the pilot inquiry.
+
+   No checkout, no plan selector, no duration, no price. See src/copy/pilot.ts for the rules the
+   copy on this page follows. */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PilotHero from '../components/sections/pilot/PilotHero.astro';
+import Shaped from '../components/sections/workspace/Shaped.astro';
+import Example from '../components/sections/workspace/Example.astro';
+import PilotScope from '../components/sections/workspace/PilotScope.astro';
+import WhoDoesWhat from '../components/sections/workspace/WhoDoesWhat.astro';
+import Fit from '../components/sections/workspace/Fit.astro';
+import Costs from '../components/sections/workspace/Costs.astro';
+import Faq from '../components/sections/workspace/Faq.astro';
+import CTABand from '../components/patterns/CTABand.astro';
+import { WORKSPACE_CTA } from '../copy/pages/workspace';
+---
+
+<BaseLayout route="workspace">
+  <PilotHero />
+  <Shaped />
+  <Example />
+  <PilotScope />
+  <WhoDoesWhat />
+  <Fit />
+  <Costs />
+  <Faq />
+
+  <CTABand
+    folio={WORKSPACE_CTA.folio}
+    heading={WORKSPACE_CTA.heading}
+    support={WORKSPACE_CTA.support}
+    primary={WORKSPACE_CTA.primary}
+    secondary={WORKSPACE_CTA.secondary}
+  />
+</BaseLayout>

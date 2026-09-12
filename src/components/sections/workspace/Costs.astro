@@ -1,0 +1,70 @@
+---
+/* /workspace §07. The cost paragraph, verbatim from the brief, and nothing that looks like a
+   price, a plan, or a checkout. Infrastructure and model usage are not assumed to be inside the
+   service fee: the quote determines billing and any allowance. */
+import Band from '../../layout/Band.astro';
+import Folio from '../../ui/Folio.astro';
+import Declaration from '../../patterns/Declaration.astro';
+import { COSTS } from '../../../copy/pages/workspace';
+
+const { folio, heading, body, note } = COSTS;
+---
+
+<Band ground="bone-2" labelledBy="costs-heading">
+  <Folio text={folio} />
+
+  <div class="costs__grid">
+    <Declaration
+      id="costs-heading"
+      size="clamp(32px,3.8vw,66px)"
+      leading="0.9"
+      tracking="-0.03em"
+      weight={900}
+    >
+      {heading}
+    </Declaration>
+
+    <div>
+      <p class="costs__text">{body}</p>
+      <p class="costs__note">{note}</p>
+    </div>
+  </div>
+</Band>
+
+<style>
+  .costs__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+    gap: clamp(32px, 5vw, 80px);
+    align-items: start;
+  }
+
+  .costs__grid > * {
+    min-width: 0;
+  }
+
+  .costs__text {
+    margin: 0;
+    font-size: clamp(18px, 1.3vw, 22px);
+    line-height: 1.5;
+    max-width: 52ch;
+  }
+
+  .costs__note {
+    margin: 24px 0 0;
+    padding-top: 18px;
+    border-top: 1px solid var(--rule);
+    font-family: var(--font-mono);
+    font-size: var(--type-label-sm);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--steel);
+    line-height: 1.8;
+  }
+
+  @media (max-width: 900px) {
+    .costs__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>
