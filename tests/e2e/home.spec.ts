@@ -34,15 +34,16 @@ test.describe('home', () => {
     );
   });
 
-  test('renders eight sections in the specified order', async ({ page }) => {
+  test('renders nine sections in the specified order', async ({ page }) => {
     await page.goto('/');
-    await expect(page.locator('main section')).toHaveCount(8);
+    await expect(page.locator('main section')).toHaveCount(9);
     const body = await page.locator('main').innerText();
     const order = [
-      'WORK WITH AI. BUILD WHAT THE WORK NEEDS.',
+      'WORKFLOWS. AGENTS. SCHEDULED TASKS. APPLICATIONS.',
+      'CHEAPER TO RUN THAN A STACK OF SUBSCRIPTIONS.',
       'YOUR TEAM BUILDS. YOU SET THE BOUNDARIES. WE KEEP IT RUNNING.',
       'START WITH ONE TEAM AND WORK WORTH IMPROVING.',
-      'KNOW WHO CAN USE IT, WHAT IT CAN REACH, AND WHO SUPPORTS IT.',
+      'YOUR DATA STAYS IN YOUR ENVIRONMENT.',
       'ALREADY HAVE AI TOOLS? WE CAN WORK WITH THOSE TOO.',
       'BRING A MANAGED AI WORKSPACE TO YOUR CLIENTS.',
       'WHAT WOULD YOUR TEAM BUILD FIRST?',
@@ -67,10 +68,23 @@ test.describe('home', () => {
     );
   });
 
-  test('labels every example as an example pilot use case', async ({ page }) => {
+  test('labels every example as an example pilot use case, one per kind', async ({ page }) => {
     await page.goto('/');
-    await expect(page.getByText('Example pilot use case')).toHaveCount(3);
+    await expect(page.getByText('Example pilot use case')).toHaveCount(4);
+    for (const kind of ['Workflow', 'Agent', 'Scheduled task', 'Application']) {
+      await expect(page.locator('.example').getByText(`/ ${kind}`)).toHaveCount(1);
+    }
     await expect(page.getByText('Examples are selected and validated for each pilot.')).toBeVisible();
+  });
+
+  test('states the security model in text: data, access, own AI, shared tools', async ({ page }) => {
+    await page.goto('/');
+    const text = await page.locator('main').innerText();
+    expect(text).toMatch(/Data stays within your systems/i);
+    expect(text).toMatch(/reach only what they are allowed to/i);
+    expect(text).toMatch(/runs its own AI/i);
+    expect(text).toMatch(/Tools are shared, data is not/i);
+    expect(text).toMatch(/Everything is customizable/i);
   });
 
   test('names the three parties in text on the responsibility rows', async ({ page }) => {

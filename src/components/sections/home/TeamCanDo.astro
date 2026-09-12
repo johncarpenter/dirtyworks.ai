@@ -1,7 +1,8 @@
 ---
-/* Home §02. Three example pilot use cases, each labelled as exactly that in text. None is a
-   completed customer deployment and none promises a specific external integration; the endnote
-   says examples are selected and validated per pilot. */
+/* Home §02. Four example pilot use cases — one workflow, one agent, one scheduled task, one
+   application — each labelled as exactly that in text. None is a completed customer deployment
+   and none promises a specific external integration; the endnote says examples are selected and
+   validated per pilot. */
 import Band from '../../layout/Band.astro';
 import Folio from '../../ui/Folio.astro';
 import ProofLabel from '../../ui/ProofLabel.astro';
@@ -31,7 +32,9 @@ const { folio, heading, intro, exampleLabel, examples, endnote } = TEAM_CAN_DO;
     {
       examples.map((example) => (
         <li class="example">
-          <ProofLabel status="neutral" size="sm">{exampleLabel}</ProofLabel>
+          <ProofLabel status="neutral" size="sm" value={example.kind}>
+            {exampleLabel}
+          </ProofLabel>
           <h3 class="example__name">{example.name}</h3>
           <p class="example__body">{example.body}</p>
         </li>
@@ -67,7 +70,7 @@ const { folio, heading, intro, exampleLabel, examples, endnote } = TEAM_CAN_DO;
     padding: 0;
     list-style: none;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
     gap: clamp(24px, 3vw, 40px);
   }
 
@@ -85,6 +88,8 @@ const { folio, heading, intro, exampleLabel, examples, endnote } = TEAM_CAN_DO;
 
   .example :global(.chip) {
     justify-self: start;
+    /* "Example pilot use case / Scheduled task" is wider than a narrow column; let it wrap. */
+    white-space: normal;
   }
 
   .example__name {

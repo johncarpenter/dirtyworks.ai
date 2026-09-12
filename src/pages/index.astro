@@ -1,7 +1,7 @@
 ---
-/* Home. Eight sections, in the order the workspace-pilot refresh brief specifies: the offer, what
-   a team can do, the freedom-and-management distinction, what the pilot includes, trust and
-   technology, the existing-AI route, the MSP route, and one conversion. Every one is a Band.
+/* Home. Nine sections: the offer, what a team can create, why one managed workspace (security,
+   speed, cost), the freedom-and-management distinction, what the pilot includes, secure by
+   design, the existing-AI route, the MSP route, and one conversion. Every one is a Band.
 
    The previous twelve-section argument — the unmanaged stack, the operating register, the vendor
    menu, the access-versus-operation comparison, the knowledge sequence, the manifesto — is gone
@@ -10,6 +10,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PilotHero from '../components/sections/pilot/PilotHero.astro';
 import TeamCanDo from '../components/sections/home/TeamCanDo.astro';
+import WhyWorkspace from '../components/sections/home/WhyWorkspace.astro';
 import Differentiator from '../components/sections/home/Differentiator.astro';
 import PilotIncludes from '../components/sections/home/PilotIncludes.astro';
 import TrustTechnology from '../components/sections/home/TrustTechnology.astro';
@@ -21,6 +22,7 @@ import Conversion from '../components/sections/home/Conversion.astro';
 <BaseLayout route="home">
   <PilotHero />
   <TeamCanDo />
+  <WhyWorkspace />
   <Differentiator />
   <PilotIncludes />
   <TrustTechnology />

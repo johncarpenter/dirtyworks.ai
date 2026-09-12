@@ -1,0 +1,95 @@
+---
+/* Home §03. The three reasons for one managed workspace, in the founder's order: security,
+   speed, cost. Three fields at equal weight on a bone-2 ground; the label on each is text. */
+import Band from '../../layout/Band.astro';
+import Folio from '../../ui/Folio.astro';
+import Declaration from '../../patterns/Declaration.astro';
+import { WHY_WORKSPACE } from '../../../copy/pilot';
+
+const { folio, heading, reasons } = WHY_WORKSPACE;
+---
+
+<Band ground="bone-2" labelledBy="why-heading">
+  <Folio text={folio} />
+
+  <Declaration
+    id="why-heading"
+    size="clamp(30px,3.6vw,64px)"
+    leading="0.9"
+    tracking="-0.03em"
+    weight={900}
+    measure="26ch"
+  >
+    {heading}
+  </Declaration>
+
+  <ol class="reasons">
+    {
+      reasons.map((reason, index) => (
+        <li class="reason">
+          <p class="reason__label">
+            <span class="reason__index" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
+            {reason.label}
+          </p>
+          <h3 class="reason__heading">{reason.heading}</h3>
+          <p class="reason__body">{reason.body}</p>
+        </li>
+      ))
+    }
+  </ol>
+</Band>
+
+<style>
+  .reasons {
+    margin: clamp(40px, 5vw, 64px) 0 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+    gap: clamp(24px, 3vw, 40px);
+  }
+
+  .reasons > * {
+    min-width: 0;
+  }
+
+  .reason {
+    display: grid;
+    gap: 14px;
+    align-content: start;
+    border-top: 6px solid var(--ink);
+    padding-top: 20px;
+  }
+
+  .reason__label {
+    margin: 0;
+    display: flex;
+    gap: 12px;
+    align-items: baseline;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: var(--weight-label);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+
+  .reason__index {
+    color: var(--orange-press);
+  }
+
+  .reason__heading {
+    margin: 0;
+    font-weight: var(--weight-display);
+    font-size: clamp(24px, 2.2vw, 36px);
+    line-height: 1;
+    letter-spacing: -0.025em;
+  }
+
+  .reason__body {
+    margin: 0;
+    font-size: 17px;
+    line-height: 1.5;
+    max-width: 40ch;
+  }
+</style>

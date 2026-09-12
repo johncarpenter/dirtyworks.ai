@@ -29,9 +29,10 @@ export const PILOT_HERO = {
   headingEmphasis: 'Dirtyworks.ai',
   headingLine2After: '.',
   body:
-    'Give your team a place to work with AI, use approved company information, and build tools ' +
-    'for the way your business operates. Start with a pilot configured around one team and a ' +
-    'defined set of work, with Dirtyworks.ai handling setup, onboarding, and support.',
+    'One managed workspace where your employees create workflows, agents, scheduled tasks, and ' +
+    'even applications, using approved company information. Data stays in your environment and ' +
+    'people reach only what they are allowed to. Start with a pilot configured around one team ' +
+    'and a defined set of work, with Dirtyworks.ai handling setup, onboarding, and support.',
   primary: { label: 'Discuss a workspace pilot', href: inquiryHref('workspace-pilot') } as Action,
   secondary: { label: 'Explore the workspace', href: hrefFor('workspace') } as Action,
   foundation: 'Built on Cloudflare OS. Customized and managed by Dirtyworks.ai.',
@@ -81,36 +82,94 @@ export const ILLUSTRATIVE_WORKFLOW = {
 /* ------------------------------------------------------------------ 02 what your team can do */
 
 export interface ExampleUseCase {
+  /** what kind of thing the team builds: workflow, agent, scheduled task, application */
+  kind: string;
   name: string;
   body: string;
 }
 
 export const TEAM_CAN_DO = {
-  folio: '02 / What your team can do',
-  heading: 'Work with AI. Build what the work needs.',
-  intro: 'Start with useful everyday work. Explore tools your team can shape as it learns.',
+  folio: '02 / What your team can create',
+  heading: 'Workflows. Agents. Scheduled tasks. Applications.',
+  intro:
+    'Employees describe the work in their own words and build the tool that does it, inside one ' +
+    'managed workspace. Start with useful everyday work and let the team shape it as it learns.',
   /** every example carries this label as text; none is a completed customer deployment */
   exampleLabel: 'Example pilot use case',
   examples: [
     {
-      name: 'Prepare an internal briefing',
-      body: 'Bring selected information together and draft a briefing for a person to review.',
-    },
-    {
-      name: 'Build an onboarding checklist',
-      body: 'Turn a repeatable internal process into a tool the team can use and improve.',
-    },
-    {
-      name: 'Create a project tracker',
+      kind: 'Workflow',
+      name: 'Prepare the weekly briefing',
       body:
-        'Describe the fields and views the team needs, then develop and share a tracker inside ' +
-        'the workspace.',
+        'Bring selected information together and draft a briefing for a person to review before ' +
+        'it goes anywhere.',
+    },
+    {
+      kind: 'Agent',
+      name: 'Answer policy questions',
+      body:
+        'An agent that answers from the approved policy documents, cites where it looked, and ' +
+        'says when it does not know.',
+    },
+    {
+      kind: 'Scheduled task',
+      name: 'Check the renewals every Monday',
+      body:
+        'A task that runs on a schedule, reads the approved register, and flags what needs a ' +
+        'decision this week.',
+    },
+    {
+      kind: 'Application',
+      name: 'Build an onboarding checklist',
+      body:
+        'Turn a repeatable internal process into an application the team can open, use, revise, ' +
+        'and share.',
     },
   ] satisfies readonly ExampleUseCase[],
   endnote: 'Examples are selected and validated for each pilot.',
 };
 
-/* ------------------------------------------------------------------ 03 who does what */
+/* ------------------------------------------------------------------ 03 why a managed workspace */
+
+export interface Reason {
+  label: string;
+  heading: string;
+  body: string;
+}
+
+/* The three reasons, in the founder's order: security, speed, cost. The cost line compares the
+   workspace with a subscription for every employee and every tool; it is a positioning claim, not
+   a price, and the actual costs are agreed before work begins. */
+export const WHY_WORKSPACE = {
+  folio: '03 / Why one managed workspace',
+  heading: 'Secure. Faster to build with. Cheaper to run than a stack of subscriptions.',
+  reasons: [
+    {
+      label: 'Security',
+      heading: 'It solves the security problem.',
+      body:
+        'Company data stays in your environment. Employees reach only what they are already ' +
+        'allowed to, and the workspace runs its own AI so information does not have to be sent ' +
+        'to an outside service to be used.',
+    },
+    {
+      label: 'Speed',
+      heading: 'A faster, easier way into agentic development.',
+      body:
+        'Employees do not wait for a project, a vendor, or a developer. They describe the work, ' +
+        'build the workflow, agent, task, or application, and improve it as they use it.',
+    },
+    {
+      label: 'Cost',
+      heading: 'More cost-effective than buying subscriptions.',
+      body:
+        'One managed workspace in place of a subscription for every employee and every tool, with ' +
+        'setup, support, and usage agreed before work begins and reviewed as you go.',
+    },
+  ] satisfies readonly Reason[],
+};
+
+/* ------------------------------------------------------------------ 04 who does what */
 
 export interface ResponsibilityRow {
   party: string;
@@ -135,17 +194,19 @@ export const RESPONSIBILITY_ROWS: readonly ResponsibilityRow[] = [
 ];
 
 export const DIFFERENTIATOR = {
-  folio: '03 / Freedom to build, managed operation',
+  folio: '04 / Freedom to build, managed operation',
   heading: 'Your team builds. You set the boundaries. We keep it running.',
   body:
-    'Employees can explore and create tools within the agreed workspace scope. Dirtyworks.ai ' +
-    'configures the environment, helps the team get started, and manages the support and ' +
-    'changes included in the pilot. When a tool becomes something the business relies on, we ' +
-    'agree how it will be tested, maintained, and supported.',
+    'Employees can explore and create tools within the agreed workspace scope, and share them ' +
+    'with each other without sharing the data behind them: a colleague who opens a shared tool ' +
+    'sees only what they are allowed to see. Everything is customizable, from the workspace ' +
+    'itself to the tools inside it. Dirtyworks.ai configures the environment, helps the team ' +
+    'get started, and manages the support and changes included in the pilot. When a tool becomes ' +
+    'something the business relies on, we agree how it will be tested, maintained, and supported.',
   rowsTitle: 'Who does what',
 };
 
-/* ------------------------------------------------------------------ 04 what the pilot includes */
+/* ------------------------------------------------------------------ 05 what the pilot includes */
 
 export interface PilotStage {
   name: string;
@@ -176,7 +237,7 @@ export const PILOT_STAGES: readonly PilotStage[] = [
 ];
 
 export const PILOT_INCLUDES = {
-  folio: '04 / What the pilot includes',
+  folio: '05 / What the pilot includes',
   heading: 'Start with one team and work worth improving.',
   body:
     'We define the work, configure the workspace, onboard the team, and review what happens in ' +
@@ -185,15 +246,43 @@ export const PILOT_INCLUDES = {
   secondary: { label: 'Read how it works', href: hrefFor('method') } as Action,
 };
 
-/* ------------------------------------------------------------------ 05 trust and technology */
+/* ------------------------------------------------------------------ 06 secure by design */
+
+export interface SecurityPoint {
+  heading: string;
+  body: string;
+}
 
 export const TRUST_TECHNOLOGY = {
-  folio: '05 / Trust and technology',
-  heading: 'Know who can use it, what it can reach, and who supports it.',
+  folio: '06 / Secure by design',
+  heading: 'Your data stays in your environment.',
   body:
-    'Before the pilot starts, we agree user access, approved information and connections, ' +
-    'support responsibilities, and costs. We also document account control and what happens to ' +
-    'data, configuration, and tools when the pilot ends.',
+    'The workspace is built so that company information does not have to leave your systems to ' +
+    'be useful. Before the pilot starts, we agree user access, approved information and ' +
+    'connections, support responsibilities, and costs, and we document account control and what ' +
+    'happens to data, configuration, and tools when the pilot ends.',
+  points: [
+    {
+      heading: 'Data stays within your systems',
+      body: 'The workspace runs in your environment and works with the information already there.',
+    },
+    {
+      heading: 'People reach only what they are allowed to',
+      body: 'Access is defined and tested for each connected resource, not assumed.',
+    },
+    {
+      heading: 'It runs its own AI',
+      body:
+        'Models run inside the workspace, so company data is not sent to an outside AI service ' +
+        'to be used.',
+    },
+    {
+      heading: 'Tools are shared, data is not',
+      body:
+        'An employee can share a workflow, agent, or application with a colleague without ' +
+        'sharing the data behind it.',
+    },
+  ] satisfies readonly SecurityPoint[],
   foundationTitle: 'The foundation',
   foundation:
     'Cloudflare OS provides the open-source workspace foundation. Dirtyworks.ai adapts it to ' +
@@ -202,10 +291,10 @@ export const TRUST_TECHNOLOGY = {
   action: { label: 'Read the trust approach', href: hrefFor('trust') } as Action,
 };
 
-/* ------------------------------------------------------------------ 06 existing AI route */
+/* ------------------------------------------------------------------ 07 existing AI route */
 
 export const EXISTING_AI = {
-  folio: '06 / Already using AI tools',
+  folio: '07 / Already using AI tools',
   heading: 'Already have AI tools? We can work with those too.',
   body:
     'If your team already uses AI products, Dirtyworks.ai can help manage accounts, onboarding, ' +
@@ -214,10 +303,10 @@ export const EXISTING_AI = {
   action: { label: 'Explore managed services', href: hrefFor('services') } as Action,
 };
 
-/* ------------------------------------------------------------------ 07 MSP route */
+/* ------------------------------------------------------------------ 08 MSP route */
 
 export const MSP_ROUTE = {
-  folio: '07 / For MSPs',
+  folio: '08 / For MSPs',
   heading: 'Bring a managed AI workspace to your clients.',
   body:
     'Start with one client and a defined pilot. We agree how your team and Dirtyworks.ai share ' +
@@ -226,13 +315,14 @@ export const MSP_ROUTE = {
   secondary: { label: 'Read the partner models', href: hrefFor('msps') } as Action,
 };
 
-/* ------------------------------------------------------------------ 08 final conversion */
+/* ------------------------------------------------------------------ 09 final conversion */
 
 export const PILOT_CONVERSION = {
-  folio: '08 / A first tool',
+  folio: '09 / A first tool',
   heading: 'What would your team build first?',
   support:
-    'Bring one team, one recurring task, or one tool you wish existed. We will explore whether a ' +
-    'managed workspace pilot is a useful place to start.',
+    'Bring one team, one recurring task, or one tool you wish existed: a workflow, an agent, a ' +
+    'scheduled task, or an application. We will explore whether a managed workspace pilot is a ' +
+    'useful place to start.',
   primary: { label: 'Discuss a workspace pilot', href: inquiryHref('workspace-pilot') } as Action,
 };
