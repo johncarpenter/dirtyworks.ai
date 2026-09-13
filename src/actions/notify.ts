@@ -1,5 +1,6 @@
 import type { SendEmailBinding } from '../types/bindings';
-import { FIELD_LABELS, type OperatingGapSubmission } from './schemas';
+import { INTEREST_LABELS } from '../copy/inquiry';
+import { FIELD_LABELS, type InquirySubmission } from './schemas';
 
 /**
  * Turns a validated submission into one transactional notification, and records a
@@ -7,7 +8,7 @@ import { FIELD_LABELS, type OperatingGapSubmission } from './schemas';
  *
  * Cloudflare Email Service is transactional only. Both `text` and `html` are always populated,
  * `replyTo` is the submitter so a reply needs no copy-paste, and the subject identifies the form
- * so a subscription could never be mistaken for a setup request.
+ * and the interest so a partner enquiry is never mistaken for a pilot inquiry.
  */
 
 export const NOTIFY_TO = 'hello@dirtyworks.ai';
@@ -22,7 +23,7 @@ export type SubmissionOutcome =
 
 /** Exactly five fields, none derived from user content. No names, addresses, bodies or raw IPs. */
 export interface SubmissionLogRecord {
-  purpose: 'operating-gap-intake';
+  purpose: 'website-inquiry';
   outcome: SubmissionOutcome;
   durationMs: number;
   messageId?: string;
@@ -44,38 +45,39 @@ const escapeHtml = (value: string): string =>
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;');
 
-export const buildNotification = (submission: OperatingGapSubmission): Notification => {
+export const buildNotification = (submission: InquirySubmission): Notification => {
   const rows = FIELD_LABELS.map(([key, label]) => {
     const raw = submission[key];
-    const value = typeof raw === 'string' && raw.length > 0 ? raw : ABSENT;
+    const value =
+      key === 'interest'
+        ? INTEREST_LABELS[submission.interest]
+        : typeof raw === 'string' && raw.length > 0
+          ? raw
+          : ABSENT;
     return { label, value };
   });
 
-  const needs = submission.needs.length > 0 ? submission.needs.join(', ') : 'none selected';
-
   const textBody = [
-    'OPERATING GAP / INTAKE',
+    'WEBSITE INQUIRY',
     '',
     ...rows.map(({ label, value }) => `${label}\n  ${value}`),
-    `What do you need?\n  ${needs}`,
     '',
     'Submitted from the dirtyworks.ai website form. Reply directly to reach the sender.',
   ].join('\n');
 
   const htmlBody = [
-    '<h1>Operating gap / intake</h1>',
+    '<h1>Website inquiry</h1>',
     '<dl>',
     ...rows.map(
       ({ label, value }) =>
         `<dt><strong>${escapeHtml(label)}</strong></dt><dd>${escapeHtml(value)}</dd>`,
     ),
-    `<dt><strong>What do you need?</strong></dt><dd>${escapeHtml(needs)}</dd>`,
     '</dl>',
     '<p>Submitted from the dirtyworks.ai website form. Reply directly to reach the sender.</p>',
   ].join('\n');
 
   return {
-    subject: `OPERATING GAP / INTAKE — ${submission.company}`,
+    subject: `WEBSITE INQUIRY / ${INTEREST_LABELS[submission.interest].toUpperCase()} — ${submission.company}`,
     text: textBody,
     html: htmlBody,
   };
@@ -87,7 +89,7 @@ export const buildNotification = (submission: OperatingGapSubmission): Notificat
  */
 export const sendNotification = async (
   email: SendEmailBinding,
-  submission: OperatingGapSubmission,
+  submission: InquirySubmission,
 ): Promise<string> => {
   const notification = buildNotification(submission);
 

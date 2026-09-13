@@ -1,0 +1,54 @@
+---
+/* /workspace §06. One fit field: what is a good starting point, and what this pilot is not. The
+   exclusions render at the same weight as the inclusions — that is the pattern's reason to exist. */
+import Band from '../../layout/Band.astro';
+import Folio from '../../ui/Folio.astro';
+import Declaration from '../../patterns/Declaration.astro';
+import FitField from '../../patterns/FitField.astro';
+import { FIT } from '../../../copy/pages/workspace';
+
+const { folio, heading, segment, label, summary, included, excluded } = FIT;
+---
+
+<Band ground="bone" labelledBy="fit-heading">
+  <Folio text={folio} />
+
+  <div class="fit__grid">
+    <Declaration
+      id="fit-heading"
+      size="clamp(30px,3.4vw,60px)"
+      leading="0.92"
+      tracking="-0.03em"
+      weight={800}
+    >
+      {heading}
+    </Declaration>
+
+    <FitField
+      segment={segment}
+      label={label}
+      summary={summary}
+      included={included}
+      excluded={excluded}
+    />
+  </div>
+</Band>
+
+<style>
+  .fit__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.4fr);
+    gap: clamp(32px, 5vw, 80px);
+    align-items: start;
+  }
+
+  .fit__grid > * {
+    min-width: 0;
+  }
+
+  @media (max-width: 900px) {
+    .fit__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>

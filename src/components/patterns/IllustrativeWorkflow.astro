@@ -1,0 +1,177 @@
+---
+/* The workspace pilot's visual: a worked example of the onboarding-checklist use case, rendered
+   as a numbered record on a hard-shadowed sheet and stamped "Illustrative workflow".
+
+   Deliberately NOT a mock of the product. No window chrome, no invented controls, no chat prompt,
+   nothing that reads as a screenshot of a deployed client environment. The brief is explicit:
+   a missing demonstration asset must produce a text example, not a fabricated interface. When a
+   real recording with sample data exists — poster image, captions, user-controlled playback — it
+   replaces this component on both pages.
+
+   Step names are paragraphs, not headings: the sheet sits inside the hero under the h1, and an h3
+   there would break the heading outline that tests/e2e/a11y.spec.ts holds every route to. */
+import ClaimStamp from '../ui/ClaimStamp.astro';
+import { ILLUSTRATIVE_WORKFLOW } from '../../copy/pilot';
+
+interface Props {
+  /** `hero` is the compact sheet beside the lede; `section` is the wider, roomier one on /workspace */
+  size?: 'hero' | 'section';
+  class?: string;
+}
+
+const { size = 'hero', class: className } = Astro.props;
+const { sheetLabel, stamp, steps, note } = ILLUSTRATIVE_WORKFLOW;
+const pad = (n: number) => String(n).padStart(2, '0');
+---
+
+<div class:list={['workflow', size === 'section' && 'workflow--section', className]}>
+  <div class="workflow__head">
+    <span class="workflow__label">{sheetLabel}</span>
+    <ClaimStamp state="ILLUSTRATIVE" label={stamp} />
+  </div>
+
+  <ol class="workflow__steps">
+    {
+      steps.map((step, index) => (
+        <li class="workflow__step">
+          <span class="workflow__index" aria-hidden="true">{pad(index + 1)}</span>
+          <div class="workflow__body">
+            <p class="workflow__name">{step.name}</p>
+            <p class="workflow__detail">{step.detail}</p>
+          </div>
+        </li>
+      ))
+    }
+  </ol>
+
+  <p class="workflow__note">{note}</p>
+</div>
+
+<style>
+  .workflow {
+    background: var(--bone-3);
+    border: 1.5px solid var(--ink);
+    box-shadow: 6px 6px 0 var(--ink);
+  }
+
+  .workflow__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    padding: 14px 20px;
+    border-bottom: 1.5px solid var(--ink);
+    background: var(--bone);
+  }
+
+  .workflow__label {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    font-weight: var(--weight-label);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+
+  .workflow__steps {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .workflow__step {
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr);
+    gap: 14px;
+    align-items: start;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .workflow__step > * {
+    min-width: 0;
+  }
+
+  /* The alternating offset the register pattern carries everywhere: a record, not a card grid. */
+  .workflow__step:nth-child(even) {
+    background: var(--bone-2);
+    padding-left: 32px;
+  }
+
+  .workflow__index {
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    background: var(--ink);
+    color: var(--bone);
+    font-family: var(--font-mono);
+    font-weight: var(--weight-label);
+    font-size: 13px;
+  }
+
+  .workflow__step:last-child .workflow__index {
+    background: var(--verified-acid);
+    color: var(--ink);
+  }
+
+  .workflow__name {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: var(--weight-display);
+    font-size: 17px;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+  }
+
+  .workflow__detail {
+    margin: 6px 0 0;
+    font-size: 15.5px;
+    line-height: 1.45;
+    color: var(--ink-2);
+  }
+
+  .workflow__note {
+    margin: 0;
+    padding: 12px 20px 14px;
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--steel);
+    line-height: 1.7;
+  }
+
+  .workflow--section .workflow__step {
+    padding: 22px 28px;
+    gap: 20px;
+  }
+
+  .workflow--section .workflow__step:nth-child(even) {
+    padding-left: 44px;
+  }
+
+  .workflow--section .workflow__name {
+    font-size: clamp(19px, 1.7vw, 26px);
+  }
+
+  .workflow--section .workflow__detail {
+    font-size: 17px;
+    max-width: 60ch;
+  }
+
+  @media (max-width: 480px) {
+    .workflow__step,
+    .workflow--section .workflow__step {
+      padding-left: 14px;
+      padding-right: 14px;
+    }
+
+    .workflow__step:nth-child(even),
+    .workflow--section .workflow__step:nth-child(even) {
+      padding-left: 22px;
+    }
+  }
+</style>

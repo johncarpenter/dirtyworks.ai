@@ -13,7 +13,7 @@ import ProofLabel from '../../ui/ProofLabel.astro';
 import ClaimStamp from '../../ui/ClaimStamp.astro';
 import { PRODUCT_MENU } from '../../../copy/pages/catalogue';
 
-const { folio, categories, primary, secondary, disclaimer } = PRODUCT_MENU;
+const { folio, categories, primary, secondary, disclaimer, pilotNote } = PRODUCT_MENU;
 
 /* Grouped by operating tier rather than run as seven undifferentiated rows.
    The tier was already on every row as a small mono label, repeated four times for Operate; it is
@@ -90,6 +90,8 @@ let stripe = -1;
       <ClaimStamp state="VERIFY AT QUOTE" /> {disclaimer}
     </p>
   </div>
+
+  <p class="menu__pilot-note">{pilotNote}</p>
 </Band>
 
 <script is:inline>
@@ -252,6 +254,19 @@ let stripe = -1;
     color: var(--steel-2);
     max-width: 34ch;
     line-height: 1.7;
+  }
+
+  .menu__pilot-note {
+    margin: 24px 0 0;
+    padding-top: 18px;
+    border-top: 1px solid var(--rule);
+    font-family: var(--font-mono);
+    font-size: var(--type-label-sm);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--steel);
+    line-height: 1.8;
+    max-width: 70ch;
   }
 
   .menu__toggle {

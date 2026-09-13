@@ -1,14 +1,27 @@
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { actions, isInputError } from 'astro:actions';
 import { Icon } from '../ui/Icon';
+import {
+  INTERESTS,
+  INTEREST_LABELS,
+  MESSAGE_HELP,
+  MESSAGE_MAX_LENGTH,
+  NEUTRAL_INTEREST,
+  parseInterest,
+  type Interest,
+} from '../../copy/inquiry';
 
 /**
- * The site's only stateful surface.
+ * The site's only stateful surface: the shared inquiry form.
  *
- * The prototype held a single `submitted` boolean. That is not enough to be honest about failure,
- * so this implements the full machine from data-model.md §3: editing, invalid, submitting,
- * confirmed, refused, rateLimited, deliveryFailed. `confirmed` is reachable only from a resolved
- * send — every other outcome keeps the visitor's values and offers a direct email alternative.
+ * It replaced the incident-first intake. Nobody has to report a failure to express interest in a
+ * pilot; the required fields are name, company, work email, an interest, and one free-text
+ * answer. The interest can arrive preselected through `/start?interest=…` — parsed on the client
+ * after mount, because the page is prerendered — and the visitor can always change it.
+ *
+ * The state machine is unchanged from data-model.md §3: editing, submitting, confirmed, refused,
+ * rateLimited, deliveryFailed. `confirmed` is reachable only from a resolved send — every other
+ * outcome keeps the visitor's values and offers a direct email alternative.
  */
 
 type Status =
@@ -38,7 +51,6 @@ const IDENTITY_FIELDS: FieldSpec[] = [
     required: true,
     maxLength: 120,
   },
-  { name: 'role', label: 'Role', placeholder: 'Your title', required: true, maxLength: 80 },
   {
     name: 'email',
     label: 'Work email',
@@ -49,61 +61,23 @@ const IDENTITY_FIELDS: FieldSpec[] = [
   },
 ];
 
-const EVENT_FIELDS: FieldSpec[] = [
-  {
-    name: 'intent',
-    label: 'What was somebody trying to do?',
-    placeholder: 'The task, not the technology.',
-    required: true,
-    multiline: true,
-    maxLength: 1000,
-  },
-  {
-    name: 'event',
-    label: 'What happened?',
-    placeholder: 'The event, in plain terms.',
-    required: true,
-    multiline: true,
-    maxLength: 1000,
-  },
-];
-
-const OWNERSHIP_FIELDS: FieldSpec[] = [
-  {
-    name: 'system',
-    label: 'Product or system involved',
-    placeholder: 'Tool, account, or integration',
-    required: true,
-    maxLength: 160,
-  },
-  {
-    name: 'owner',
-    label: 'Who owns it today, if anyone?',
-    placeholder: 'Person, team, or \u201cnobody\u201d',
-    required: true,
-    maxLength: 160,
-  },
-];
+const MESSAGE_FIELD: FieldSpec = {
+  name: 'message',
+  label: 'What would you like your team to do, build, or improve?',
+  placeholder: 'The work, in plain terms.',
+  required: true,
+  multiline: true,
+  maxLength: MESSAGE_MAX_LENGTH,
+};
 
 const OPTIONAL_FIELDS: FieldSpec[] = [
-  { name: 'companySize', label: 'Approximate company size', placeholder: 'People', maxLength: 80 },
+  { name: 'role', label: 'Role', placeholder: 'Your title', maxLength: 80 },
+  { name: 'teamSize', label: 'Approximate team size', placeholder: 'People', maxLength: 80 },
   {
     name: 'aiProducts',
-    label: 'Current AI products or categories',
+    label: 'Current systems or AI tools',
     placeholder: 'Names or job types',
     maxLength: 300,
-  },
-  {
-    name: 'peopleUsing',
-    label: 'People using them',
-    placeholder: 'Approximate number',
-    maxLength: 80,
-  },
-  {
-    name: 'environment',
-    label: 'Existing environment',
-    placeholder: 'Microsoft, Google, AWS, Azure, other',
-    maxLength: 160,
   },
   {
     name: 'mspRelationship',
@@ -111,55 +85,24 @@ const OPTIONAL_FIELDS: FieldSpec[] = [
     placeholder: 'Provider, or none',
     maxLength: 160,
   },
-  {
-    name: 'contactPreference',
-    label: 'Preferred way and time to respond',
-    placeholder: 'Email, phone, morning, afternoon',
-    maxLength: 160,
-  },
 ];
 
-const NEEDS = [
-  'product selection',
-  'user administration',
-  'training',
-  'support',
-  'integration',
-  'governance',
-  'monitoring',
-  'cost control',
-  'knowledge',
-  'msp partnership',
-] as const;
+const ALL_FIELDS = [...IDENTITY_FIELDS, MESSAGE_FIELD, ...OPTIONAL_FIELDS];
 
-const NEED_LABELS: Record<(typeof NEEDS)[number], string> = {
-  'product selection': 'Product selection',
-  'user administration': 'User administration',
-  training: 'Training',
-  support: 'Support',
-  integration: 'Integration',
-  governance: 'Governance',
-  monitoring: 'Monitoring',
-  'cost control': 'Cost control',
-  knowledge: 'Knowledge',
-  'msp partnership': 'MSP partnership',
-};
-
-const ALL_FIELDS = [
-  ...IDENTITY_FIELDS,
-  ...EVENT_FIELDS,
-  ...OWNERSHIP_FIELDS,
-  ...OPTIONAL_FIELDS,
-];
-
-const MAILTO = 'mailto:hello@dirtyworks.ai?subject=Operating%20gap';
+const MAILTO = 'mailto:hello@dirtyworks.ai?subject=Website%20inquiry';
 
 export default function StartForm() {
   const [status, setStatus] = useState<Status>('editing');
   const [fieldErrors, setFieldErrors] = useState<Record<string, string[]>>({});
-  const [needs, setNeeds] = useState<string[]>([]);
+  const [interest, setInterest] = useState<Interest>(NEUTRAL_INTEREST);
   const formRef = useRef<HTMLFormElement | null>(null);
   const mountedAt = useMemo(() => Date.now(), []);
+
+  // The page is prerendered, so the query string is only readable here. Only the three
+  // recognised values preselect anything; everything else stays on the neutral selection.
+  useEffect(() => {
+    setInterest(parseInterest(window.location.search));
+  }, []);
 
   const busy = status === 'submitting';
 
@@ -201,16 +144,15 @@ export default function StartForm() {
 
     const payload = {
       ...Object.fromEntries(ALL_FIELDS.map((field) => [field.name, value(field.name)])),
-      needs,
+      interest,
       decoy: value('decoy'),
       elapsedMs: Date.now() - mountedAt,
     };
 
-    const { error } = await actions.logOperatingGap(payload as never);
+    const { error } = await actions.sendInquiry(payload as never);
 
     if (!error) {
       setStatus('confirmed');
-      setNeeds([]);
       formRef.current?.reset();
       return;
     }
@@ -235,10 +177,12 @@ export default function StartForm() {
     setStatus('deliveryFailed');
   };
 
-  const renderField = (field: FieldSpec) => {
+  const renderField = (field: FieldSpec, help?: string) => {
     const errors = fieldErrors[field.name] ?? [];
     const invalid = errors.length > 0;
-    const describedBy = invalid ? `${field.name}-error` : undefined;
+    const helpId = help ? `${field.name}-help` : null;
+    const errorId = invalid ? `${field.name}-error` : null;
+    const describedBy = [helpId, errorId].filter(Boolean).join(' ') || undefined;
 
     return (
       <p className="field" key={field.name}>
@@ -246,6 +190,11 @@ export default function StartForm() {
           {field.label}
           {field.required ? <span className="field__required"> *</span> : null}
         </label>
+        {help ? (
+          <span className="field__help" id={helpId ?? undefined}>
+            {help}
+          </span>
+        ) : null}
         {field.multiline ? (
           <textarea
             id={field.name}
@@ -269,7 +218,7 @@ export default function StartForm() {
           />
         )}
         {invalid ? (
-          <span className="field__error" id={`${field.name}-error`}>
+          <span className="field__error" id={errorId ?? undefined}>
             {/* Decorative on purpose — no `label`. The mark makes a failed field findable while
                 scanning a long form; the text beside it is what actually says what went wrong,
                 and a screen reader should not hear "cancel" before hearing that. */}
@@ -284,14 +233,22 @@ export default function StartForm() {
   if (status === 'confirmed') {
     return (
       <div className="intake-confirm" role="status" aria-live="polite">
-        <p className="intake-confirm__chip">Received / Logged</p>
-        <h2 className="intake-confirm__heading">The gap is on the record.</h2>
+        <p className="intake-confirm__chip">Received</p>
+        <h2 className="intake-confirm__heading">Your inquiry has been received.</h2>
         <p className="intake-confirm__body">
-          We will review the event and respond using the contact details provided. Sending this
-          form does not create a service relationship or authorize access to company systems.
+          Thanks — your inquiry has been received. Dirtyworks.ai will follow up using the email
+          address you provided to discuss fit and possible next steps. Sending this form does not
+          start a pilot, create a service relationship, or authorize access to company systems.
         </p>
-        <button className="intake-confirm__again" type="button" onClick={() => setStatus('editing')}>
-          Log another gap
+        <button
+          className="intake-confirm__again"
+          type="button"
+          onClick={() => {
+            setInterest(NEUTRAL_INTEREST);
+            setStatus('editing');
+          }}
+        >
+          Send another inquiry
         </button>
       </div>
     );
@@ -300,46 +257,42 @@ export default function StartForm() {
   return (
     <form className="intake" ref={formRef} onSubmit={onSubmit} noValidate>
       <div className="intake__head">
-        <span className="intake__head-title">Operating gap / intake</span>
+        <span className="intake__head-title">Inquiry / shared form</span>
         <span className="intake__head-note">
           Required fields marked <span className="field__required">*</span>
         </span>
       </div>
 
       <div className="intake__body">
-        <div className="intake__pair">{IDENTITY_FIELDS.map(renderField)}</div>
-        {EVENT_FIELDS.map(renderField)}
-        <div className="intake__pair">{OWNERSHIP_FIELDS.map(renderField)}</div>
+        <div className="intake__pair">{IDENTITY_FIELDS.map((field) => renderField(field))}</div>
 
-        <p className="intake__divider">Optional context</p>
-        <div className="intake__optional">{OPTIONAL_FIELDS.map(renderField)}</div>
-
-        <fieldset className="needs">
-          <legend className="needs__legend">What do you need?</legend>
-          <div className="needs__options">
-            {NEEDS.map((need) => {
-              const checked = needs.includes(need);
+        <fieldset className="interest">
+          <legend className="interest__legend">
+            Interest<span className="field__required"> *</span>
+          </legend>
+          <div className="interest__options">
+            {INTERESTS.map((option) => {
+              const checked = interest === option;
               return (
-                <label className="needs__option" key={need} data-checked={checked}>
+                <label className="interest__option" key={option} data-checked={checked}>
                   <input
-                    type="checkbox"
-                    name="needs"
-                    value={need}
+                    type="radio"
+                    name="interest"
+                    value={option}
                     checked={checked}
-                    onChange={() =>
-                      setNeeds((current) =>
-                        current.includes(need)
-                          ? current.filter((item) => item !== need)
-                          : [...current, need],
-                      )
-                    }
+                    onChange={() => setInterest(option)}
                   />
-                  <span>{NEED_LABELS[need]}</span>
+                  <span>{INTEREST_LABELS[option]}</span>
                 </label>
               );
             })}
           </div>
         </fieldset>
+
+        {renderField(MESSAGE_FIELD, MESSAGE_HELP[interest])}
+
+        <p className="intake__divider">Optional context</p>
+        <div className="intake__optional">{OPTIONAL_FIELDS.map((field) => renderField(field))}</div>
 
         {/* Decoy. Hidden from sight and from assistive technology, unreachable by keyboard: a
             non-empty value means a script filled every input it could find. */}
@@ -349,14 +302,12 @@ export default function StartForm() {
         </div>
 
         <div className="consent">
-          <p className="consent__caption">Do not send</p>
+          <p className="consent__caption">Before you send</p>
           <p className="consent__body">
-            Do not include passwords, API keys, customer or employee records, private documents,
-            health or financial information, or other sensitive data. By submitting, you agree that
-            Dirtyworks.ai may use the information to respond to this inquiry under the website
-            privacy notice.
+            Please do not include credentials, private documents, or customer or employee records.
+            By sending this inquiry, you agree that Dirtyworks.ai may use the information provided
+            to respond to it.
           </p>
-          <p className="consent__stamp">Legal review — consent wording pending</p>
         </div>
 
         {status === 'refused' ? (
@@ -382,11 +333,11 @@ export default function StartForm() {
 
         <div className="intake__actions">
           <button className="intake__submit" type="submit" disabled={busy}>
-            {busy ? 'Sending…' : 'Log the operating gap'}
+            {busy ? 'Sending…' : 'Send inquiry'}
           </button>
           {busy ? (
             <span className="intake__status" role="status">
-              Sending your answers.
+              Sending your inquiry.
             </span>
           ) : null}
         </div>

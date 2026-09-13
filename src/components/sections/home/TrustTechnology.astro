@@ -1,0 +1,143 @@
+---
+/* Home §06. Secure by design: four points on where data goes and who reaches it, what is agreed
+   before a pilot starts, and what the platform underneath it is. Cloudflare OS is named as the
+   open-source foundation and Dirtyworks.ai as the operator; there is no partner badge here and
+   there must not be one until a designation and its use rights are confirmed. */
+import Band from '../../layout/Band.astro';
+import Folio from '../../ui/Folio.astro';
+import Button from '../../ui/Button.astro';
+import Declaration from '../../patterns/Declaration.astro';
+import { TRUST_TECHNOLOGY } from '../../../copy/pilot';
+
+const { folio, heading, body, points, foundationTitle, foundation, action } = TRUST_TECHNOLOGY;
+---
+
+<Band ground="bone-2" labelledBy="trust-technology-heading">
+  <Folio text={folio} />
+
+  <div class="trust-tech__grid">
+    <div>
+      <Declaration
+        id="trust-technology-heading"
+        size="clamp(32px,4vw,70px)"
+        leading="0.88"
+        tracking="-0.035em"
+        weight={900}
+      >
+        {heading}
+      </Declaration>
+      <p class="trust-tech__text">{body}</p>
+      <div class="trust-tech__action">
+        <Button href={action.href} variant="secondary">{action.label}</Button>
+      </div>
+    </div>
+
+    <div>
+      <ul class="points">
+        {
+          points.map((point) => (
+            <li class="point">
+              <h3 class="point__heading">{point.heading}</h3>
+              <p class="point__body">{point.body}</p>
+            </li>
+          ))
+        }
+      </ul>
+
+      <div class="foundation">
+        <p class="foundation__title">{foundationTitle}</p>
+        <p class="foundation__body">{foundation}</p>
+      </div>
+    </div>
+  </div>
+</Band>
+
+<style>
+  .trust-tech__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    gap: clamp(32px, 5vw, 80px);
+    align-items: start;
+  }
+
+  .trust-tech__grid > * {
+    min-width: 0;
+  }
+
+  .trust-tech__text {
+    margin: 26px 0 0;
+    font-size: 18px;
+    line-height: 1.52;
+    max-width: 50ch;
+  }
+
+  .trust-tech__action {
+    margin-top: 32px;
+  }
+
+  .points {
+    margin: 0 0 clamp(28px, 3vw, 40px);
+    padding: 0;
+    list-style: none;
+    border-top: 1.5px solid var(--ink);
+  }
+
+  .point {
+    padding: 18px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .point:nth-child(even) {
+    background: var(--bone-3);
+    padding-left: 16px;
+  }
+
+  .point:last-child {
+    border-bottom: 1.5px solid var(--ink);
+  }
+
+  .point__heading {
+    margin: 0;
+    font-weight: var(--weight-display);
+    font-size: clamp(19px, 1.6vw, 24px);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+  }
+
+  .point__body {
+    margin: 8px 0 0;
+    font-size: 16.5px;
+    line-height: 1.5;
+    max-width: 52ch;
+  }
+
+  .foundation {
+    background: var(--bone-3);
+    border: 1.5px solid var(--ink);
+    padding: clamp(22px, 2.4vw, 32px);
+    /* Hard offset, the sanctioned kind. */
+    box-shadow: 6px 6px 0 var(--ink);
+  }
+
+  .foundation__title {
+    margin: 0 0 14px;
+    font-family: var(--font-mono);
+    font-size: var(--type-label-sm);
+    font-weight: var(--weight-label);
+    letter-spacing: var(--track-label-wide);
+    text-transform: uppercase;
+    color: var(--steel);
+  }
+
+  .foundation__body {
+    margin: 0;
+    font-size: 17px;
+    line-height: 1.52;
+  }
+
+  @media (max-width: 900px) {
+    .trust-tech__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>

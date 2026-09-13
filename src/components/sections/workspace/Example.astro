@@ -1,0 +1,82 @@
+---
+/* /workspace §03. The onboarding-checklist example at section scale, with a provenance line that
+   says in public what the asset is: an illustration of the workflow, not a recording of the
+   deployed version. A real demonstration with sample data replaces the sheet when one exists. */
+import Band from '../../layout/Band.astro';
+import Folio from '../../ui/Folio.astro';
+import Declaration from '../../patterns/Declaration.astro';
+import IllustrativeWorkflow from '../../patterns/IllustrativeWorkflow.astro';
+import { EXAMPLE } from '../../../copy/pages/workspace';
+
+const { folio, heading, intro, provenance } = EXAMPLE;
+---
+
+<Band ground="bone" labelledBy="example-heading">
+  <Folio text={folio} />
+
+  <div class="example__grid">
+    <div class="example__sticky">
+      <Declaration
+        id="example-heading"
+        size="clamp(32px,3.8vw,66px)"
+        leading="0.9"
+        tracking="-0.03em"
+        weight={900}
+      >
+        {heading}
+      </Declaration>
+      <p class="example__text">{intro}</p>
+      <p class="example__provenance">{provenance}</p>
+    </div>
+
+    <IllustrativeWorkflow size="section" />
+  </div>
+</Band>
+
+<style>
+  .example__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.3fr);
+    gap: clamp(32px, 5vw, 80px);
+    align-items: start;
+  }
+
+  .example__grid > * {
+    min-width: 0;
+  }
+
+  .example__sticky {
+    position: sticky;
+    top: 108px;
+  }
+
+  .example__text {
+    margin: 26px 0 0;
+    font-size: 18px;
+    line-height: 1.52;
+    max-width: 44ch;
+  }
+
+  .example__provenance {
+    margin: 28px 0 0;
+    padding-top: 18px;
+    border-top: 1px solid var(--rule);
+    font-family: var(--font-mono);
+    font-size: var(--type-label-sm);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--steel);
+    line-height: 1.8;
+    max-width: 52ch;
+  }
+
+  @media (max-width: 900px) {
+    .example__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .example__sticky {
+      position: static;
+    }
+  }
+</style>

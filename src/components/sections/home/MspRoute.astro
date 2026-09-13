@@ -1,0 +1,87 @@
+---
+/* Home §08, ink band. One client, one defined pilot. The primary action preselects the partner
+   interest on the shared inquiry form; the secondary is a text link to the partner page. */
+import Band from '../../layout/Band.astro';
+import Folio from '../../ui/Folio.astro';
+import Button from '../../ui/Button.astro';
+import Declaration from '../../patterns/Declaration.astro';
+import { MSP_ROUTE } from '../../../copy/pilot';
+
+const { folio, heading, body, primary, secondary } = MSP_ROUTE;
+---
+
+<Band ground="ink" labelledBy="msp-route-heading">
+  <Folio text={folio} tone="dark" />
+
+  <div class="msp-route__grid">
+    <Declaration
+      id="msp-route-heading"
+      size="clamp(32px,3.8vw,66px)"
+      leading="0.9"
+      tracking="-0.03em"
+      weight={900}
+    >
+      {heading}
+    </Declaration>
+
+    <div>
+      <p class="msp-route__text">{body}</p>
+      <div class="msp-route__actions">
+        <Button href={primary.href} size="lg">{primary.label}</Button>
+        <a class="msp-route__link" href={secondary.href}>{secondary.label}</a>
+      </div>
+    </div>
+  </div>
+</Band>
+
+<style>
+  .msp-route__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    gap: clamp(32px, 5vw, 80px);
+    align-items: end;
+  }
+
+  .msp-route__grid > * {
+    min-width: 0;
+  }
+
+  .msp-route__text {
+    margin: 0;
+    font-size: 18px;
+    line-height: 1.52;
+    max-width: 48ch;
+  }
+
+  .msp-route__actions {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-top: 32px;
+  }
+
+  .msp-route__link {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--target-min);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: var(--weight-label);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--bone);
+    border-bottom: 2px solid var(--signal-orange);
+  }
+
+  .msp-route__link:hover {
+    color: var(--signal-orange);
+  }
+
+  @media (max-width: 900px) {
+    .msp-route__grid {
+      grid-template-columns: minmax(0, 1fr);
+      align-items: start;
+    }
+  }
+</style>

@@ -2,6 +2,7 @@ import { expect, test } from '@playwright/test';
 
 const ROUTES = [
   '/',
+  '/workspace',
   '/services',
   '/catalogue',
   '/method',
@@ -127,6 +128,15 @@ test.describe('accessibility structure', () => {
         .map((node) => node.tagName),
     );
     expect(exposed).toEqual([]);
+  });
+
+  test('keeps the pilot status visible at phone width, not in a tooltip', async ({ page }) => {
+    await page.setViewportSize({ width: 320, height: 720 });
+    await page.goto('/');
+    const status = page.locator('.pilot-hero__status');
+    await expect(status).toBeVisible();
+    await expect(status).toContainText(/agreed before work begins/i);
+    await expect(status.locator('[title]')).toHaveCount(0);
   });
 
   test('gives the page a language and a viewport', async ({ page }) => {

@@ -1,0 +1,60 @@
+---
+/* Home §04, ink band. The distinction this section draws is the one the whole offer rests on:
+   employees may create tools within the agreed scope, and that is not unlimited custom development
+   or automatic production support for everything created. The three responsibility rows say who
+   does what; the Dirtyworks.ai row's offset is the page's second and last grid violation. */
+import Band from '../../layout/Band.astro';
+import Folio from '../../ui/Folio.astro';
+import Declaration from '../../patterns/Declaration.astro';
+import ResponsibilityRows from '../../patterns/ResponsibilityRows.astro';
+import { DIFFERENTIATOR } from '../../../copy/pilot';
+
+const { folio, heading, body, rowsTitle } = DIFFERENTIATOR;
+---
+
+<Band ground="ink" labelledBy="differentiator-heading">
+  <Folio text={folio} tone="dark" />
+
+  <div class="differentiator__grid">
+    <div>
+      <Declaration
+        id="differentiator-heading"
+        size="clamp(34px,4.2vw,76px)"
+        leading="0.86"
+        tracking="-0.035em"
+        weight={900}
+      >
+        {heading}
+      </Declaration>
+      <p class="differentiator__text">{body}</p>
+    </div>
+
+    <ResponsibilityRows title={rowsTitle} tone="dark" />
+  </div>
+</Band>
+
+<style>
+  .differentiator__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+    gap: clamp(32px, 5vw, 80px);
+    align-items: start;
+  }
+
+  .differentiator__grid > * {
+    min-width: 0;
+  }
+
+  .differentiator__text {
+    margin: 26px 0 0;
+    font-size: 18px;
+    line-height: 1.52;
+    max-width: 50ch;
+  }
+
+  @media (max-width: 900px) {
+    .differentiator__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>

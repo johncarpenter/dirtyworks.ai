@@ -1,28 +1,16 @@
 import { z } from 'astro:schema';
+import { INTERESTS, MESSAGE_MAX_LENGTH } from '../copy/inquiry';
 
 /**
  * Wire contract for the one transaction on the site. Strict: unknown keys are rejected, every
- * field is bounded, and `needs` is a closed union — so an oversized paste or an unexpected field
- * fails validation instead of reaching the notification.
+ * field is bounded, and `interest` is a closed union — so an oversized paste or an unexpected
+ * field fails validation instead of reaching the notification.
  *
- * Field names and labels track data-model.md; the labels are also what the notification prints,
- * so they must stay in step with the form.
+ * Five required fields (name, company, work email, interest, message) and four optional ones.
+ * Nothing here asks the visitor to report an incident: the refresh replaced the incident-first
+ * intake with an inquiry that fits a pilot, an existing stack, or a partner conversation alike.
+ * The labels are also what the notification prints, so they must stay in step with the form.
  */
-
-export const NEEDS = [
-  'product selection',
-  'user administration',
-  'training',
-  'support',
-  'integration',
-  'governance',
-  'monitoring',
-  'cost control',
-  'knowledge',
-  'msp partnership',
-] as const;
-
-export type Need = (typeof NEEDS)[number];
 
 /** Minimum time from island mount to submit. A person typing an address takes longer. */
 export const MIN_ELAPSED_MS = 1000;
@@ -41,31 +29,25 @@ const optional = (max: number, label: string) =>
     .optional()
     .transform((value) => (value === '' ? undefined : value));
 
-export const operatingGapSchema = z
+export const inquirySchema = z
   .object({
-    // Required — identity and the event
+    // Required
     name: required(80, 'Name'),
     company: required(120, 'Company'),
-    role: required(80, 'Role'),
     email: z
       .string()
       .trim()
       .min(1, 'Work email is required')
       .max(254, 'Work email must be 254 characters or fewer')
       .email('Enter a work email address we can reply to'),
-    intent: required(1000, 'What was somebody trying to do'),
-    event: required(1000, 'What happened'),
-    system: required(160, 'Product or system involved'),
-    owner: required(160, 'Who owns it today'),
+    interest: z.enum(INTERESTS, { message: 'Choose the interest that fits best' }),
+    message: required(MESSAGE_MAX_LENGTH, 'What you would like your team to do, build, or improve'),
 
     // Optional context
-    companySize: optional(80, 'Approximate company size'),
-    aiProducts: optional(300, 'Current AI products or categories'),
-    peopleUsing: optional(80, 'People using them'),
-    environment: optional(160, 'Existing environment'),
+    role: optional(80, 'Role'),
+    teamSize: optional(80, 'Approximate team size'),
+    aiProducts: optional(300, 'Current systems or AI tools'),
     mspRelationship: optional(160, 'Existing MSP relationship'),
-    contactPreference: optional(160, 'Preferred way and time to respond'),
-    needs: z.array(z.enum(NEEDS)).max(NEEDS.length).default([]),
 
     // Guards. Never rendered as real inputs.
     decoy: z.string().max(0).default(''),
@@ -73,22 +55,17 @@ export const operatingGapSchema = z
   })
   .strict();
 
-export type OperatingGapSubmission = z.infer<typeof operatingGapSchema>;
+export type InquirySubmission = z.infer<typeof inquirySchema>;
 
 /** Field order and visible labels for the notification, matching the form. */
-export const FIELD_LABELS: readonly (readonly [keyof OperatingGapSubmission, string])[] = [
+export const FIELD_LABELS: readonly (readonly [keyof InquirySubmission, string])[] = [
   ['name', 'Name'],
   ['company', 'Company'],
-  ['role', 'Role'],
   ['email', 'Work email'],
-  ['intent', 'What was somebody trying to do?'],
-  ['event', 'What happened?'],
-  ['system', 'Product or system involved'],
-  ['owner', 'Who owns it today, if anyone?'],
-  ['companySize', 'Approximate company size'],
-  ['aiProducts', 'Current AI products or categories'],
-  ['peopleUsing', 'People using them'],
-  ['environment', 'Existing environment'],
+  ['interest', 'Interest'],
+  ['message', 'What would you like your team to do, build, or improve?'],
+  ['role', 'Role'],
+  ['teamSize', 'Approximate team size'],
+  ['aiProducts', 'Current systems or AI tools'],
   ['mspRelationship', 'Existing MSP relationship'],
-  ['contactPreference', 'Preferred way and time to respond'],
 ];

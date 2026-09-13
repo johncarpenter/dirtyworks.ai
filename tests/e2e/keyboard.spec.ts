@@ -33,7 +33,7 @@ test.describe('keyboard', () => {
       }
       reachable.push(info.text);
     }
-    expect(reachable.join(' ')).toMatch(/services/i);
+    expect(reachable.join(' ')).toMatch(/workspace pilot/i);
   });
 
   test('shows a visible focus indicator on every focus stop', async ({ page }) => {
@@ -74,21 +74,17 @@ test.describe('keyboard', () => {
     await waitForHeaderHydration(page);
     await page.locator('.header-menu-button').click();
     await expect(
-      page.locator('.header-panel').getByRole('link', { name: /map your ai stack/i }),
+      page.locator('.header-panel').getByRole('link', { name: /discuss a workspace pilot/i }),
     ).toBeVisible();
   });
 
-  test('completes the intake by keyboard alone', async ({ page }) => {
+  test('completes the inquiry by keyboard alone', async ({ page }) => {
     await page.goto('/start');
     const values: Record<string, string> = {
       name: 'Dana Okonkwo',
       company: 'Northline Engineering',
-      role: 'Operations lead',
       email: 'dana@northline.ca',
-      intent: 'Get a new hire access to the assistant the team already uses.',
-      event: 'Two weeks in, nobody could say who owns the account.',
-      system: 'Workforce assistant',
-      owner: 'Nobody',
+      message: 'Turn our new-hire setup process into a checklist the team can keep current.',
     };
 
     for (const [field, value] of Object.entries(values)) {
@@ -96,13 +92,14 @@ test.describe('keyboard', () => {
       await page.keyboard.type(value);
     }
 
-    await page.locator('.needs__option input').first().focus();
-    await page.keyboard.press('Space');
-    await expect(page.locator('.needs__option input').first()).toBeChecked();
+    // Radios: arrow keys move the selection within the group.
+    await page.locator('input[name="interest"]:checked').focus();
+    await page.keyboard.press('ArrowLeft');
+    await expect(page.locator('input[name="interest"][value="msp-partner"]')).toBeChecked();
 
     await page.waitForTimeout(1200);
     await page.locator('.intake__submit').focus();
     await page.keyboard.press('Enter');
-    await expect(page.getByText('The gap is on the record.')).toBeVisible();
+    await expect(page.getByRole('heading', { name: /your inquiry has been received/i })).toBeVisible();
   });
 });

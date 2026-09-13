@@ -1,5 +1,5 @@
 import { ActionError, defineAction } from 'astro:actions';
-import { operatingGapSchema } from './schemas';
+import { inquirySchema } from './schemas';
 import { failsHoneypot, hashClientKey, tooFast, withinRateLimit } from './guards';
 import { logSubmission, sendNotification, type SubmissionOutcome } from './notify';
 
@@ -19,16 +19,16 @@ import { logSubmission, sendNotification, type SubmissionOutcome } from './notif
  * undefined applies to prerendered pages, which this is not.
  */
 export const server = {
-  logOperatingGap: defineAction({
+  sendInquiry: defineAction({
     accept: 'json',
-    input: operatingGapSchema,
+    input: inquirySchema,
     handler: async (submission, context) => {
       const startedAt = Date.now();
       const env = context.locals.runtime?.env ?? {};
 
       const finish = (outcome: SubmissionOutcome, extra?: { messageId?: string; errorCode?: string }) =>
         logSubmission({
-          purpose: 'operating-gap-intake',
+          purpose: 'website-inquiry',
           outcome,
           durationMs: Date.now() - startedAt,
           ...extra,

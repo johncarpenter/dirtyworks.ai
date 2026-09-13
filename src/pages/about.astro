@@ -3,9 +3,8 @@
 
    This is the address a visitor guesses when they want to reach the company, so it carries both
    halves: who Dirtyworks.ai is, and every way in. The contact register sits directly under the
-   hero rather than at the foot of the page, and the route is in the header navigation under
-   "About & contact" — the previous build reached the same information only through the footer
-   address or /start.
+   hero rather than at the foot of the page. Since the workspace-pilot refresh the route lives in
+   the footer under "About & contact"; the header carries the pilot journey.
 
    Founder name, biography, credentials and photograph remain outstanding sponsor inputs, tracked
    as FOUNDER_PROFILE in src/copy/placeholders.ts. The page publishes without them: it describes
@@ -19,7 +18,7 @@ import CTABand from '../components/patterns/CTABand.astro';
 import Contact from '../components/sections/about/Contact.astro';
 import Company from '../components/sections/about/Company.astro';
 import Beliefs from '../components/sections/about/Beliefs.astro';
-import { hrefFor } from '../copy/routes';
+import { hrefFor, inquiryHref } from '../copy/routes';
 import { CTA, HERO } from '../copy/pages/about';
 ---
 
@@ -46,7 +45,7 @@ import { CTA, HERO } from '../copy/pages/about';
     folio={CTA.folio}
     heading={CTA.heading}
     support={CTA.support}
-    primary={{ label: CTA.primaryLabel, href: hrefFor('start') }}
+    primary={{ label: CTA.primaryLabel, href: inquiryHref('workspace-pilot') }}
     secondary={{ label: CTA.secondaryLabel, href: hrefFor('method') }}
   />
 </BaseLayout>

@@ -1,11 +1,13 @@
 /* Single source for routing, metadata, navigation membership and publication gating.
-   Titles and descriptions are verbatim from mockups/README.md — content, not implementation
-   detail. The one exception is /about, which the README scoped as an about page and which now
-   also carries the contact register; its title says so. tests/unit/routes.test.ts asserts the
-   invariants. */
+
+   The table was rebuilt for the workspace-pilot refresh (dirtyworks-company MKT-001): the pilot
+   leads the header, the catalogue and the contact page move to the footer with their routes and
+   inbound links preserved, and every primary action carries the inquiry interest it should
+   preselect on /start. tests/unit/routes.test.ts asserts the invariants. */
 
 export type RouteId =
   | 'home'
+  | 'workspace'
   | 'services'
   | 'catalogue'
   | 'method'
@@ -39,16 +41,32 @@ export const ROUTES: readonly RouteEntry[] = [
     id: 'home',
     path: '/',
     page: 'index',
-    title: 'Dirtyworks.ai | Managed AI operations for Alberta businesses',
+    title: 'Managed AI Workspace Pilot for Alberta Businesses | Dirtyworks.ai',
     description:
-      'An AI MSP for product selection, account and user management, training, integrations, ' +
-      'knowledge, governance, monitoring, support, and cost control.',
+      'Start a managed AI workspace pilot with Dirtyworks.ai. A Cloudflare OS environment ' +
+      'customized for your team, with onboarding and support.',
     navLabel: 'Home',
     inHeaderNav: false,
     footerColumn: null,
     headerAction: 'buyer',
     ctaPrimary: 'start',
-    ctaSecondary: 'msps',
+    ctaSecondary: 'workspace',
+    published: true,
+  },
+  {
+    id: 'workspace',
+    path: '/workspace',
+    page: 'workspace',
+    title: 'Managed AI Workspace Pilot | Dirtyworks.ai',
+    description:
+      'Explore a Cloudflare OS workspace pilot customized for your team, with onboarding, ' +
+      'approved connections, and support from Dirtyworks.ai.',
+    navLabel: 'Workspace pilot',
+    inHeaderNav: true,
+    footerColumn: 'service',
+    headerAction: 'buyer',
+    ctaPrimary: 'start',
+    ctaSecondary: 'method',
     published: true,
   },
   {
@@ -57,7 +75,7 @@ export const ROUTES: readonly RouteEntry[] = [
     page: 'services',
     title: 'AI managed services | Dirtyworks.ai',
     description: null,
-    navLabel: 'Services',
+    navLabel: 'Managed services',
     inHeaderNav: true,
     footerColumn: 'service',
     headerAction: 'buyer',
@@ -72,7 +90,7 @@ export const ROUTES: readonly RouteEntry[] = [
     title: 'Managed AI product catalogue | Dirtyworks.ai',
     description: null,
     navLabel: 'Catalogue',
-    inHeaderNav: true,
+    inHeaderNav: false,
     footerColumn: 'service',
     headerAction: 'buyer',
     ctaPrimary: 'start',
@@ -85,7 +103,7 @@ export const ROUTES: readonly RouteEntry[] = [
     page: 'method',
     title: 'Managed AI operating method | Dirtyworks.ai',
     description: null,
-    navLabel: 'Method',
+    navLabel: 'How it works',
     inHeaderNav: true,
     footerColumn: 'service',
     headerAction: 'buyer',
@@ -127,12 +145,12 @@ export const ROUTES: readonly RouteEntry[] = [
     page: 'about',
     title: 'About and contact | Dirtyworks.ai',
     description:
-      'Who Dirtyworks.ai is, and how to reach us: email hello@dirtyworks.ai, the operating-gap ' +
-      'intake, or a partner enquiry. Calgary, Alberta.',
+      'Who Dirtyworks.ai is, and how to reach us: email hello@dirtyworks.ai, a workspace pilot ' +
+      'or existing-AI inquiry, or a partner enquiry. Calgary, Alberta.',
     navLabel: 'About & contact',
-    // In the header because the contact route is the one visitors hunt for. The label names both
-    // halves of the page; "Contact us" on its own is a banned call to action (content-check RULE-3).
-    inHeaderNav: true,
+    // Footer, not header: the header carries the pilot journey. The route and every inbound link
+    // are preserved; "Contact us" on its own is a banned call to action (content-check RULE-3).
+    inHeaderNav: false,
     footerColumn: 'company',
     headerAction: 'buyer',
     ctaPrimary: 'start',
@@ -153,16 +171,16 @@ export const ROUTES: readonly RouteEntry[] = [
     footerColumn: 'company',
     headerAction: 'buyer',
     ctaPrimary: 'start',
-    ctaSecondary: 'services',
+    ctaSecondary: 'workspace',
     published: true,
   },
   {
     id: 'start',
     path: '/start',
     page: 'start',
-    title: 'Map your AI stack | Dirtyworks.ai',
+    title: 'Start an inquiry | Dirtyworks.ai',
     description: null,
-    navLabel: 'Map your AI stack',
+    navLabel: 'Start an inquiry',
     inHeaderNav: false,
     footerColumn: 'company',
     headerAction: 'current',
@@ -182,8 +200,16 @@ export const hrefFor = (id: RouteId): string => routeById(id).path;
 
 export const isPublished = (id: RouteId): boolean => routeById(id).published;
 
+/* The three inquiry interests /start recognises in its query string. Anything else falls back to
+   the neutral selection; see src/copy/inquiry.ts, which owns the list and the parser. */
+export type InquiryInterestParam = 'workspace-pilot' | 'existing-ai' | 'msp-partner';
+
+/** `/start?interest=…` — the shared inquiry form with one interest preselected. */
+export const inquiryHref = (interest: InquiryInterestParam): string =>
+  `${hrefFor('start')}?interest=${interest}`;
+
 export const HEADER_ACTIONS: Record<HeaderAction, { label: string; href: string | null }> = {
-  buyer: { label: 'Map your AI stack', href: '/start' },
-  partner: { label: 'Design a partner pilot', href: '/start' },
+  buyer: { label: 'Discuss a workspace pilot', href: inquiryHref('workspace-pilot') },
+  partner: { label: 'Discuss an MSP pilot', href: inquiryHref('msp-partner') },
   current: { label: 'Start', href: null },
 };

@@ -1,0 +1,145 @@
+---
+/* The workspace pilot hero, shared by the home page and /workspace. A visitor must be able to
+   read four things from the first screen without scrolling or hovering: the offer, the pilot
+   status, the Cloudflare foundation, and the next step. All four are in the lede, and the pilot
+   status is a visible line rather than a tooltip so it survives on a phone.
+
+   Text and one visual, no photograph. The visual is the stamped illustrative workflow — a worked
+   text example, because no real workspace asset exists yet. On a phone the lede comes first and
+   the sheet follows; the headline is the thing the visitor came to read. */
+import Band from '../../layout/Band.astro';
+import Folio from '../../ui/Folio.astro';
+import Button from '../../ui/Button.astro';
+import ProofLabel from '../../ui/ProofLabel.astro';
+import Declaration from '../../patterns/Declaration.astro';
+import IllustrativeWorkflow from '../../patterns/IllustrativeWorkflow.astro';
+import { PILOT_HERO } from '../../../copy/pilot';
+
+const hero = PILOT_HERO;
+---
+
+<Band ground="bone" variant="hero" labelledBy="hero-heading">
+  <div class="pilot-hero">
+    <div class="pilot-hero__lede">
+      <Folio text={hero.eyebrow} />
+
+      {/* 5.6vw lands at 80px on the 1440px desktop viewport tests/e2e/fidelity.spec.ts uses, clear
+          of its 60px floor. Below 400px the type is capped at 10vw rather than the Declaration's
+          default 13vw: "Dirtyworks.ai" is one unbreakable word about 8.5em wide, and at the 42px
+          floor it ran past the edge of a 375px phone. */}
+      <Declaration
+        as="h1"
+        id="hero-heading"
+        size="clamp(42px,5.6vw,96px)"
+        leading="0.88"
+        tracking="-0.035em"
+        weight={900}
+        narrowCap="10vw"
+      >
+        {hero.headingLine1}<br />{hero.headingLine2Before}<span class="pilot-hero__nowrap"
+          ><span class="pilot-hero__pull">{hero.headingEmphasis}</span>{
+            hero.headingLine2After
+          }</span
+        >
+      </Declaration>
+
+      <p class="pilot-hero__body">{hero.body}</p>
+
+      <div class="pilot-hero__actions">
+        <Button href={hero.primary.href} size="lg">{hero.primary.label}</Button>
+        <Button href={hero.secondary.href} size="lg" variant="secondary">
+          {hero.secondary.label}
+        </Button>
+      </div>
+
+      <p class="pilot-hero__foundation">{hero.foundation}</p>
+
+      <p class="pilot-hero__status">
+        <ProofLabel status="neutral" size="sm">{hero.availabilityLabel}</ProofLabel>
+        <span class="pilot-hero__status-text">{hero.availability}</span>
+      </p>
+    </div>
+
+    <IllustrativeWorkflow />
+  </div>
+</Band>
+
+<style>
+  .pilot-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+    gap: clamp(32px, 5vw, 80px);
+    align-items: start;
+  }
+
+  .pilot-hero > * {
+    min-width: 0;
+  }
+
+  /* The full stop stays on the line with the word it closes; a period alone on a fourth line is
+     what this prevents at tablet widths. */
+  .pilot-hero__nowrap {
+    white-space: nowrap;
+  }
+
+  /* Violation 1 of 2: the orange word breaks the left edge. */
+  .pilot-hero__pull {
+    display: inline-block;
+    margin-left: -0.06em;
+    color: var(--orange-press);
+  }
+
+  .pilot-hero__body {
+    margin: clamp(22px, 2.4vw, 34px) 0 0;
+    font-size: clamp(17px, 1.3vw, 23px);
+    line-height: 1.42;
+    max-width: 50ch;
+  }
+
+  .pilot-hero__actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: clamp(24px, 2.6vw, 36px);
+  }
+
+  .pilot-hero__foundation {
+    margin: clamp(24px, 2.6vw, 36px) 0 0;
+    padding-top: 18px;
+    border-top: 1.5px solid var(--ink);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: var(--weight-label);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink);
+    line-height: 1.7;
+  }
+
+  .pilot-hero__status {
+    margin: 14px 0 0;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    font-size: 16px;
+    line-height: 1.5;
+    max-width: 52ch;
+  }
+
+  .pilot-hero__status :global(.chip) {
+    flex: none;
+    margin-top: 2px;
+  }
+
+  .pilot-hero__status-text {
+    flex: 1 1 24ch;
+    min-width: 0;
+  }
+
+  @media (max-width: 1000px) {
+    .pilot-hero {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>

@@ -1,0 +1,78 @@
+---
+/* /workspace §04 — the pilot deliverables, as a register. The band carries id="pilot-scope": the
+   home page's "See the pilot deliverables" action lands here. Seven rows, each stating what is
+   agreed before work begins; the duration in the pilot brief row is agreed, not published. */
+import Band from '../../layout/Band.astro';
+import Folio from '../../ui/Folio.astro';
+import Declaration from '../../patterns/Declaration.astro';
+import RegisterRow from '../../patterns/RegisterRow.astro';
+import { PILOT_SCOPE } from '../../../copy/pages/workspace';
+
+const { id, folio, heading, columns, rows } = PILOT_SCOPE;
+---
+
+<Band ground="bone-2" id={id} labelledBy="pilot-scope-heading">
+  <Folio text={folio} />
+
+  <Declaration
+    id="pilot-scope-heading"
+    size="clamp(32px,4vw,70px)"
+    leading="0.88"
+    tracking="-0.035em"
+    weight={900}
+    measure="22ch"
+  >
+    {heading}
+  </Declaration>
+
+  <div class="scope__head" aria-hidden="true">
+    <span>{columns.deliverable}</span>
+    <span>{columns.agreed}</span>
+  </div>
+
+  <div class="scope__register">
+    {
+      rows.map((row, index) => (
+        <RegisterRow
+          label={row.deliverable}
+          offset={index % 2 === 1}
+          last={index === rows.length - 1}
+        >
+          <p>{row.agreed}</p>
+        </RegisterRow>
+      ))
+    }
+  </div>
+</Band>
+
+<style>
+  .scope__head {
+    display: grid;
+    grid-template-columns: minmax(180px, 0.6fr) minmax(0, 2.4fr);
+    gap: clamp(16px, 3vw, 48px);
+    margin-top: clamp(40px, 5vw, 64px);
+    padding-bottom: 10px;
+    border-bottom: 1.5px solid var(--ink);
+    font-family: var(--font-mono);
+    font-size: var(--type-label-sm);
+    font-weight: var(--weight-label);
+    letter-spacing: var(--track-label-wide);
+    text-transform: uppercase;
+    color: var(--steel);
+  }
+
+  .scope__head > * {
+    min-width: 0;
+  }
+
+  @media (max-width: 720px) {
+    .scope__head {
+      display: none;
+    }
+
+    .scope__register {
+      margin-top: clamp(40px, 5vw, 64px);
+      border-top: 1.5px solid var(--ink);
+    }
+  }
+</style>

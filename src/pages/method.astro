@@ -8,7 +8,7 @@ import CTABand from '../components/patterns/CTABand.astro';
 import Lifecycle from '../components/sections/method/Lifecycle.astro';
 import ValidOutcomes from '../components/sections/method/ValidOutcomes.astro';
 import MonthlyRecord from '../components/sections/method/MonthlyRecord.astro';
-import { hrefFor } from '../copy/routes';
+import { hrefFor, inquiryHref } from '../copy/routes';
 import { METHOD_HERO, METHOD_CTA } from '../copy/pages/method';
 ---
 
@@ -33,7 +33,7 @@ import { METHOD_HERO, METHOD_CTA } from '../copy/pages/method';
     folio={METHOD_CTA.folio}
     heading={METHOD_CTA.heading}
     support={METHOD_CTA.support}
-    primary={{ label: METHOD_CTA.primaryLabel, href: hrefFor('start') }}
+    primary={{ label: METHOD_CTA.primaryLabel, href: inquiryHref('workspace-pilot') }}
     secondary={{ label: METHOD_CTA.secondaryLabel, href: hrefFor('trust') }}
   />
 </BaseLayout>

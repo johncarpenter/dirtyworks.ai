@@ -14,7 +14,7 @@ import CTABand from '../components/patterns/CTABand.astro';
 import PhotoHero from '../components/patterns/PhotoHero.astro';
 import Behaviour from '../components/sections/trust/Behaviour.astro';
 import Exit from '../components/sections/trust/Exit.astro';
-import { hrefFor } from '../copy/routes';
+import { hrefFor, inquiryHref } from '../copy/routes';
 import { SUPPORT_INCIDENT } from '../copy/photography';
 import supportIncident from '../assets/photography/support-incident-operations-v1.png';
 import {
@@ -75,7 +75,7 @@ import {
     folio={TRUST_CTA.folio}
     heading={TRUST_CTA.heading}
     support={TRUST_CTA.support}
-    primary={{ label: TRUST_CTA.primaryLabel, href: hrefFor('start') }}
+    primary={{ label: TRUST_CTA.primaryLabel, href: inquiryHref('workspace-pilot') }}
     secondary={{ label: TRUST_CTA.secondaryLabel, href: hrefFor('services') }}
   />
 </BaseLayout>

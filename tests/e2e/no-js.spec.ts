@@ -5,6 +5,7 @@ test.use({ javaScriptEnabled: false });
 
 const ROUTES = [
   '/',
+  '/workspace',
   '/services',
   '/catalogue',
   '/method',
@@ -19,6 +20,15 @@ const ROUTES = [
  * A site that ships almost no JavaScript has no excuse for requiring it. These run with scripting
  * disabled entirely, which also covers the locked-down corporate machine case.
  */
+
+test('shows the pilot status and the neutral interest without scripting', async ({ page }) => {
+  await page.goto('/start?interest=workspace-pilot');
+  // The query string is parsed on the client; without scripting the server-rendered neutral
+  // selection stands, which is the honest fallback rather than a guess.
+  await expect(page.locator('input[name="interest"][value="not-sure"]')).toBeChecked();
+  await page.goto('/');
+  await expect(page.getByText('Pilot offering')).toBeVisible();
+});
 test.describe('without scripting', () => {
   for (const route of ROUTES) {
     test(`${route} still renders its content`, async ({ page }) => {
@@ -33,7 +43,15 @@ test.describe('without scripting', () => {
     // Two copies of each destination exist by design (desktop list + disclosure panel); which one
     // is visible depends on width. Without scripting the panel cannot collapse, so one is always
     // visible — that is the guarantee being asserted.
-    for (const path of ['/services', '/catalogue', '/method', '/trust', '/msps', '/about']) {
+    for (const path of [
+      '/workspace',
+      '/services',
+      '/method',
+      '/trust',
+      '/msps',
+      '/catalogue',
+      '/about',
+    ]) {
       await expect(page.locator(`a[href="${path}"]:visible`).first()).toBeVisible();
     }
   });
@@ -55,8 +73,8 @@ test.describe('without scripting', () => {
 
   test('navigates by following a link', async ({ page }) => {
     await page.goto('/');
-    await page.locator('a[href="/services"]:visible').first().click();
-    await expect(page).toHaveURL(/\/services$/);
+    await page.locator('a[href="/workspace"]:visible').first().click();
+    await expect(page).toHaveURL(/\/workspace$/);
     await expect(page.locator('h1')).toBeVisible();
   });
 
@@ -65,12 +83,12 @@ test.describe('without scripting', () => {
     // <noscript> content is inert markup to the DOM API, so assert on the raw HTML.
     const html = await page.content();
     expect(html).toContain('mailto:hello@dirtyworks.ai');
-    expect(html).toContain('What somebody was trying to do');
-    expect(html).toMatch(/Do not include passwords/);
+    expect(html).toContain('What you would like your team to do, build, or improve');
+    expect(html).toMatch(/Please do not include credentials/);
   });
 
   test('still states the purpose and fields of the intake', async ({ page }) => {
     await page.goto('/start');
-    await expect(page.locator('h1')).toContainText(/SHOW US WHAT IS ALREADY IN THE/i);
+    await expect(page.locator('h1')).toContainText(/SCOPE A USEFUL PLACE TO/i);
   });
 });

@@ -13,7 +13,15 @@
       "Boundary and access incidents" control, which is scoped to events we can actually detect.
       TRUST_BEHAVIOUR states the non-promise in words.
    2. The usage-and-cost control row. Cost is a real part of the service and it is argued on
-      /services; on this page it diluted the question the visitor came to ask. */
+      /services; on this page it diluted the question the visitor came to ask.
+
+   The workspace-pilot refresh applied the claim corrections from the brief: no guaranteed refusal
+   ("we configure and test supported question types and refusal behaviour; outputs still require
+   review"), no "never more than" inherited permissions ("we define and test access for each
+   connected resource"), no "before anything writes" ("actions requiring approval are identified
+   and tested in the pilot scope"), and one statement of what quality monitoring is and is not.
+   Ownership is no longer "customer-owned by default" everywhere: a customer-direct product is, a
+   partner-provisioned workspace documents account control explicitly, and the register says so. */
 import type { ProofStatus } from '../../types/proof';
 
 export interface TrustControlRow {
@@ -65,9 +73,9 @@ export const TRUST_BEHAVIOUR = {
     {
       failure: 'It makes things up.',
       control:
-        'Answers are scoped to approved sources with a named owner, and a question outside the ' +
-        'supported classes refuses instead of guessing. \u201cI don\u2019t know\u201d is a configured ' +
-        'behaviour, not a shortfall.',
+        'Answers are scoped to approved sources with a named owner. We configure and test ' +
+        'supported question types and refusal behaviour, so \u201cI don\u2019t know\u201d is a ' +
+        'configured response rather than a shortfall. AI outputs still require review.',
     },
     {
       failure: 'It sends data somewhere it should not.',
@@ -78,14 +86,15 @@ export const TRUST_BEHAVIOUR = {
     {
       failure: 'It answers people who should not be asking.',
       control:
-        'Named accounts, least privilege, and permission spot tests, so the assistant inherits ' +
-        'the access the person already had and never more than that.',
+        'Named accounts, least privilege, and permission tests. We define and test access for ' +
+        'each connected resource, rather than assuming the permissions of a source carry through ' +
+        'every connection on their own.',
     },
     {
       failure: 'It acts on something consequential.',
       control:
-        'Employment, financial, legal, safety, and regulatory decisions stay with people, and an ' +
-        'integration stops at a human approval before anything writes.',
+        'Employment, financial, legal, safety, and regulatory decisions stay with people. ' +
+        'Actions requiring approval are identified and tested in the pilot scope.',
     },
     {
       failure: 'It changes underneath you.',
@@ -100,26 +109,28 @@ export const TRUST_BEHAVIOUR = {
     'as you are. What changes is everything around it — what it can read, who can ask, what it ' +
     'may act on, what it must refuse, and what gets written down when it is wrong. Complete ' +
     'security, universal regulatory compliance, uninterrupted third-party services, and support ' +
-    'for every AI product on the market are still not on offer. Neither is monitoring of answer ' +
-    'quality: a wrong answer is found by the person reading it, and then worked through the ' +
-    'configuration, the sources, and the vendor.',
+    'for every AI product on the market are still not on offer. On quality: we test agreed use ' +
+    'cases at setup and after relevant changes, and investigate reported output problems. ' +
+    'Continuous review of every AI answer is not included.',
 };
 
-/* Ten controls, and the test for admission is narrow: a row earns its place only if it answers
+/* Eleven controls, and the test for admission is narrow: a row earns its place only if it answers
    "where does my data go" or "what is the AI allowed to do". Budgets and licence reconciliation are
    real operating work but they answer neither, so they live on /services now. Vendor change review
    folded into the data-position row, which is the part of a vendor change a visitor to THIS page
-   actually cares about. */
+   actually cares about. The eleventh row is the workspace pilot's: agreed scope, and what it takes
+   for a team-created tool to become a supported one. */
 export const TRUST_REGISTER = {
   folio: '03 / Public control register',
-  heading: 'Ten controls. Each with a mechanism, a record, and a holder.',
+  heading: 'Eleven controls. Each with a mechanism, a record, and a holder.',
   lead:
     'The register below is the public extract. The version inside an engagement names systems, ' +
     'people, and dates.',
-  caption: 'Public control register / extract 0.3',
+  caption: 'Public control register / extract 0.4',
   note:
-    'Customer-owned by default. Human accountability stays human. Nothing in this register is a ' +
-    'legal or regulatory certification.',
+    'Clear responsibilities. Human accountability. Account control, data handling, and handover ' +
+    'are agreed before deployment. Nothing in this register is a legal or regulatory ' +
+    'certification.',
   rows: [
     {
       control: 'Purpose and accountable owner',
@@ -130,11 +141,23 @@ export const TRUST_REGISTER = {
       status: 'owner',
     },
     {
-      control: 'Product, tenant, and data ownership',
+      control: 'Account control, data handling, and handover',
       mechanism:
-        'Customer-owned tenants, billing recovery path, and exportable records by default',
+        'Agreed before deployment. A customer-direct product stays customer-owned; a ' +
+        'partner-provisioned workspace documents who controls the account, how data and tools ' +
+        'are handled, and how they are handed over',
       holder: 'Customer + Dirtyworks.ai',
-      state: 'Default',
+      state: 'Agreed',
+      status: 'owner',
+    },
+    {
+      control: 'Workspace scope and team-created tools',
+      mechanism:
+        'Agreed users, information, connections, and spending for the pilot workspace. A tool ' +
+        'the business comes to rely on gets an agreed owner, tests, and maintenance scope before ' +
+        'it is supported',
+      holder: 'Customer approves; Dirtyworks.ai supports',
+      state: 'Per pilot',
       status: 'owner',
     },
     {
@@ -172,8 +195,8 @@ export const TRUST_REGISTER = {
     {
       control: 'Refusal and failure behaviour',
       mechanism:
-        'Question-class tests at deployment and after any vendor or configuration change; ' +
-        'unsupported questions refuse rather than guess',
+        'Supported question types and refusal behaviour configured and tested at setup and after ' +
+        'relevant changes; outputs still require review',
       holder: 'Dirtyworks.ai operates',
       state: 'At change',
       status: 'answer',
@@ -182,7 +205,7 @@ export const TRUST_REGISTER = {
       control: 'Human review',
       mechanism:
         'Consequential employment, financial, legal, engineering, safety, and regulatory ' +
-        'decisions stay with people',
+        'decisions stay with people; actions requiring approval are identified and tested in scope',
       holder: 'Customer',
       state: 'Reserved',
       status: 'human',
@@ -191,7 +214,8 @@ export const TRUST_REGISTER = {
       control: 'Boundary and access incidents',
       mechanism:
         'Alerting on access, integration, and configuration events; triage, containment, ' +
-        'notification, and written follow-up. Answer quality is customer-reported, not monitored',
+        'notification, and written follow-up. Reported output problems are investigated; ' +
+        'continuous review of every AI answer is not included',
       holder: 'Dirtyworks.ai within scope',
       state: 'Operated',
       status: 'operated',
@@ -237,8 +261,8 @@ export const TRUST_CTA = {
   folio: '06 / Conversion',
   heading: 'Write the responsibility seam before production.',
   support:
-    'Bring the use case you are least sure about. We will map who owns what, and what the ' +
-    'service will refuse to do.',
-  primaryLabel: 'Review the operating boundary',
-  secondaryLabel: 'See what we manage',
+    'Bring the use case you are least sure about. We will map who controls what, what the ' +
+    'service will refuse to do, and what a pilot would need to agree first.',
+  primaryLabel: 'Discuss a workspace pilot',
+  secondaryLabel: 'Explore managed services',
 };

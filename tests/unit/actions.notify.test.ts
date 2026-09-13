@@ -1,26 +1,23 @@
 import { describe, expect, it, vi } from 'vitest';
 import { buildNotification, logSubmission, sendNotification } from '../../src/actions/notify';
-import { operatingGapSchema, type OperatingGapSubmission } from '../../src/actions/schemas';
+import { inquirySchema, type InquirySubmission } from '../../src/actions/schemas';
 
-const submission: OperatingGapSubmission = operatingGapSchema.parse({
+const submission: InquirySubmission = inquirySchema.parse({
   name: 'Dana Okonkwo',
   company: 'Northline Engineering',
-  role: 'Operations lead',
   email: 'dana@northline.ca',
-  intent: 'Get a new hire access to the assistant the team already uses.',
-  event: 'Two weeks in, nobody could say who owns the account.',
-  system: 'Workforce assistant',
-  owner: 'Nobody',
+  interest: 'workspace-pilot',
+  message: 'Turn our new-hire setup process into a checklist the team can keep current.',
+  role: 'Operations lead',
   mspRelationship: 'Foothills IT',
-  needs: ['user administration', 'governance'],
   decoy: '',
   elapsedMs: 4200,
 });
 
 describe('notification', () => {
-  it('identifies the form and the company in the subject', () => {
+  it('identifies the form, the interest and the company in the subject', () => {
     expect(buildNotification(submission).subject).toBe(
-      'OPERATING GAP / INTAKE — Northline Engineering',
+      'WEBSITE INQUIRY / WORKSPACE PILOT — Northline Engineering',
     );
   });
 
@@ -29,28 +26,28 @@ describe('notification', () => {
     for (const label of [
       'Name',
       'Company',
-      'Role',
       'Work email',
-      'What was somebody trying to do?',
-      'What happened?',
-      'Product or system involved',
-      'Who owns it today, if anyone?',
+      'Interest',
+      'What would you like your team to do, build, or improve?',
+      'Role',
       'Existing MSP relationship',
     ]) {
       expect(text, label).toContain(label);
     }
     expect(text).toContain('Northline Engineering');
-    expect(text).toContain('nobody could say who owns the account');
+    expect(text).toContain('checklist the team can keep current');
     expect(text).toContain('Foothills IT');
   });
 
-  it('lists the selected needs', () => {
-    expect(buildNotification(submission).text).toContain('user administration, governance');
+  it('prints the interest as its visible label, not its wire value', () => {
+    const { text } = buildNotification(submission);
+    expect(text).toContain('Interest\n  Workspace pilot');
+    expect(text).not.toContain('workspace-pilot');
   });
 
   it('marks omitted optional context as absent rather than leaving a blank label', () => {
     const { text } = buildNotification(submission);
-    expect(text).toContain('Approximate company size\n  not provided');
+    expect(text).toContain('Approximate team size\n  not provided');
   });
 
   it('always populates both text and html', () => {
@@ -60,10 +57,9 @@ describe('notification', () => {
   });
 
   it('escapes html so submitted content cannot inject markup', () => {
-    const hostile = operatingGapSchema.parse({
+    const hostile = inquirySchema.parse({
       ...submission,
       company: '<script>alert(1)</script>',
-      needs: [],
     });
     expect(buildNotification(hostile).html).not.toContain('<script>');
     expect(buildNotification(hostile).html).toContain('&lt;script&gt;');
@@ -102,7 +98,7 @@ describe('logging', () => {
     const spy = vi.spyOn(console, 'log').mockImplementation(() => {});
 
     logSubmission({
-      purpose: 'operating-gap-intake',
+      purpose: 'website-inquiry',
       outcome: 'accepted',
       durationMs: 42,
       messageId: 'msg_123',
@@ -112,7 +108,7 @@ describe('logging', () => {
     spy.mockRestore();
 
     expect(JSON.parse(line)).toEqual({
-      purpose: 'operating-gap-intake',
+      purpose: 'website-inquiry',
       outcome: 'accepted',
       durationMs: 42,
       messageId: 'msg_123',
@@ -123,7 +119,7 @@ describe('logging', () => {
       'dana@northline.ca',
       'Northline',
       'Foothills',
-      'assistant',
+      'checklist',
       '203.0.113',
     ]) {
       expect(line, leak).not.toContain(leak);
