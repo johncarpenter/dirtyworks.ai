@@ -1,8 +1,10 @@
 ---
-/* Home §06. Secure by design: four points on where data goes and who reaches it, what is agreed
-   before a pilot starts, and what the platform underneath it is. Cloudflare OS is named as the
-   open-source foundation and Dirtyworks.ai as the operator; there is no partner badge here and
-   there must not be one until a designation and its use rights are confirmed. */
+/* Home §06. Secure by design: four one-line points on where data goes and who reaches it, what is
+   agreed before a pilot starts, and what the platform underneath it is. The explanation behind
+   each point left the page in the text-minimisation pass and lives in src/copy/llms.ts.
+   Cloudflare OS is named as the open-source foundation and Dirtyworks.ai as the operator; there
+   is no partner badge here and there must not be one until a designation and its use rights are
+   confirmed. */
 import Band from '../../layout/Band.astro';
 import Folio from '../../ui/Folio.astro';
 import Button from '../../ui/Button.astro';
@@ -38,7 +40,6 @@ const { folio, heading, body, points, foundationTitle, foundation, action } = TR
           points.map((point) => (
             <li class="point">
               <h3 class="point__heading">{point.heading}</h3>
-              <p class="point__body">{point.body}</p>
             </li>
           ))
         }
@@ -102,13 +103,6 @@ const { folio, heading, body, points, foundationTitle, foundation, action } = TR
     font-size: clamp(19px, 1.6vw, 24px);
     line-height: 1.05;
     letter-spacing: -0.02em;
-  }
-
-  .point__body {
-    margin: 8px 0 0;
-    font-size: 16.5px;
-    line-height: 1.5;
-    max-width: 52ch;
   }
 
   .foundation {

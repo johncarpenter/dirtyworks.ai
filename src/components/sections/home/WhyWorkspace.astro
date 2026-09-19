@@ -1,6 +1,8 @@
 ---
 /* Home §03. The three reasons for one managed workspace, in the founder's order: security,
-   speed, cost. Three fields at equal weight on a bone-2 ground; the label on each is text. */
+   speed, cost. Three fields at equal weight on a bone-2 ground; the label on each is text. Each
+   reason is one sentence since the text-minimisation pass; the paragraph behind it is in
+   src/copy/llms.ts. */
 import Band from '../../layout/Band.astro';
 import Folio from '../../ui/Folio.astro';
 import Declaration from '../../patterns/Declaration.astro';
@@ -32,7 +34,6 @@ const { folio, heading, reasons } = WHY_WORKSPACE;
             {reason.label}
           </p>
           <h3 class="reason__heading">{reason.heading}</h3>
-          <p class="reason__body">{reason.body}</p>
         </li>
       ))
     }
@@ -86,10 +87,4 @@ const { folio, heading, reasons } = WHY_WORKSPACE;
     letter-spacing: -0.025em;
   }
 
-  .reason__body {
-    margin: 0;
-    font-size: 17px;
-    line-height: 1.5;
-    max-width: 40ch;
-  }
 </style>

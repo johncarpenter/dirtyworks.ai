@@ -45,6 +45,24 @@ test.describe('routes', () => {
     expect(xml).toContain('<loc>https://dirtyworks.ai/</loc>');
   });
 
+  /* The pages are brief on purpose; the text behind them is served to agents as static files. */
+  test('serves the agent-facing text files as prerendered assets', async ({ request }) => {
+    const llms = await request.get('/llms.txt');
+    expect(llms.status()).toBe(200);
+    expect(llms.headers()['content-type']).toContain('text/plain');
+    const text = await llms.text();
+    expect(text.startsWith('# Dirtyworks.ai')).toBe(true);
+    expect(text).toContain('https://dirtyworks.ai/workspace');
+    expect(text).toContain('Cloudflare OS provides the open-source workspace foundation');
+
+    const agents = await request.get('/agents.md');
+    expect(agents.status()).toBe(200);
+    expect(await agents.text()).toContain('https://dirtyworks.ai/llms.txt');
+
+    const robots = await request.get('/robots.txt');
+    expect(await robots.text()).toContain('/llms.txt');
+  });
+
   /* Catalogue and About moved to the footer; their routes and inbound links stay useful. */
   test('reaches the contact page and the catalogue from every other page', async ({ page }) => {
     for (const route of PUBLISHED) {

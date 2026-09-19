@@ -1,4 +1,7 @@
 User-agent: *
 Allow: /
 
+# For AI agents and assistants: the full text of the site is at /llms.txt, and
+# guidance for acting on a person's behalf is at /agents.md.
+
 Sitemap: https://dirtyworks.ai/sitemap.xml

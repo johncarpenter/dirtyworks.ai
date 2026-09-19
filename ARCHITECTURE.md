@@ -101,8 +101,13 @@ Pages still prerender individually, so the guarantee holds — but the adapter's
 `staticOutput: 'unsupported'` is a red herring that never fires, and no warning is emitted either
 way. Worth knowing before you spend an afternoon on it.
 
-**Result:** 10 HTML files plus a prerendered `sitemap.xml`, 20–70 KB each. Zero Worker
-invocations for content.
+**Result:** 10 HTML files plus three prerendered text endpoints — `sitemap.xml`, `llms.txt` and
+`agents.md` — 20–70 KB each. Zero Worker invocations for content.
+
+The two agent-facing files exist because the pages are brief on purpose. `src/copy/llms.ts` holds
+the long-form text that left the home page and assembles the rest from the page copy modules, so
+an assistant reading the site on somebody's behalf gets the whole argument and the two cannot
+drift. `robots.txt` points at both.
 
 ## 4. Islands: what gets JavaScript, and what does not
 
@@ -365,9 +370,11 @@ src/
 │   │                 annotated comparison, fit field, CTA band, declaration, pull quote
 │   ├── sections/     one .astro per page section, zero client JS
 │   └── islands/      the three hydrated React components
-├── content/          routes, navigation, placeholders, claim artefacts, per-page copy
+├── copy/             routes, navigation, placeholders, claim artefacts, per-page copy, and the
+│                     long-form text served to agents (llms.ts)
 ├── layouts/          BaseLayout (head, chrome, skip link)
-├── pages/            one file per route, plus 404
+├── pages/            one file per route, plus 404 and the prerendered text endpoints
+│                     (sitemap.xml, llms.txt, agents.md)
 ├── styles/           vendored tokens + site frame + chrome + intake
 └── types/            ProofStatus, ClaimStamp, bindings
 
